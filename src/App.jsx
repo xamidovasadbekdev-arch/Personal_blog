@@ -7,6 +7,7 @@ import Projects from './pages/Projects';
 import Blog from './pages/Blog';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import AdminEditor from './pages/AdminEditor';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -51,12 +52,15 @@ export default function App() {
             selectedArticleId={selectedArticleId} 
             setSelectArticleId={setSelectedArticleId} 
             lang={lang} 
+            onOpenAdmin={() => setActiveTab('admin')}
           />
         );
       case 'about':
         return <About lang={lang} />;
       case 'contact':
         return <Contact lang={lang} />;
+      case 'admin':
+        return <AdminEditor lang={lang} onArticlePublished={() => setActiveTab('blog')} />;
       default:
         return <Home setActiveTab={setActiveTab} setSelectArticleId={setSelectedArticleId} lang={lang} />;
     }

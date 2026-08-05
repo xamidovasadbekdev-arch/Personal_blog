@@ -1,15 +1,65 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Clock, Calendar, Share2, Check, Bookmark, ThumbsUp, Tag } from 'lucide-react';
+import { ArrowLeft, Clock, Calendar, Share2, Check, Bookmark, ThumbsUp, Tag, Copy, Code } from 'lucide-react';
 import { translations, articlesData } from '../data/portfolioData';
+import GiscusComments from '../components/GiscusComments';
+
+function CodeBlock({ codeText, lang = 'python' }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="my-6 rounded-2xl bg-[#070b16] border border-indigo-900/50 p-4 font-mono text-xs sm:text-sm text-indigo-200 overflow-x-auto shadow-xl relative group">
+      {/* Header bar with language badge and Copy Code button */}
+      <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-indigo-900/50 text-xs text-indigo-400">
+        <span className="px-2.5 py-0.5 rounded-md bg-indigo-950/80 border border-indigo-800/40 text-[11px] font-bold text-indigo-300 uppercase tracking-wider">
+          {lang}
+        </span>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-900/50 hover:bg-indigo-800/60 text-indigo-200 text-xs font-semibold transition-colors cursor-pointer"
+        >
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5 text-emerald-400" />
+              <span className="text-emerald-400">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" />
+              <span>Copy Code</span>
+            </>
+          )}
+        </button>
+      </div>
+      <pre className="leading-relaxed"><code>{codeText}</code></pre>
+    </div>
+  );
+}
 
 export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
   const t = translations[lang].blog;
   const [copied, setCopied] = useState(false);
-  const [likes, setLikes] = useState(14);
+  const [likes, setLikes] = useState(24);
   const [isLiked, setIsLiked] = useState(false);
 
-  const article = articlesData.find(a => a.id === articleId) || articlesData[0];
-  const relatedArticles = articlesData.filter(a => a.id !== article.id).slice(0, 2);
+  // Combine custom LocalStorage posts and default articles
+  const getCustomPosts = () => {
+    try {
+      const stored = localStorage.getItem('custom_articles');
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  const allArticles = [...getCustomPosts(), ...articlesData];
+  const article = allArticles.find(a => a.id === articleId) || allArticles[0];
+  const relatedArticles = allArticles.filter(a => a.id !== article.id).slice(0, 2);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -27,11 +77,11 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
     }
   };
 
-  // Convert raw text into nicely formatted paragraph / code blocks for demonstration
   const renderMarkdown = (text) => {
     const lines = text.trim().split('\n');
     let inCodeBlock = false;
     let codeContent = [];
+    let codeLang = 'python';
 
     return lines.map((line, idx) => {
       if (line.startsWith('```')) {
@@ -39,17 +89,10 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
           inCodeBlock = false;
           const codeText = codeContent.join('\n');
           codeContent = [];
-          return (
-            <div key={idx} className="my-6 rounded-xl bg-neutral-900 border border-neutral-800 p-4 font-mono text-xs sm:text-sm text-blue-300 overflow-x-auto shadow-lg relative">
-              <div className="flex items-center justify-between pb-2 mb-3 border-b border-neutral-800 text-[10px] text-neutral-400">
-                <span>Code Snippet</span>
-                <span className="text-blue-400">UTF-8</span>
-              </div>
-              <pre><code>{codeText}</code></pre>
-            </div>
-          );
+          return <CodeBlock key={idx} codeText={codeText} lang={codeLang} />;
         } else {
           inCodeBlock = true;
+          codeLang = line.replace('```', '').trim() || 'python';
           return null;
         }
       }
@@ -60,30 +103,30 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
       }
 
       if (line.startsWith('# ')) {
-        return <h1 key={idx} className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white mt-8 mb-4 tracking-tight">{line.replace('# ', '')}</h1>;
+        return <h1 key={idx} className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-8 mb-4 tracking-tight">{line.replace('# ', '')}</h1>;
       }
       if (line.startsWith('## ')) {
-        return <h2 key={idx} className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white mt-8 mb-3 tracking-tight">{line.replace('## ', '')}</h2>;
+        return <h2 key={idx} className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-3 tracking-tight">{line.replace('## ', '')}</h2>;
       }
       if (line.startsWith('### ')) {
-        return <h3 key={idx} className="text-lg font-bold text-neutral-900 dark:text-white mt-6 mb-2">{line.replace('### ', '')}</h3>;
+        return <h3 key={idx} className="text-lg font-bold text-slate-900 dark:text-white mt-6 mb-2">{line.replace('### ', '')}</h3>;
       }
       if (line.startsWith('- ')) {
         return (
-          <li key={idx} className="ml-6 list-disc text-sm sm:text-base text-neutral-700 dark:text-neutral-300 my-1">
+          <li key={idx} className="ml-6 list-disc text-sm sm:text-base text-slate-700 dark:text-slate-300 my-1">
             {line.replace('- ', '')}
           </li>
         );
       }
       if (line.trim() === '---') {
-        return <hr key={idx} className="my-8 border-neutral-200 dark:border-neutral-800" />;
+        return <hr key={idx} className="my-8 border-slate-200 dark:border-indigo-900/40" />;
       }
       if (line.trim() === '') {
         return <div key={idx} className="h-3"></div>;
       }
 
       return (
-        <p key={idx} className="text-sm sm:text-base leading-relaxed text-neutral-700 dark:text-neutral-300 my-2">
+        <p key={idx} className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300 my-2">
           {line}
         </p>
       );
@@ -96,16 +139,16 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
       {/* Back Button */}
       <button 
         onClick={onBack}
-        className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-600 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+        className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
       >
         <ArrowLeft className="h-4 w-4" />
         <span>{t.backToBlog}</span>
       </button>
 
-      {/* Article Header */}
-      <div className="space-y-4 border-b border-neutral-200 dark:border-neutral-800 pb-8">
-        <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
-          <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 font-semibold border border-blue-200/40 dark:border-blue-800/40 capitalize flex items-center gap-1">
+      {/* Header */}
+      <div className="space-y-4 border-b border-slate-200 dark:border-indigo-900/40 pb-8">
+        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+          <span className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-800/40 capitalize flex items-center gap-1">
             <Tag className="h-3 w-3" />
             {article.category}
           </span>
@@ -119,11 +162,11 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-neutral-900 dark:text-white leading-[1.2]">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.2]">
           {article.title}
         </h1>
 
-        <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed italic border-l-4 border-blue-500 pl-4 py-1">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed italic border-l-4 border-indigo-500 pl-4 py-1">
           {article.excerpt}
         </p>
 
@@ -132,22 +175,22 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
           <div className="flex items-center gap-3">
             <img 
               src={article.author.avatar} 
-              alt={article.author.name}
-              className="w-10 h-10 rounded-full object-cover border-2 border-blue-500/40" 
+              alt={article.author.name} 
+              className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500/40"
             />
             <div>
-              <div className="text-sm font-bold text-neutral-900 dark:text-white">{article.author.name}</div>
-              <div className="text-xs text-neutral-500">{article.author.role}</div>
+              <div className="text-sm font-bold text-slate-900 dark:text-white">{article.author.name}</div>
+              <div className="text-xs text-slate-500">{article.author.role}</div>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleLike}
-              className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                 isLiked 
-                  ? 'bg-blue-600 text-white border-blue-600' 
-                  : 'bg-neutral-100 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300'
+                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-md' 
+                  : 'bg-slate-100 dark:bg-indigo-950/60 border-slate-300 dark:border-indigo-900/60 text-slate-700 dark:text-slate-300'
               }`}
             >
               <ThumbsUp className="h-3.5 w-3.5" />
@@ -156,7 +199,7 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
 
             <button
               onClick={handleCopyLink}
-              className="px-3.5 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl border border-slate-300 dark:border-indigo-900/60 bg-slate-100 dark:bg-indigo-950/60 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-indigo-900/60 transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Share2 className="h-3.5 w-3.5" />}
               <span>{copied ? t.copied : t.share}</span>
@@ -171,36 +214,17 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
       </div>
 
       {/* Tags */}
-      <div className="pt-8 border-t border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider mr-2">Tags:</span>
+      <div className="pt-8 border-t border-slate-200 dark:border-indigo-900/40 flex flex-wrap items-center gap-2">
+        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-2">Tags:</span>
         {article.tags.map((tag, idx) => (
-          <span key={idx} className="px-3 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 text-xs font-semibold">
+          <span key={idx} className="px-3 py-1 rounded-lg bg-slate-100 dark:bg-indigo-950/60 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-indigo-900/40">
             #{tag}
           </span>
         ))}
       </div>
 
-      {/* Related Posts */}
-      {relatedArticles.length > 0 && (
-        <div className="pt-12 space-y-6">
-          <h3 className="text-2xl font-bold text-neutral-900 dark:text-white border-b border-neutral-200 dark:border-neutral-800 pb-3">
-            {t.relatedPosts}
-          </h3>
-          <div className="grid gap-6 md:grid-cols-2">
-            {relatedArticles.map((rel) => (
-              <div 
-                key={rel.id}
-                onClick={() => onSelectArticle(rel.id)}
-                className="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/60 hover:border-blue-500/50 transition-all cursor-pointer space-y-2"
-              >
-                <span className="text-[11px] font-semibold text-blue-500 uppercase tracking-wider">{rel.category}</span>
-                <h4 className="text-base font-bold text-neutral-900 dark:text-white line-clamp-1">{rel.title}</h4>
-                <p className="text-xs text-neutral-500 line-clamp-2">{rel.excerpt}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Giscus Comments Section */}
+      <GiscusComments />
 
     </article>
   );

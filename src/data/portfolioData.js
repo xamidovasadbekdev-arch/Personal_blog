@@ -6,18 +6,19 @@ export const translations = {
       blog: "Blog",
       about: "About",
       contact: "Contact",
-      login: "Log In",
-      available: "👋 Available for Freelance / Fulltime",
+      admin: "Admin Studio",
+      available: "👋 Available for Freelance / Opportunities",
     },
     hero: {
-      badge: "Available for Freelance / Full-time",
+      badge: "Available for Opportunities",
       title: "Hi, I'm Asadbek Xamidov",
-      subtitle: "Software Engineer & Backend Developer crafting high-performance APIs, modern web apps, and sharing technical insights.",
+      headline: "Backend Developer, AI/ML Engineer & Data Scientist",
+      subtitle: "Data Analyst at Mittivoy, Intern at FLyrank, & WIUT Scholarship Awardee. Specializing in Python, FastAPI, Machine Learning, and Data Science.",
       viewProjects: "View Projects",
       readBlog: "Read Articles",
       getInTouch: "Get In Touch",
-      yearsExp: "3+ Years Exp.",
-      projectsCount: "20+ Projects",
+      yearsExp: "2+ Years Exp.",
+      projectsCount: "15+ Projects",
       dedication: "100% Dedicated",
     },
     sections: {
@@ -25,21 +26,21 @@ export const translations = {
       featuredProjectsSub: "A hand-picked selection of things I've built recently.",
       viewAllProjects: "View All Projects",
       skillsTitle: "Technical Toolbox",
-      skillsSub: "Technologies, frameworks, and infrastructure tools I work with daily.",
+      skillsSub: "Technologies, frameworks, machine learning models, and data pipelines I work with.",
       recentPosts: "Recent Tech Articles",
-      recentPostsSub: "In-depth tutorials, system architecture breakdowns, and web insights.",
+      recentPostsSub: "In-depth tutorials, system architecture breakdowns, and data science insights.",
       readAllPosts: "Read All Articles",
       aboutSnippetTitle: "About Me",
       readMoreAbout: "Read Full Bio",
       contactTitle: "Let's Build Something Great Together",
-      contactSub: "Have an exciting project idea, job opportunity, or tech question? Feel free to reach out anytime.",
+      contactSub: "Have an exciting project idea, job opportunity, or AI/data query? Feel free to reach out anytime.",
     },
     projects: {
       all: "All Projects",
       fullstack: "Fullstack",
       backend: "Backend & API",
       frontend: "Frontend",
-      ai: "AI & ML",
+      ai: "AI / Data Science",
       searchPlaceholder: "Search projects by title or keyword...",
       viewCode: "Source Code",
       liveDemo: "Live Demo",
@@ -52,7 +53,7 @@ export const translations = {
       tutorials: "Tutorials",
       architecture: "Architecture",
       webdev: "Web Dev",
-      career: "Engineering",
+      career: "Data & Engineering",
       readTime: "min read",
       publishedOn: "Published on",
       author: "Written by",
@@ -63,29 +64,29 @@ export const translations = {
       backToBlog: "← Back to Articles",
     },
     about: {
-      title: "About Asadbek Xamidov",
-      subtitle: "Passionate about software architecture, distributed systems, clean code, and continuous learning.",
+      title: "About Xamidov Asadbek",
+      subtitle: "Backend Developer, AI/ML Engineer & Data Scientist passionate about data pipelines, machine learning, and clean API design.",
       bioHeading: "Who I Am",
-      bioP1: "I am a Software Engineer based in Uzbekistan with a focus on building scalable backend services, RESTful & GraphQL APIs, and dynamic web applications.",
-      bioP2: "I enjoy dissecting complex engineering problems, optimizing database queries, and exploring modern web standards. Outside of writing code, I love writing technical guides to share knowledge with the developer community.",
-      experienceTitle: "Work & Project Experience",
+      bioP1: "I am Xamidov Asadbek, a Business Information System Scholarship Awardee at WIUT (Westminster International University in Tashkent). I currently work as a Data Analyst at Mittivoy company and am doing an internship at FLyrank.",
+      bioP2: "My expertise spans backend software engineering with FastAPI & Python, data analysis, and machine learning models in the Uzcard Data Science program. I love dissecting complex data problems and building scalable software solutions.",
+      experienceTitle: "Education & Career Timeline",
       skillsHeading: "Technical Proficiency",
       downloadResume: "Download Resume (PDF)",
     },
     contact: {
       title: "Get In Touch",
-      subtitle: "Feel free to send a message using the form below or connect via social media.",
+      subtitle: "Send a message using the form below or connect via Telegram / LinkedIn.",
       name: "Your Name",
       namePlaceholder: "John Doe",
       email: "Your Email",
       emailPlaceholder: "john@example.com",
       subject: "Subject",
-      subjectPlaceholder: "Project inquiry / Collaboration",
+      subjectPlaceholder: "Project inquiry / AI & Data Collaboration",
       message: "Message",
       messagePlaceholder: "Tell me about your project or inquiry...",
       send: "Send Message",
-      sending: "Sending...",
-      success: "Thank you! Your message has been sent successfully.",
+      sending: "Sending Email...",
+      success: "Thank you! Your message has been sent directly to Asadbek.",
       directContact: "Direct Contacts",
     }
   },
@@ -96,40 +97,41 @@ export const translations = {
       blog: "Maqolalar",
       about: "Men haqimda",
       contact: "Aloqa",
-      login: "Kirish",
-      available: "👋 Frelans / Ish uchun ochiq",
+      admin: "Admin Studiya",
+      available: "👋 Takliflar va loyihalar uchun ochiq",
     },
     hero: {
-      badge: "Frelans / Ish uchun ochiq",
+      badge: "Takliflar uchun ochiq",
       title: "Salom, men Asadbek Xamidov",
-      subtitle: "Yuqori unumdorlikka ega backend tizimlar va zamonaviy web ilovalar yaratuvchi dasturchi.",
+      headline: "Backend Dasturchi, AI/ML Muhandisi va Data Scientist",
+      subtitle: "Mittivoy kompaniyasida Data Analitik, FLyrank kompaniyasida Stajyor va WIUT granti sohibi. Python, FastAPI, AI va Data Science bo'yicha mutaxassis.",
       viewProjects: "Loyihalarni ko'rish",
       readBlog: "Maqolalarni o'qish",
       getInTouch: "Bog'lanish",
-      yearsExp: "3+ Yillik tajriba",
-      projectsCount: "20+ Loyihalar",
+      yearsExp: "2+ Yillik tajriba",
+      projectsCount: "15+ Loyihalar",
       dedication: "100% Bag'ishlangan",
     },
     sections: {
       featuredProjects: "Saralangan Loyihalar",
-      featuredProjectsSub: "Yaqinda yaratgan eng yaxshi loyihalarim jamlanmasi.",
+      featuredProjectsSub: "Yaqinda yaratgan eng yaxshi loyihalarim va AI modellarim.",
       viewAllProjects: "Barcha loyihalar",
       skillsTitle: "Texnik Asboblar",
-      skillsSub: "Har kuni foydalanadigan dasturlash tillari va freymvorklarim.",
+      skillsSub: "Backend, AI/ML modellar, ma'lumotlar bazasi va tahliliy vositalarim.",
       recentPosts: "So'nggi Maqolalar",
-      recentPostsSub: "Tizim arxitekturasi va dasturlash bo'yicha tahliliy maqolalar.",
+      recentPostsSub: "Data Science, FastAPI arxitekturasi va AI bo'yicha tahliliy maqolalar.",
       readAllPosts: "Barcha maqolalar",
       aboutSnippetTitle: "Men Haqimda",
       readMoreAbout: "Batafsil o'qish",
-      contactTitle: "Birgalikda Ajoyib Loyiha Yaratamiz",
-      contactSub: "Loyihangiz bo'yicha taklifingiz yoki savolingiz bo'lsa, istalgan vaqtda murojaat qiling.",
+      contactTitle: "Birgalikda Loyiha Yaratamiz",
+      contactSub: "Backend, Data Science yoki AI loyihangiz bo'lsa, istalgan vaqtda murojaat qiling.",
     },
     projects: {
       all: "Barchasi",
       fullstack: "Fullstack",
       backend: "Backend & API",
       frontend: "Frontend",
-      ai: "Sun'iy Intelekt",
+      ai: "AI / Data Science",
       searchPlaceholder: "Loyiha nomi yoki kalit so'z bo'yicha qidiruv...",
       viewCode: "Manba Kodi",
       liveDemo: "Jonli Namoyish",
@@ -142,7 +144,7 @@ export const translations = {
       tutorials: "Qo'llanmalar",
       architecture: "Arxitektura",
       webdev: "Web Ishlab Chiqish",
-      career: "Muhandislik",
+      career: "Data Science",
       readTime: "daqiqa o'qish",
       publishedOn: "Chop etilgan vaqti",
       author: "Muallif",
@@ -153,29 +155,29 @@ export const translations = {
       backToBlog: "← Maqolalarga qaytish",
     },
     about: {
-      title: "Asadbek Xamidov Haqida",
-      subtitle: "Dasturiy ta'minot arxitekturasi, taqsimlangan tizimlar va toza kod ixlosmandi.",
+      title: "Xamidov Asadbek Haqida",
+      subtitle: "Backend Dasturchi, AI/ML Muhandisi va Data Scientist.",
       bioHeading: "Kimman?",
-      bioP1: "Men O'zbekistonda faoliyat yurituvchi Software Engineer'man. Asosan kengaytiriluvchan backend xizmatlar, RESTful & GraphQL API hamda zamonaviy web ilovalar yarataman.",
-      bioP2: "Murakkab muhandislik muammolarini yechish, ma'lumotlar bazasini optimallashtirish va yangi texnologiyalarni o'rganishni yaxshi ko'raman. Dasturlashdan tashqari, hamjamiyat uchun qo'llanma va maqolalar yozib boraman.",
-      experienceTitle: "Ish va Loyihalar Tajribasi",
+      bioP1: "Men Xamidov Asadbek, WIUT (Westminster International University in Tashkent) universitetining Business Information System yo'nalishi granti sohibiman. Hozirda Mittivoy kompaniyasida Data Analyst va FLyrank kompaniyasida stajyor sifatida faoliyat yuritaman.",
+      bioP2: "Uzcard Data Science dasturida machine learning va sun'iy intellect bo'yicha bilimlarimni oshirib kelmoqdaman. Backend (FastAPI, Python) hamda ma'lumotlar tahlili loyihalarini yaratishni yaxshi ko'raman.",
+      experienceTitle: "Ta'lim va Ish Tajribasi Timeline",
       skillsHeading: "Texnik Ko'nikmalar",
       downloadResume: "Rezyumeni Yuklab Olish (PDF)",
     },
     contact: {
       title: "Bog'lanish",
-      subtitle: "Quyidagi forma orqali xabar yuboring yoki ijtimoiy tarmoqlar orqali bog'laning.",
+      subtitle: "Quyidagi forma orqali Asadbekka to'g'ridan-to me-mail yuboring.",
       name: "Ismingiz",
       namePlaceholder: "Ali Valiyev",
       email: "E-mail manzilingiz",
       emailPlaceholder: "ali@example.com",
       subject: "Mavzu",
-      subjectPlaceholder: "Loyiha taklifi / Hamkorlik",
+      subjectPlaceholder: "Loyiha taklifi / Data Science",
       message: "Xabar",
-      messagePlaceholder: "Loyihangiz haqida ma'lumot bering...",
+      messagePlaceholder: "Loyihangiz bo'yicha ma'lumot bering...",
       send: "Xabarni Yuborish",
-      sending: "Yuborilmoqda...",
-      success: "Rahmat! Xabaringiz muvaffaqiyatli yuborildi.",
+      sending: "E-mail yuborilmoqda...",
+      success: "Rahmat! Xabaringiz Asadbekning e-mailiga yuborildi.",
       directContact: "Doimiy Aloqa",
     }
   }
@@ -183,19 +185,58 @@ export const translations = {
 
 export const skillsData = [
   {
-    category: "Languages",
+    category: "Backend & Languages",
     icon: "Terminal",
-    skills: ["JavaScript", "TypeScript", "Python", "Go", "SQL", "HTML5/CSS3"]
+    skills: ["Python", "FastAPI", "SQL", "JavaScript", "Go (Basics)", "RESTful APIs"]
   },
   {
-    category: "Frameworks & Libraries",
+    category: "Data Science & AI/ML",
     icon: "Cpu",
-    skills: ["React.js", "Next.js", "FastAPI", "Express.js", "Node.js", "Tailwind CSS"]
+    skills: ["Pandas & NumPy", "Scikit-Learn", "Data Analytics", "Machine Learning", "Data Pipelines", "SQL Analytics"]
   },
   {
-    category: "Databases & DevOps",
+    category: "Databases & Tools",
     icon: "Layers",
-    skills: ["PostgreSQL", "MongoDB", "Redis", "Docker", "Git / GitHub", "Vercel / Linux"]
+    skills: ["PostgreSQL", "Docker", "Git / GitHub", "Linux", "VS Code", "Vercel"]
+  }
+];
+
+export const experienceTimeline = [
+  {
+    year: "July 2026 - Present",
+    role: "Data Analyst",
+    company: "Mittivoy Company",
+    description: "Analyzing business metrics, building SQL data pipelines, and creating executive dashboards to drive data-driven decision making.",
+  },
+  {
+    year: "July 2026 - Present",
+    role: "Engineering Intern",
+    company: "FLyrank",
+    description: "Developing backend features, integrating REST APIs, and optimizing database queries in an agile engineering environment.",
+  },
+  {
+    year: "May 2026 - Present",
+    role: "Data Science Scholar",
+    company: "Uzcard Data Science Program",
+    description: "Deep-diving into machine learning algorithms, predictive modeling, data cleaning, and statistical analysis.",
+  },
+  {
+    year: "Jan 2026 - Apr 2026",
+    role: "Junior Backend Developer",
+    company: "Freelance",
+    description: "Architected REST APIs with FastAPI and PostgreSQL for clients, implemented JWT authentication, and containerized apps with Docker.",
+  },
+  {
+    year: "Nov 2025 - Mar 2026",
+    role: "Backend Development Intensive",
+    company: "Specialized Training",
+    description: "Mastered Python backend development, asynchronous database patterns, API design, and clean architecture principles.",
+  },
+  {
+    year: "2024 - Present",
+    role: "BSc Business Information Systems",
+    company: "WIUT (Scholarship Awardee)",
+    description: "Awarded full scholarship at Westminster International University in Tashkent. Studying software engineering, database management, and information systems.",
   }
 ];
 
@@ -204,49 +245,37 @@ export const projectsData = [
     id: "personal-blog",
     title: "Personal Developer Portfolio & Engineering Blog",
     category: "fullstack",
-    description: "High-performance developer portfolio and article blog featuring bilingual support (EN/UZ), interactive terminal visuals, article search engine, and dark/light modes.",
-    tech: ["React", "Vite", "Tailwind CSS", "Lucide Icons", "JavaScript"],
+    description: "High-performance portfolio and blog built with React, Vite, Tailwind CSS, bilingual support (EN/UZ), interactive terminal visuals, and markdown reader.",
+    tech: ["React", "Vite", "Tailwind CSS", "JavaScript"],
     github: "https://github.com/xamidovasadbekdev-arch/Personal_blog",
-    demo: "https://enemer.tech",
+    demo: "#",
     featured: true,
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-    longDescription: "A full-featured personal website built to display software engineering projects, publish technical articles, and showcase technical skills. Supports responsive layouts, smooth micro-interactions, dark/light themes, and bilingual translations."
+    longDescription: "A full-featured personal website built to display software engineering projects, publish technical articles, and showcase AI & Data Science skills."
   },
   {
     id: "fastapi-microservice",
-    title: "Scalable Authentication & User Management Service",
+    title: "Scalable FastAPI Backend & Authentication Service",
     category: "backend",
-    description: "Production-ready FastAPI backend template with JWT authentication, OAuth2, async PostgreSQL integration, Redis caching, and Docker containerization.",
-    tech: ["FastAPI", "Python", "PostgreSQL", "Redis", "Docker", "SQLAlchemy"],
+    description: "Async Python REST API microservice with JWT authentication, PostgreSQL integration, Redis caching, and Docker setup.",
+    tech: ["FastAPI", "Python", "PostgreSQL", "Redis", "Docker"],
     github: "https://github.com/xamidovasadbekdev-arch",
     demo: "#",
     featured: true,
     image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=800&q=80",
-    longDescription: "An enterprise-grade async REST API microservice structure designed for high throughput. Features structured logging, auto OpenAPI specs, Pytest suite, and database migration setups with Alembic."
+    longDescription: "Enterprise async REST API microservice structure designed for high throughput, OpenAPI specs, and Pytest coverage."
   },
   {
-    id: "dev-analytics-dashboard",
-    title: "Real-time Metrics & Code Quality Analytics Platform",
-    category: "frontend",
-    description: "Interactive metrics portal displaying commit metrics, API response speeds, repository activity stats, and real-time system resource health charts.",
-    tech: ["React", "Tailwind CSS", "Recharts", "Node.js", "REST API"],
+    id: "data-analytics-pipeline",
+    title: "Automated Data Analytics & Sales Insights Pipeline",
+    category: "ai",
+    description: "Automated pandas/SQL data pipeline for extracting, cleaning, and visualizing core business performance metrics.",
+    tech: ["Python", "Pandas", "SQL", "Scikit-Learn", "Matplotlib"],
     github: "https://github.com/xamidovasadbekdev-arch",
     demo: "#",
     featured: true,
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-    longDescription: "Frontend analytics application for monitoring server performance, code coverage, and API status with dynamic charts, filterable data tables, and dark theme support."
-  },
-  {
-    id: "ai-prompt-generator",
-    title: "AI Code Assistant & Prompt Optimization Tool",
-    category: "ai",
-    description: "AI-powered workflow tool that optimizes coding prompts and generates structured architectural design patterns for developers.",
-    tech: ["TypeScript", "OpenAI API", "React", "Next.js", "Tailwind CSS"],
-    github: "https://github.com/xamidovasadbekdev-arch",
-    demo: "#",
-    featured: false,
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
-    longDescription: "Leverages modern LLM APIs to help developers convert plain text requirements into clean software architecture, database schemas, and boilerplate code."
+    longDescription: "Data analytics solution designed to process raw transactional data, perform statistical analysis, and generate predictive sales reports."
   }
 ];
 
@@ -258,25 +287,21 @@ export const articlesData = [
     category: "architecture",
     date: "2026-07-28",
     readTime: "7",
-    excerpt: "Learn how to structure enterprise Python APIs using FastAPI async route handlers, SQLAlchemy 2.0 async sessions, Redis query caching, and Docker.",
+    excerpt: "Learn how to structure enterprise Python APIs using FastAPI async route handlers, SQLAlchemy async sessions, and Redis query caching.",
     author: {
-      name: "Asadbek Xamidov",
-      role: "Software Engineer",
+      name: "Xamidov Asadbek",
+      role: "Backend Developer & Data Scientist",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
     },
-    tags: ["FastAPI", "Python", "PostgreSQL", "Backend", "Architecture"],
+    tags: ["FastAPI", "Python", "PostgreSQL", "Backend"],
     content: `
 # Building Scalable Async REST APIs with FastAPI & PostgreSQL
 
-Building modern backend APIs requires speed, maintainability, and clean architecture. **FastAPI** has quickly emerged as one of Python's premier web frameworks due to its native support for asynchronous programming, auto-generated OpenAPI documentation, and strict type safety with Pydantic.
-
-In this guide, we will walk through structuring a production-grade FastAPI microservice equipped with asynchronous PostgreSQL queries, Redis caching, and Docker.
+Building modern backend APIs requires speed, maintainability, and clean architecture. **FastAPI** has quickly emerged as Python's premier web framework due to its native asynchronous support, auto-generated OpenAPI docs, and type safety with Pydantic.
 
 ---
 
 ## 1. Project Directory Structure
-
-A clean separation of concerns prevents spaghetti code as your project grows. Here is our recommended architecture:
 
 \`\`\`bash
 app/
@@ -284,225 +309,63 @@ app/
 │   ├── v1/
 │   │   ├── endpoints/
 │   │   │   ├── auth.py
-│   │   │   └── users.py
-│   │   └── router.py
+│   │   │   └── data.py
 ├── core/
 │   ├── config.py
-│   ├── database.py
-│   └── security.py
-├── models/
-│   └── user.py
-├── schemas/
-│   └── user.py
-├── services/
-│   └── user_service.py
+│   └── database.py
 └── main.py
 \`\`\`
 
 ---
 
-## 2. Asynchronous Database Connection with SQLAlchemy 2.0
-
-Using \`asyncpg\` and SQLAlchemy's \`AsyncSession\` allows the server to process hundreds of concurrent I/O operations without blocking the main event loop.
+## 2. Asynchronous Database Connection
 
 \`\`\`python
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from app.core.config import settings
 
-engine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=False,
-    pool_size=20,
-    max_overflow=10
-)
-
-AsyncSessionLocal = async_sessionmaker(
-    bind=engine,
-    class_=AsyncSession,
-    expire_on_commit=False
-)
+engine = create_async_engine("postgresql+asyncpg://user:pass@localhost/db", echo=False)
+AsyncSessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 async def get_db_session():
     async with AsyncSessionLocal() as session:
-        try:
-            yield session
-        finally:
-            await session.close()
+        yield session
 \`\`\`
-
----
-
-## 3. High-Performance Caching with Redis
-
-Cache frequent database reads (such as user profiles or configuration settings) inside Redis to reduce latency to under **5 milliseconds**:
-
-\`\`\`python
-import json
-from redis.asyncio import Redis
-
-redis_client = Redis.from_url("redis://localhost:6379", decode_responses=True)
-
-async def get_cached_user(user_id: int):
-    cache_key = f"user:{user_id}"
-    cached_data = await redis_client.get(cache_key)
-    if cached_data:
-        return json.loads(cached_data)
-    return None
-\`\`\`
-
----
-
-## 4. Key Takeaways
-
-- **Type Safety**: Pydantic models automatically validate input payloads and produce accurate HTTP error responses.
-- **Async I/O**: Asynchronous database drivers unlock superior request handling capabilities.
-- **Containerization**: Wrapping your service with Docker ensures consistent behavior across development, staging, and production.
 `
   },
   {
-    id: "mastering-react-performance",
-    title: "Mastering React Performance: Optimization Tips for 2026",
-    slug: "mastering-react-performance",
-    category: "webdev",
+    id: "data-science-with-python-and-pandas",
+    title: "Introduction to Data Science & Analytics Pipelines with Python",
+    slug: "data-science-with-python-and-pandas",
+    category: "career",
     date: "2026-06-15",
     readTime: "5",
-    excerpt: "Discover essential techniques for reducing bundle size, optimizing re-renders, leveraging code splitting, and implementing effective browser caching.",
+    excerpt: "Key patterns for data cleaning, exploratory data analysis (EDA), and machine learning model evaluation with Pandas & Scikit-Learn.",
     author: {
-      name: "Asadbek Xamidov",
-      role: "Software Engineer",
+      name: "Xamidov Asadbek",
+      role: "Backend Developer & Data Scientist",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
     },
-    tags: ["React", "JavaScript", "Frontend", "Performance", "Vite"],
+    tags: ["Data Science", "Python", "Pandas", "AI/ML"],
     content: `
-# Mastering React Performance: Optimization Tips for 2026
+# Introduction to Data Science & Analytics Pipelines with Python
 
-Fast page load times and butter-smooth transitions are vital for user engagement. In modern React applications, performance issues often stem from unnecessary re-renders, unoptimized media assets, or heavy JavaScript bundles.
-
-Here are key strategies to keep your React web application lightning fast.
+Data analysis starts with cleaning and structuring raw data. In this guide, we explore core data manipulation techniques using **Pandas** and **NumPy**.
 
 ---
 
-## 1. Eliminate Unnecessary Re-Renders with React Compiler & React.memo
+## 1. Data Cleaning with Pandas
 
-React 19 automatically optimizes many memoization cases, but understanding when components re-render is still crucial.
+\`\`\`python
+import pandas as pd
+import numpy as np
 
-Use React Developer Tools to highlight updates when components render:
+# Load dataset
+df = pd.read_csv("sales_data.csv")
 
-\`\`\`jsx
-import React, { memo } from 'react';
-
-const SkillBadge = memo(({ name, category }) => {
-  return (
-    <span className="px-2.5 py-1 rounded-md bg-neutral-800 text-xs font-semibold">
-      {name}
-    </span>
-  );
-});
+# Clean missing values & remove outliers
+df.fillna({"revenue": df["revenue"].median()}, inplace=True)
+print(df.describe())
 \`\`\`
-
----
-
-## 2. Dynamic Code Splitting with React.lazy()
-
-Instead of bundling all pages into a single giant JavaScript file, split routes into smaller chunks that load on demand:
-
-\`\`\`jsx
-import { lazy, Suspense } from 'react';
-
-const ProjectsPage = lazy(() => import('./pages/Projects'));
-const BlogPage = lazy(() => import('./pages/Blog'));
-
-function App() {
-  return (
-    <Suspense fallback={<div className="p-8 text-center">Loading page...</div>}>
-      {/* Routes here */}
-    </Suspense>
-  );
-}
-\`\`\`
-
----
-
-## 3. Optimizing Image & Asset Delivery
-
-- Convert standard PNG/JPEG images into modern **WebP** or **AVIF** formats.
-- Use explicit \`width\` and \`height\` attributes to avoid layout shifts (CLS).
-- Lazy-load offscreen images using \`loading="lazy"\`.
 `
-  },
-  {
-    id: "clean-code-and-refactoring-principles",
-    title: "Clean Code & Refactoring Principles for Modern Engineers",
-    slug: "clean-code-and-refactoring-principles",
-    category: "career",
-    date: "2026-05-10",
-    readTime: "6",
-    excerpt: "Practical rules for writing readable, self-documenting code, avoiding over-engineering, and managing technical debt effectively.",
-    author: {
-      name: "Asadbek Xamidov",
-      role: "Software Engineer",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-    },
-    tags: ["Clean Code", "Engineering", "Best Practices", "Refactoring"],
-    content: `
-# Clean Code & Refactoring Principles for Modern Engineers
-
-Writing code that works is only half the battle. Writing code that your team—and your future self—can read, maintain, and adapt six months later is what sets exceptional software engineers apart.
-
-Here are fundamental principles for writing clean, self-documenting code.
-
----
-
-## 1. Meaningful & Intent-Revealing Names
-
-Variable and function names should clearly express intent without requiring explanatory comments.
-
-❌ **Bad:**
-\`\`\`js
-const d = 86400; // time in sec
-function calc(x, y) { return x * y; }
-\`\`\`
-
-✅ **Good:**
-\`\`\`js
-const SECONDS_PER_DAY = 86400;
-function calculateRectangleArea(width, height) { 
-  return width * height; 
-}
-\`\`\`
-
----
-
-## 2. Single Responsibility Principle (SRP)
-
-A function or component should do **one thing** well. If a function is validating input, fetching data from an API, formatting dates, and updating UI states all at once, break it down into smaller helper functions.
-
----
-
-## 3. Keep Functions Small and Declarative
-
-Short functions with clear inputs and outputs are easier to unit test and reason about. Focus on clarity over cleverness!
-`
-  }
-];
-
-export const experienceTimeline = [
-  {
-    year: "2024 - Present",
-    role: "Fullstack & Backend Engineer",
-    company: "Software Projects & Freelance",
-    description: "Architecting RESTful APIs with FastAPI and Node.js, building interactive frontends with React & Next.js, and deploying containerized services with Docker.",
-  },
-  {
-    year: "2023 - 2024",
-    role: "Junior Developer",
-    company: "Tech Solutions",
-    description: "Developed frontend UI components, integrated third-party REST services, and optimized SQL queries for high-volume database tables.",
-  },
-  {
-    year: "2022 - 2023",
-    role: "CS & Software Engineering Studies",
-    company: "University / Self-Directed Learning",
-    description: "Deep-dived into data structures, algorithms, system design patterns, and modern web application development.",
   }
 ];
