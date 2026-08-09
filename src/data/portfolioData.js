@@ -1,3 +1,22 @@
+export const blogTaxonomy = {
+  ml: {
+    label: "Machine Learning & AI",
+    subcategories: ["Supervised Learning", "Unsupervised Learning", "Deep Learning", "NLP & LLMs"]
+  },
+  backend: {
+    label: "Backend & Architecture",
+    subcategories: ["FastAPI & Microservices", "Databases & SQL", "Distributed Systems", "Caching & Performance"]
+  },
+  datascience: {
+    label: "Data Science & Analytics",
+    subcategories: ["Exploratory Data Analysis", "Pandas & Pipelines", "Data Visualization"]
+  },
+  personal: {
+    label: "Personal & Life",
+    subcategories: ["Achievements & Medals", "University & WIUT", "Career Journey", "Sports & Football"]
+  }
+};
+
 export const translations = {
   en: {
     nav: {
@@ -7,7 +26,7 @@ export const translations = {
       about: "About",
       contact: "Contact",
       admin: "Admin Studio",
-      available: "👋 Available for Freelance / Opportunities",
+      available: "👋 Available for Opportunities",
     },
     hero: {
       badge: "Available for Opportunities",
@@ -27,8 +46,8 @@ export const translations = {
       viewAllProjects: "View All Projects",
       skillsTitle: "Technical Toolbox",
       skillsSub: "Technologies, frameworks, machine learning models, and data pipelines I work with.",
-      recentPosts: "Recent Tech Articles",
-      recentPostsSub: "In-depth tutorials, system architecture breakdowns, and data science insights.",
+      recentPosts: "Recent Tech & Personal Articles",
+      recentPostsSub: "Machine Learning breakdowns, backend architecture guides, and personal milestones.",
       readAllPosts: "Read All Articles",
       aboutSnippetTitle: "About Me",
       readMoreAbout: "Read Full Bio",
@@ -48,12 +67,9 @@ export const translations = {
       noProjects: "No projects match your filter.",
     },
     blog: {
-      searchPlaceholder: "Search articles by title, tag, or topic...",
-      allCategories: "All Topics",
-      tutorials: "Tutorials",
-      architecture: "Architecture",
-      webdev: "Web Dev",
-      career: "Data & Engineering",
+      searchPlaceholder: "Search articles by title, tag, category, or subcategory...",
+      allCategories: "All Categories",
+      allSubcategories: "All Subcategories",
       readTime: "min read",
       publishedOn: "Published on",
       author: "Written by",
@@ -119,7 +135,7 @@ export const translations = {
       skillsTitle: "Texnik Asboblar",
       skillsSub: "Backend, AI/ML modellar, ma'lumotlar bazasi va tahliliy vositalarim.",
       recentPosts: "So'nggi Maqolalar",
-      recentPostsSub: "Data Science, FastAPI arxitekturasi va AI bo'yicha tahliliy maqolalar.",
+      recentPostsSub: "Machine Learning, FastAPI va shaxsiy muvaffaqiyatlar bo'yicha maqolalar.",
       readAllPosts: "Barcha maqolalar",
       aboutSnippetTitle: "Men Haqimda",
       readMoreAbout: "Batafsil o'qish",
@@ -139,12 +155,9 @@ export const translations = {
       noProjects: "Filtringizga mos loyihalar topilmadi.",
     },
     blog: {
-      searchPlaceholder: "Maqolalarni sarlavha, teg yoki mavzu bo'yicha qidirish...",
-      allCategories: "Barcha mavzular",
-      tutorials: "Qo'llanmalar",
-      architecture: "Arxitektura",
-      webdev: "Web Ishlab Chiqish",
-      career: "Data Science",
+      searchPlaceholder: "Maqolalarni sarlavha, teg, kategoriya va subkategoriya bo'yicha qidirish...",
+      allCategories: "Barcha Kategoriyalar",
+      allSubcategories: "Barcha Subkategoriyalar",
       readTime: "daqiqa o'qish",
       publishedOn: "Chop etilgan vaqti",
       author: "Muallif",
@@ -192,7 +205,7 @@ export const skillsData = [
   {
     category: "Data Science & AI/ML",
     icon: "Cpu",
-    skills: ["Pandas & NumPy", "Scikit-Learn", "Data Analytics", "Machine Learning", "Data Pipelines", "SQL Analytics"]
+    skills: ["Supervised Learning", "Unsupervised Learning", "Pandas & NumPy", "Scikit-Learn", "Machine Learning", "Data Pipelines"]
   },
   {
     category: "Databases & Tools",
@@ -281,10 +294,125 @@ export const projectsData = [
 
 export const articlesData = [
   {
+    id: "supervised-learning-classification-guide",
+    title: "Supervised Learning: Building Classifier Models with Scikit-Learn",
+    slug: "supervised-learning-classification-guide",
+    category: "ml",
+    subcategory: "Supervised Learning",
+    date: "2026-08-02",
+    readTime: "6",
+    excerpt: "A practical guide to supervised machine learning algorithms, cross-validation, feature scaling, and model evaluation metrics.",
+    author: {
+      name: "Xamidov Asadbek",
+      role: "Backend Developer & AI/ML Engineer",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+    },
+    tags: ["Machine Learning", "Supervised Learning", "Python", "Scikit-Learn"],
+    content: `
+# Supervised Learning: Building Classifier Models with Scikit-Learn
+
+Supervised Machine Learning algorithms learn mappings from input features to target labels. In this article, we explore classification models using **Scikit-Learn**.
+
+---
+
+## 1. Data Preparation & Feature Scaling
+
+\`\`\`python
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+
+# Split features and target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Feature Scaling
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train Classifier
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train_scaled, y_train)
+print(f"Accuracy Score: {model.score(X_test_scaled, y_test):.4f}")
+\`\`\`
+`
+  },
+  {
+    id: "unsupervised-learning-clustering-guide",
+    title: "Unsupervised Learning: K-Means & Hierarchical Clustering Patterns",
+    slug: "unsupervised-learning-clustering-guide",
+    category: "ml",
+    subcategory: "Unsupervised Learning",
+    date: "2026-07-20",
+    readTime: "7",
+    excerpt: "Explore how unsupervised algorithms discover hidden structures in unlabelled dataset clusters using K-Means and PCA dimensionality reduction.",
+    author: {
+      name: "Xamidov Asadbek",
+      role: "Backend Developer & AI/ML Engineer",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+    },
+    tags: ["Unsupervised Learning", "Clustering", "K-Means", "PCA"],
+    content: `
+# Unsupervised Learning: K-Means & Hierarchical Clustering Patterns
+
+Unsupervised learning algorithms process data without explicit target labels to discover natural groupings and clusters.
+
+---
+
+## 1. K-Means Clustering Example
+
+\`\`\`python
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+# Reduce dimensions with PCA
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# K-Means Clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+labels = kmeans.fit_predict(X_pca)
+\`\`\`
+`
+  },
+  {
+    id: "football-tournament-medal-milestone",
+    title: "Personal Milestone: Winning 1st Place Gold Medal in University Football Tournament",
+    slug: "football-tournament-medal-milestone",
+    category: "personal",
+    subcategory: "Sports & Football",
+    date: "2026-06-10",
+    readTime: "4",
+    excerpt: "Sharing my personal achievement winning the football tournament gold medal, teamwork lessons, and balancing sports with software engineering.",
+    author: {
+      name: "Xamidov Asadbek",
+      role: "Backend Developer & Data Scientist",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+    },
+    tags: ["Personal", "Football", "Medal", "Achievement", "Sports"],
+    content: `
+# Personal Milestone: Winning 1st Place Gold Medal in University Football Tournament 🏆⚽
+
+Outside of coding REST APIs and training Machine Learning models, playing football is one of my favorite passions for staying disciplined, focused, and healthy.
+
+---
+
+## ⚽ The Championship Journey
+
+Our university team competed in a 16-team knockout tournament. Through intense training, tactical teamwork, and resilience, we made it to the final match and secured 1st place!
+
+### Key Takeaways from Football Applied to Software Engineering:
+1. **Team Communication**: Just like microservices need seamless API contracts, football teams require constant vocal communication on the field.
+2. **Resilience Under Pressure**: Remaining calm in penalty shootouts translates directly to debugging production backend errors under tight deadlines.
+3. **Continuous Training**: Practice makes perfect, whether practicing free kicks or mastering async Python algorithms.
+`
+  },
+  {
     id: "building-scalable-fastapi-backend",
     title: "Building Scalable Async REST APIs with FastAPI & PostgreSQL",
     slug: "building-scalable-fastapi-backend",
-    category: "architecture",
+    category: "backend",
+    subcategory: "FastAPI & Microservices",
     date: "2026-07-28",
     readTime: "7",
     excerpt: "Learn how to structure enterprise Python APIs using FastAPI async route handlers, SQLAlchemy async sessions, and Redis query caching.",
@@ -301,24 +429,7 @@ Building modern backend APIs requires speed, maintainability, and clean architec
 
 ---
 
-## 1. Project Directory Structure
-
-\`\`\`bash
-app/
-├── api/
-│   ├── v1/
-│   │   ├── endpoints/
-│   │   │   ├── auth.py
-│   │   │   └── data.py
-├── core/
-│   ├── config.py
-│   └── database.py
-└── main.py
-\`\`\`
-
----
-
-## 2. Asynchronous Database Connection
+## 1. Asynchronous Database Connection
 
 \`\`\`python
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
@@ -329,42 +440,6 @@ AsyncSessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, expire_
 async def get_db_session():
     async with AsyncSessionLocal() as session:
         yield session
-\`\`\`
-`
-  },
-  {
-    id: "data-science-with-python-and-pandas",
-    title: "Introduction to Data Science & Analytics Pipelines with Python",
-    slug: "data-science-with-python-and-pandas",
-    category: "career",
-    date: "2026-06-15",
-    readTime: "5",
-    excerpt: "Key patterns for data cleaning, exploratory data analysis (EDA), and machine learning model evaluation with Pandas & Scikit-Learn.",
-    author: {
-      name: "Xamidov Asadbek",
-      role: "Backend Developer & Data Scientist",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-    },
-    tags: ["Data Science", "Python", "Pandas", "AI/ML"],
-    content: `
-# Introduction to Data Science & Analytics Pipelines with Python
-
-Data analysis starts with cleaning and structuring raw data. In this guide, we explore core data manipulation techniques using **Pandas** and **NumPy**.
-
----
-
-## 1. Data Cleaning with Pandas
-
-\`\`\`python
-import pandas as pd
-import numpy as np
-
-# Load dataset
-df = pd.read_csv("sales_data.csv")
-
-# Clean missing values & remove outliers
-df.fillna({"revenue": df["revenue"].median()}, inplace=True)
-print(df.describe())
 \`\`\`
 `
   }

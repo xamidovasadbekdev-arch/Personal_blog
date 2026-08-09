@@ -607,30 +607,41 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
-              <div className="md:col-span-2 space-y-1">
+              <div className="md:col-span-1 space-y-1">
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Article Title *</label>
                 <input
                   type="text"
                   required
                   value={articleForm.title}
                   onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })}
-                  placeholder="e.g. Asynchronous SQLAlchemy Patterns in Python"
+                  placeholder="e.g. Asynchronous SQLAlchemy Patterns"
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Topic Category</label>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category</label>
                 <select
                   value={articleForm.category}
-                  onChange={(e) => setArticleForm({ ...articleForm, category: e.target.value })}
+                  onChange={(e) => setArticleForm({ ...articleForm, category: e.target.value, subcategory: '' })}
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
                 >
-                  <option value="tutorials">Tutorials</option>
-                  <option value="architecture">Architecture</option>
-                  <option value="career">Data Science & Engineering</option>
-                  <option value="webdev">Web Dev</option>
+                  <option value="ml">Machine Learning & AI</option>
+                  <option value="backend">Backend & Architecture</option>
+                  <option value="datascience">Data Science & Analytics</option>
+                  <option value="personal">Personal & Life</option>
                 </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Subcategory</label>
+                <input
+                  type="text"
+                  value={articleForm.subcategory || ''}
+                  onChange={(e) => setArticleForm({ ...articleForm, subcategory: e.target.value })}
+                  placeholder="e.g. Supervised Learning, Sports & Football"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                />
               </div>
             </div>
 
