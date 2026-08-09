@@ -10,6 +10,14 @@ export default function About({ lang }) {
   const [downloaded, setDownloaded] = useState(false);
 
   const handleDownload = () => {
+    // Trigger real file download
+    const link = document.createElement('a');
+    link.href = '/Asadbek_Xamidov_Resume.txt';
+    link.download = 'Asadbek_Xamidov_Resume.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
     setDownloaded(true);
     setTimeout(() => setDownloaded(false), 3000);
   };
@@ -48,10 +56,10 @@ export default function About({ lang }) {
         <div className="pt-2">
           <button
             onClick={handleDownload}
-            className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-500/20 flex items-center gap-2 cursor-pointer"
+            className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-500/20 flex items-center gap-2 cursor-pointer hover:scale-105"
           >
             {downloaded ? <CheckCircle2 className="h-4 w-4 text-emerald-300" /> : <Download className="h-4 w-4" />}
-            <span>{downloaded ? "Resume Downloaded!" : t.downloadResume}</span>
+            <span>{downloaded ? "Downloading Resume File..." : t.downloadResume}</span>
           </button>
         </div>
       </div>
