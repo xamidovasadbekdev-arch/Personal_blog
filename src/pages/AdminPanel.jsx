@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   User, Briefcase, Code2, BookOpen, KeyRound, Save, Plus, Trash2, Edit3, CheckCircle2, 
   X, Lock, LogOut, ExternalLink, Sparkles, Layers, ShieldCheck, FolderPlus, Tag
@@ -25,6 +25,8 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
   const [categoryForm, setCategoryForm] = useState({
     title: '', description: '', subcategories: 'General, Tutorials'
   });
+  const [showInlineCatModal, setShowInlineCatModal] = useState(false);
+  const [newCatInlineTitle, setNewCatInlineTitle] = useState('');
 
   // 3. Timeline State
   const [timeline, setTimeline] = useState(getStoredTimeline());
@@ -93,8 +95,36 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     setCategories(updated);
     saveCategories(updated);
 
+    // Also update article form selection to newly created category
+    setArticleForm(prev => ({ ...prev, category: newCat.id, subcategory: newCat.subcategories[0] || 'General' }));
+
     setCategoryForm({ title: '', description: '', subcategories: 'General, Tutorials' });
-    triggerSavedNotice(`New Category "${newCat.title}" created! It is now live on your Blog page.`);
+    triggerSavedNotice(`New Category "${newCat.title}" created and selected!`);
+  };
+
+  const handleInlineAddCategory = (e) => {
+    e.preventDefault();
+    if (!newCatInlineTitle.trim()) return;
+
+    const catId = newCatInlineTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const newCat = {
+      id: catId,
+      title: newCatInlineTitle.trim(),
+      description: `Articles and insights about ${newCatInlineTitle.trim()}.`,
+      subcategories: ['General', 'Tutorials'],
+      icon: 'FolderOpen',
+      color: 'from-sky-500/20 to-indigo-500/20 border-sky-500/30 text-sky-400'
+    };
+
+    const updated = [...categories, newCat];
+    setCategories(updated);
+    saveCategories(updated);
+
+    // Select the new category in article form
+    setArticleForm(prev => ({ ...prev, category: newCat.id, subcategory: 'General' }));
+    setNewCatInlineTitle('');
+    setShowInlineCatModal(false);
+    triggerSavedNotice(`Category "${newCat.title}" added to dropdown!`);
   };
 
   const handleDeleteCategory = (id) => {
@@ -105,6 +135,12 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     const updated = categories.filter(c => c.id !== id);
     setCategories(updated);
     saveCategories(updated);
+
+    // If active category was deleted, fallback to remaining
+    if (articleForm.category === id) {
+      setArticleForm(prev => ({ ...prev, category: updated[0]?.id || 'ml' }));
+    }
+
     triggerSavedNotice('Category deleted.');
   };
 
@@ -273,7 +309,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
             Portfolio Admin Control Center
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Manage your Profile info, Categories, Career timeline, Projects gallery, and Blog articles.
+            Manage your Profile info, Custom Categories, Career timeline, Projects gallery, and Blog articles.
           </p>
         </div>
 
@@ -306,16 +342,6 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         </button>
 
         <button
-          onClick={() => setActiveTab('categories')}
-          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-            activeTab === 'categories' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-indigo-900/40'
-          }`}
-        >
-          <FolderPlus className="h-4 w-4" />
-          <span>Category Manager ({categories.length})</span>
-        </button>
-
-        <button
           onClick={() => setActiveTab('articles')}
           className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
             activeTab === 'articles' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-indigo-900/40'
@@ -323,6 +349,16 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         >
           <BookOpen className="h-4 w-4" />
           <span>Blog Articles ({articles.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('categories')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            activeTab === 'categories' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-indigo-900/40'
+          }`}
+        >
+          <FolderPlus className="h-4 w-4" />
+          <span>Categories ({categories.length})</span>
         </button>
 
         <button
@@ -444,105 +480,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         </form>
       )}
 
-      {/* ================= TAB 2: CATEGORY MANAGER ================= */}
-      {activeTab === 'categories' && (
-        <div className="space-y-8">
-          
-          <form onSubmit={handleAddCategory} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-indigo-900/40 pb-3 flex items-center gap-2">
-              <FolderPlus className="h-5 w-5 text-indigo-500" />
-              <span>Create New Category Folder (e.g. "Ocean", "Robotics")</span>
-            </h2>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={categoryForm.title}
-                  onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })}
-                  placeholder="e.g. Ocean, Artificial Intelligence, Robotics"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Subcategories (comma separated)</label>
-                <input
-                  type="text"
-                  value={categoryForm.subcategories}
-                  onChange={(e) => setCategoryForm({ ...categoryForm, subcategories: e.target.value })}
-                  placeholder="e.g. Marine Science, Deep Sea, Coral Reefs"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Description</label>
-              <textarea
-                rows="2"
-                value={categoryForm.description}
-                onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
-                placeholder="A brief summary of what articles will be posted under this category..."
-                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm outline-none text-slate-900 dark:text-white"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md flex items-center gap-2 cursor-pointer"
-            >
-              <Plus className="h-4 w-4" />
-              <span>Create Category Folder</span>
-            </button>
-          </form>
-
-          {/* List of Active Categories */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-slate-900 dark:text-white text-lg">Active Category Folders</h3>
-            <div className="grid gap-4 md:grid-cols-2">
-              {categories.map((cat) => (
-                <div key={cat.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex flex-col justify-between space-y-3">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-extrabold text-slate-900 dark:text-white text-lg flex items-center gap-2">
-                        <Tag className="h-4 w-4 text-indigo-500" />
-                        <span>{cat.title}</span>
-                      </h4>
-                      <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded">
-                        id: {cat.id}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500 line-clamp-2">{cat.description}</p>
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {cat.subcategories.map((sub, idx) => (
-                        <span key={idx} className="text-[10px] bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded font-semibold text-indigo-400">
-                          {sub}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-100 dark:border-indigo-900/40 flex justify-end">
-                    <button
-                      onClick={() => handleDeleteCategory(cat.id)}
-                      className="px-3 py-1 rounded-lg bg-rose-50 dark:bg-rose-950 text-rose-500 text-xs font-bold flex items-center gap-1 cursor-pointer"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                      <span>Delete Category</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      )}
-
-      {/* ================= TAB 3: ARTICLES MANAGEMENT ================= */}
+      {/* ================= TAB 2: ARTICLES MANAGEMENT ================= */}
       {activeTab === 'articles' && (
         <div className="space-y-8">
           
@@ -558,7 +496,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                     setEditingArticleId(null);
                     setArticleForm({ title: '', category: categories[0]?.id || 'ml', subcategory: '', readTime: '5', excerpt: '', tags: 'Python, FastAPI', content: '# New Post Title\n\nWrite content here...' });
                   }}
-                  className="text-xs font-bold text-slate-500"
+                  className="text-xs font-bold text-slate-500 hover:text-white"
                 >
                   Cancel Edit
                 </button>
@@ -573,29 +511,67 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                   required
                   value={articleForm.title}
                   onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })}
-                  placeholder="e.g. Ocean Exploration with AI Models"
+                  placeholder="e.g. Ocean Data Analytics with Python"
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
                 />
               </div>
 
+              {/* Category Folder Selector with Inline + Add Category Button */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Folder *</label>
-                <select
-                  value={articleForm.category}
-                  onChange={(e) => {
-                    const selCat = categories.find(c => c.id === e.target.value);
-                    setArticleForm({ 
-                      ...articleForm, 
-                      category: e.target.value,
-                      subcategory: selCat?.subcategories[0] || ''
-                    });
-                  }}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
-                >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>{c.title}</option>
-                  ))}
-                </select>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Folder *</label>
+                  <button
+                    type="button"
+                    onClick={() => setShowInlineCatModal(!showInlineCatModal)}
+                    className="text-[11px] font-bold text-indigo-500 hover:text-indigo-400 flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="h-3 w-3" />
+                    <span>+ New Category</span>
+                  </button>
+                </div>
+
+                {showInlineCatModal ? (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newCatInlineTitle}
+                      onChange={(e) => setNewCatInlineTitle(e.target.value)}
+                      placeholder="e.g. Ocean"
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950 border text-xs font-bold text-slate-900 dark:text-white outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleInlineAddCategory}
+                      className="px-3 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs shrink-0 cursor-pointer"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowInlineCatModal(false)}
+                      className="p-2 rounded-xl bg-slate-200 dark:bg-indigo-900 text-slate-600 dark:text-slate-300 shrink-0 cursor-pointer"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <select
+                    value={articleForm.category}
+                    onChange={(e) => {
+                      const selCat = categories.find(c => c.id === e.target.value);
+                      setArticleForm({ 
+                        ...articleForm, 
+                        category: e.target.value,
+                        subcategory: selCat?.subcategories[0] || ''
+                      });
+                    }}
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
+                  >
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.title}</option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               <div className="space-y-1">
@@ -604,7 +580,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                   type="text"
                   value={articleForm.subcategory}
                   onChange={(e) => setArticleForm({ ...articleForm, subcategory: e.target.value })}
-                  placeholder="e.g. Deep Sea, Supervised Learning"
+                  placeholder="e.g. Marine Data, Supervised Learning"
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
                 />
               </div>
@@ -679,6 +655,104 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* ================= TAB 3: CATEGORY MANAGER ================= */}
+      {activeTab === 'categories' && (
+        <div className="space-y-8">
+          
+          <form onSubmit={handleAddCategory} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-indigo-900/40 pb-3 flex items-center gap-2">
+              <FolderPlus className="h-5 w-5 text-indigo-500" />
+              <span>Add New Category (e.g. "Ocean", "Robotics")</span>
+            </h2>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={categoryForm.title}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })}
+                  placeholder="e.g. Ocean, Robotics"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Subcategories (comma separated)</label>
+                <input
+                  type="text"
+                  value={categoryForm.subcategories}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, subcategories: e.target.value })}
+                  placeholder="e.g. Marine Science, Deep Sea"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm outline-none text-slate-900 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Description</label>
+              <textarea
+                rows="2"
+                value={categoryForm.description}
+                onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
+                placeholder="A brief summary of what articles will be posted under this category..."
+                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm outline-none text-slate-900 dark:text-white"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md flex items-center gap-2 cursor-pointer"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Create Category Folder</span>
+            </button>
+          </form>
+
+          {/* List of Active Categories with Delete Button */}
+          <div className="space-y-4">
+            <h3 className="font-bold text-slate-900 dark:text-white text-lg">Active Category Folders</h3>
+            <div className="grid gap-4 md:grid-cols-2">
+              {categories.map((cat) => (
+                <div key={cat.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex flex-col justify-between space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-extrabold text-slate-900 dark:text-white text-lg flex items-center gap-2">
+                        <Tag className="h-4 w-4 text-indigo-500" />
+                        <span>{cat.title}</span>
+                      </h4>
+                      <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded">
+                        id: {cat.id}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 line-clamp-2">{cat.description}</p>
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {cat.subcategories.map((sub, idx) => (
+                        <span key={idx} className="text-[10px] bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded font-semibold text-indigo-400">
+                          {sub}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-100 dark:border-indigo-900/40 flex justify-end">
+                    <button
+                      onClick={() => handleDeleteCategory(cat.id)}
+                      className="px-3 py-1 rounded-lg bg-rose-50 dark:bg-rose-950 text-rose-500 text-xs font-bold flex items-center gap-1 cursor-pointer hover:bg-rose-600 hover:text-white transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      <span>Delete Category</span>
                     </button>
                   </div>
                 </div>
