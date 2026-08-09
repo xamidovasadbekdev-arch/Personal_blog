@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
-import { Search, Filter, BookOpen, Clock, Tag, X, Plus } from 'lucide-react';
-import { translations, articlesData } from '../data/portfolioData';
+import { Search, Filter, BookOpen, Clock, Tag, X } from 'lucide-react';
+import { translations } from '../data/portfolioData';
+import { getStoredArticles } from '../data/dataStore';
 import ArticleCard from '../components/ArticleCard';
 import BlogPost from './BlogPost';
 
-export default function Blog({ selectedArticleId, setSelectArticleId, lang, onOpenAdmin }) {
+export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
   const t = translations[lang].blog;
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Load custom LocalStorage articles
-  const getCustomPosts = () => {
-    try {
-      const stored = localStorage.getItem('custom_articles');
-      return stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      return [];
-    }
-  };
-
-  const allArticles = [...getCustomPosts(), ...articlesData];
+  const allArticles = getStoredArticles();
 
   if (selectedArticleId) {
     return (
@@ -54,25 +45,13 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang, onOp
     <div className="space-y-10 py-6">
       
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-3 max-w-2xl">
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-            Technical Articles & Engineering Insights
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-            Articles on backend architecture, FastAPI, data science, and software engineering by Xamidov Asadbek.
-          </p>
-        </div>
-
-        {onOpenAdmin && (
-          <button
-            onClick={onOpenAdmin}
-            className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md flex items-center gap-1.5 shrink-0 self-start md:self-auto cursor-pointer"
-          >
-            <Plus className="h-4 w-4" />
-            <span>Write New Post</span>
-          </button>
-        )}
+      <div className="space-y-3 max-w-2xl">
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+          Technical Articles & Engineering Insights
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+          Articles on backend architecture, FastAPI, data science, and software engineering by Xamidov Asadbek.
+        </p>
       </div>
 
       {/* Filter & Search Bar */}

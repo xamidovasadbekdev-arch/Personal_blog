@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Menu, X, Sun, Moon, Sparkles, PenTool } from 'lucide-react';
+import { Menu, X, Sun, Moon, Sparkles, Lock } from 'lucide-react';
 import { translations } from '../data/portfolioData';
+import { getStoredProfile } from '../data/dataStore';
 
 export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, toggleTheme }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[lang].nav;
+  const profile = getStoredProfile();
 
   const navItems = [
     { id: 'home', label: t.home },
@@ -36,7 +38,7 @@ export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, 
 
             <div className="flex flex-col">
               <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">
-                Xamidov Asadbek
+                {profile.name}
               </span>
               <span className="text-[10px] text-indigo-500 dark:text-indigo-400 font-mono tracking-widest uppercase -mt-1 hidden sm:block font-bold">
                 Backend & AI/ML Engineer
@@ -65,17 +67,17 @@ export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, 
               })}
             </div>
 
-            {/* Admin Studio Link */}
+            {/* Admin Gateway Lock Icon */}
             <button
               onClick={() => setActiveTab('admin')}
-              title="Admin Article Writer"
-              className={`p-2 rounded-xl border border-slate-300 dark:border-indigo-900/50 transition-colors cursor-pointer ${
+              title="Admin Panel Gateway"
+              className={`p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 transition-colors cursor-pointer ${
                 activeTab === 'admin' 
-                  ? 'bg-purple-600 text-white border-purple-600' 
+                  ? 'bg-indigo-600 text-white border-indigo-600' 
                   : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-indigo-900/40'
               }`}
             >
-              <PenTool className="h-4 w-4" />
+              <Lock className="h-4 w-4" />
             </button>
 
             <div className="h-4 w-[1px] bg-slate-300 dark:bg-indigo-900/50 mx-1"></div>
@@ -127,9 +129,9 @@ export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, 
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setActiveTab('admin')}
-              className="p-2 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-300 dark:border-purple-800"
+              className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-300 dark:border-indigo-800"
             >
-              <PenTool className="h-4 w-4" />
+              <Lock className="h-4 w-4" />
             </button>
 
             <button

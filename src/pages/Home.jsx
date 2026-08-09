@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Send, Compass, Sparkles, Code2, Zap, Terminal, Flame } from 'lucide-react';
-import { translations, projectsData, articlesData, skillsData } from '../data/portfolioData';
+import { translations, skillsData } from '../data/portfolioData';
+import { getStoredProfile, getStoredProjects, getStoredArticles } from '../data/dataStore';
 import { GithubIcon, LinkedinIcon, TwitterIcon } from '../components/BrandIcons';
 import TerminalVisual from '../components/TerminalVisual';
 import ProjectCard from '../components/ProjectCard';
@@ -10,14 +11,18 @@ import Typewriter from '../components/Typewriter';
 
 export default function Home({ setActiveTab, setSelectArticleId, lang }) {
   const t = translations[lang];
-  const featuredProjects = projectsData.filter(p => p.featured);
-  const recentArticles = articlesData.slice(0, 2);
+  const profile = getStoredProfile();
+  const projects = getStoredProjects();
+  const articles = getStoredArticles();
+
+  const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
+  const recentArticles = articles.slice(0, 2);
 
   const typewriterWords = [
     "FastAPI Microservices",
     "Scalable Backend Systems",
-    "High-Performance APIs",
-    "Modern Web Applications"
+    "Machine Learning Models",
+    "Data Analytics Pipelines"
   ];
 
   return (
@@ -47,14 +52,14 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-            Hi, I'm <strong className="text-slate-900 dark:text-white font-bold">Asadbek Xamidov</strong> — a Software Engineer focused on high-throughput backend services, clean API architecture, and sharing technical guides.
+            Hi, I'm <strong className="text-slate-900 dark:text-white font-bold">{profile.name}</strong> — {lang === 'en' ? profile.subtitleEN : profile.subtitleUZ}
           </p>
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
             <button
               onClick={() => setActiveTab('projects')}
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-600 text-white font-bold text-sm shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-105 transition-all flex items-center gap-2 cursor-pointer"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-105 transition-all flex items-center gap-2 cursor-pointer"
             >
               <span>{t.hero.viewProjects}</span>
               <ArrowRight className="h-4 w-4" />
@@ -71,7 +76,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
           {/* Social Links */}
           <div className="flex items-center justify-center lg:justify-start gap-3 pt-4">
             <a 
-              href="https://github.com/xamidovasadbekdev-arch" 
+              href={profile.github} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-indigo-950 hover:scale-110 transition-all"
@@ -79,7 +84,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
               <GithubIcon className="h-5 w-5" />
             </a>
             <a 
-              href="https://linkedin.com" 
+              href={profile.linkedin} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-200 dark:hover:bg-indigo-950 hover:scale-110 transition-all"
@@ -87,20 +92,12 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
               <LinkedinIcon className="h-5 w-5" />
             </a>
             <a 
-              href="https://t.me" 
+              href={profile.telegramUrl || `https://t.me/${profile.telegram.replace('@', '')}`} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-600 dark:text-slate-400 hover:text-sky-500 hover:bg-slate-200 dark:hover:bg-indigo-950 hover:scale-110 transition-all"
             >
               <Send className="h-5 w-5" />
-            </a>
-            <a 
-              href="https://twitter.com" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-indigo-950 hover:scale-110 transition-all"
-            >
-              <TwitterIcon className="h-5 w-5" />
             </a>
           </div>
         </div>
@@ -214,10 +211,10 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
             {t.sections.aboutSnippetTitle}
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            {t.about.bioP1}
+            {lang === 'en' ? profile.bioEN1 : profile.bioUZ1}
           </p>
           <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            {t.about.bioP2}
+            {lang === 'en' ? profile.bioEN2 : profile.bioUZ2}
           </p>
           <div className="pt-2">
             <button
@@ -230,7 +227,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
           </div>
         </div>
 
-        {/* Contact Banner Card with Levitation */}
+        {/* Contact Banner Card */}
         <div className="relative rounded-3xl overflow-hidden p-8 bg-gradient-to-br from-indigo-950 via-[#0d122b] to-purple-950 border border-indigo-800/40 text-white space-y-6 shadow-xl animate-levitate">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-indigo-200">
             <Flame className="h-4 w-4 text-amber-400 animate-pulse" />
@@ -239,7 +236,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
 
           <div className="space-y-2">
             <h3 className="text-2xl font-black tracking-tight leading-snug">
-              Have a backend or fullstack project in mind?
+              Have a backend or AI project in mind?
             </h3>
             <p className="text-xs text-indigo-200/80 leading-relaxed">
               I am available for API architecture consultations, system performance tuning, and fullstack contract development.
@@ -248,10 +245,10 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
 
           <div className="flex items-center gap-6 pt-2 border-t border-indigo-800/50">
             <div>
-              <div className="text-xl font-black text-white">{t.hero.yearsExp}</div>
+              <div className="text-xl font-black text-white">{profile.yearsExp}</div>
             </div>
             <div>
-              <div className="text-xl font-black text-white">{t.hero.projectsCount}</div>
+              <div className="text-xl font-black text-white">{profile.projectsCount}</div>
             </div>
           </div>
 
