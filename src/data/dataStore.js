@@ -1,4 +1,4 @@
-import { translations, skillsData, experienceTimeline, projectsData, articlesData } from './portfolioData';
+import { translations, skillsData, experienceTimeline, projectsData, articlesData, blogTaxonomy } from './portfolioData';
 
 const KEYS = {
   PROFILE: 'admin_profile_data',
@@ -6,6 +6,7 @@ const KEYS = {
   ARTICLES: 'admin_articles_data',
   TIMELINE: 'admin_timeline_data',
   CREDS: 'admin_credentials_data',
+  CATEGORIES: 'admin_categories_data',
 };
 
 // Default Credentials
@@ -14,7 +15,7 @@ export const DEFAULT_CREDS = {
   password: 'Asadbek3993',
 };
 
-// Initial Profile Settings
+// Default Profile Settings
 export const DEFAULT_PROFILE = {
   name: 'Xamidov Asadbek',
   headline: 'Backend Developer & AI/ML Engineer, Data Scientist',
@@ -32,6 +33,41 @@ export const DEFAULT_PROFILE = {
   yearsExp: '2+ Years Exp.',
   projectsCount: '15+ Projects',
 };
+
+export const DEFAULT_CATEGORIES = [
+  {
+    id: 'ml',
+    title: 'Machine Learning & AI',
+    description: 'Supervised Learning algorithms, Unsupervised clustering models, Neural Networks, and NLP.',
+    subcategories: ['Supervised Learning', 'Unsupervised Learning', 'Deep Learning', 'NLP & LLMs'],
+    icon: 'Cpu',
+    color: 'from-purple-500/20 to-indigo-500/20 border-purple-500/30 text-purple-400'
+  },
+  {
+    id: 'backend',
+    title: 'Backend & Architecture',
+    description: 'FastAPI microservices, PostgreSQL async sessions, REST API design, Redis caching, and Docker.',
+    subcategories: ['FastAPI & Microservices', 'Databases & SQL', 'Distributed Systems', 'Caching & Performance'],
+    icon: 'Layers',
+    color: 'from-indigo-500/20 to-blue-500/20 border-indigo-500/30 text-indigo-400'
+  },
+  {
+    id: 'datascience',
+    title: 'Data Science & Analytics',
+    description: 'Exploratory data analysis, Pandas & NumPy data pipelines, statistical modeling, and insights.',
+    subcategories: ['Exploratory Data Analysis', 'Pandas & Pipelines', 'Data Visualization'],
+    icon: 'BarChart3',
+    color: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-400'
+  },
+  {
+    id: 'personal',
+    title: 'Personal & Life',
+    description: 'Personal achievements, football tournament gold medals, WIUT university life, and career milestones.',
+    subcategories: ['Achievements & Medals', 'University & WIUT', 'Career Journey', 'Sports & Football'],
+    icon: 'Heart',
+    color: 'from-amber-500/20 to-rose-500/20 border-amber-500/30 text-amber-400'
+  }
+];
 
 export const getStoredCredentials = () => {
   try {
@@ -96,4 +132,17 @@ export const getStoredArticles = () => {
 
 export const saveArticles = (articles) => {
   localStorage.setItem(KEYS.ARTICLES, JSON.stringify(articles));
+};
+
+export const getStoredCategories = () => {
+  try {
+    const data = localStorage.getItem(KEYS.CATEGORIES);
+    return data ? JSON.parse(data) : DEFAULT_CATEGORIES;
+  } catch (e) {
+    return DEFAULT_CATEGORIES;
+  }
+};
+
+export const saveCategories = (categories) => {
+  localStorage.setItem(KEYS.CATEGORIES, JSON.stringify(categories));
 };

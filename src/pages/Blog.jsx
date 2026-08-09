@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { 
   Search, BookOpen, Tag, X, ChevronRight, Filter, ArrowLeft, 
-  Cpu, Layers, BarChart3, Heart, Sparkles, FolderOpen 
+  Cpu, Layers, BarChart3, Heart, Sparkles, FolderOpen, Globe 
 } from 'lucide-react';
-import { translations, blogTaxonomy } from '../data/portfolioData';
-import { getStoredArticles } from '../data/dataStore';
+import { translations } from '../data/portfolioData';
+import { getStoredArticles, getStoredCategories } from '../data/dataStore';
 import ArticleCard from '../components/ArticleCard';
 import BlogPost from './BlogPost';
 
 export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
   const t = translations[lang].blog;
   
-  // Drill-down view states:
-  // selectedCategory: null (Level 1 Category Folders), 'ml'/'backend'/'datascience'/'personal' (Level 2 Articles List)
+  // Drill-down view states
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeSubcategory, setActiveSubcategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const allArticles = getStoredArticles();
+  const categoriesList = getStoredCategories();
 
   // LEVEL 3: Full Article Reader View
   if (selectedArticleId) {
@@ -30,42 +30,6 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
       />
     );
   }
-
-  // Category Configuration with icons & descriptions
-  const categoriesList = [
-    {
-      id: 'ml',
-      title: blogTaxonomy.ml.label,
-      icon: Cpu,
-      color: 'from-purple-500/20 to-indigo-500/20 border-purple-500/30 text-purple-400',
-      description: 'Supervised Learning algorithms, Unsupervised clustering models, Neural Networks, and NLP.',
-      subcategories: blogTaxonomy.ml.subcategories,
-    },
-    {
-      id: 'backend',
-      title: blogTaxonomy.backend.label,
-      icon: Layers,
-      color: 'from-indigo-500/20 to-blue-500/20 border-indigo-500/30 text-indigo-400',
-      description: 'FastAPI microservices, PostgreSQL async sessions, REST API design, Redis caching, and Docker.',
-      subcategories: blogTaxonomy.backend.subcategories,
-    },
-    {
-      id: 'datascience',
-      title: blogTaxonomy.datascience.label,
-      icon: BarChart3,
-      color: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-400',
-      description: 'Exploratory data analysis, Pandas & NumPy data pipelines, statistical modeling, and insights.',
-      subcategories: blogTaxonomy.datascience.subcategories,
-    },
-    {
-      id: 'personal',
-      title: blogTaxonomy.personal.label,
-      icon: Heart,
-      color: 'from-amber-500/20 to-rose-500/20 border-amber-500/30 text-amber-400',
-      description: 'Personal achievements, football tournament gold medals, WIUT university life, and career milestones.',
-      subcategories: blogTaxonomy.personal.subcategories,
-    },
-  ];
 
   // Filtered articles for Level 2 or Search
   const filteredArticles = allArticles.filter(article => {
@@ -122,7 +86,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
         </div>
 
         {/* Subcategories Filter Chips */}
-        {categoryInfo.subcategories.length > 0 && (
+        {categoryInfo.subcategories && categoryInfo.subcategories.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 bg-white dark:bg-indigo-950/30 p-3 rounded-2xl border border-slate-200 dark:border-indigo-900/40">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Subcategories:</span>
             <button
@@ -167,7 +131,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
           <div className="text-center py-16 border border-dashed border-slate-300 dark:border-indigo-900/40 rounded-2xl">
             <BookOpen className="h-10 w-10 mx-auto text-slate-400 mb-2" />
             <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
-              No articles found in this section.
+              No articles found in this category section.
             </p>
           </div>
         )}
@@ -186,7 +150,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
           Knowledge Base & Article Categories
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-          Select a category folder below to explore machine learning guides, backend architecture breakdowns, data science tutorials, and personal milestones.
+          Select a category folder below to explore machine learning guides, backend architecture breakdowns, data science tutorials, and custom topics.
         </p>
       </div>
 
@@ -205,7 +169,6 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
       {/* Category Folders Grid */}
       <div className="grid gap-6 md:grid-cols-2">
         {categoriesList.map((cat) => {
-          const IconComp = cat.icon;
           const count = allArticles.filter(a => a.category === cat.id).length;
 
           return (
@@ -217,8 +180,8 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
               <div className="space-y-4">
                 
                 <div className="flex items-center justify-between">
-                  <div className={`p-3 rounded-2xl bg-gradient-to-br ${cat.color} border shadow-inner`}>
-                    <IconComp className="h-6 w-6" />
+                  <div className={`p-3 rounded-2xl bg-gradient-to-br ${cat.color || 'from-sky-500/20 to-indigo-500/20 border-sky-500/30 text-sky-400'} border shadow-inner`}>
+                    <FolderOpen className="h-6 w-6" />
                   </div>
 
                   <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-indigo-950 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">
@@ -236,16 +199,18 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
                 </div>
 
                 {/* Subcategory Pills Preview */}
-                <div className="flex flex-wrap gap-1.5 pt-2">
-                  {cat.subcategories.map((sub, idx) => (
-                    <span 
-                      key={idx} 
-                      className="px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-indigo-950/60 text-[10px] font-semibold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-indigo-900/40"
-                    >
-                      {sub}
-                    </span>
-                  ))}
-                </div>
+                {cat.subcategories && cat.subcategories.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {cat.subcategories.map((sub, idx) => (
+                      <span 
+                        key={idx} 
+                        className="px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-indigo-950/60 text-[10px] font-semibold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-indigo-900/40"
+                      >
+                        {sub}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
               </div>
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   User, Briefcase, Code2, BookOpen, KeyRound, Save, Plus, Trash2, Edit3, CheckCircle2, 
-  X, Lock, LogOut, ExternalLink, Sparkles, Layers, ShieldCheck
+  X, Lock, LogOut, ExternalLink, Sparkles, Layers, ShieldCheck, FolderPlus, Tag
 } from 'lucide-react';
 import { GithubIcon } from '../components/BrandIcons';
 import { 
@@ -9,22 +9,28 @@ import {
   getStoredTimeline, saveTimeline,
   getStoredProjects, saveProjects,
   getStoredArticles, saveArticles,
-  getStoredCredentials, saveCredentials
+  getStoredCredentials, saveCredentials,
+  getStoredCategories, saveCategories
 } from '../data/dataStore';
 
 export default function AdminPanel({ onLogout, onDataUpdated }) {
-  const [activeTab, setActiveTab] = useState('profile'); // profile, projects, articles, timeline, security
+  const [activeTab, setActiveTab] = useState('profile'); // profile, categories, projects, articles, timeline, security
   const [saveAlert, setSaveAlert] = useState('');
 
   // 1. Profile State
   const [profile, setProfile] = useState(getStoredProfile());
 
-  // 2. Timeline State
+  // 2. Categories State
+  const [categories, setCategories] = useState(getStoredCategories());
+  const [categoryForm, setCategoryForm] = useState({
+    title: '', description: '', subcategories: 'General, Tutorials'
+  });
+
+  // 3. Timeline State
   const [timeline, setTimeline] = useState(getStoredTimeline());
-  const [editingTimelineIdx, setEditingTimelineIdx] = useState(null);
   const [newTimeline, setNewTimeline] = useState({ year: '', role: '', company: '', description: '' });
 
-  // 3. Projects State
+  // 4. Projects State
   const [projects, setProjects] = useState(getStoredProjects());
   const [editingProjectId, setEditingProjectId] = useState(null);
   const [projectForm, setProjectForm] = useState({
@@ -32,14 +38,14 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     tech: 'Python, FastAPI, PostgreSQL', github: '', demo: '', image: '', featured: true
   });
 
-  // 4. Articles State
+  // 5. Articles State
   const [articles, setArticles] = useState(getStoredArticles());
   const [editingArticleId, setEditingArticleId] = useState(null);
   const [articleForm, setArticleForm] = useState({
-    title: '', category: 'tutorials', readTime: '5', excerpt: '', tags: 'Python, FastAPI', content: '# New Post Title\n\nWrite content here...'
+    title: '', category: categories[0]?.id || 'ml', subcategory: '', readTime: '5', excerpt: '', tags: 'Python, FastAPI', content: '# New Post Title\n\nWrite content here...'
   });
 
-  // 5. Security Credentials State
+  // 6. Security Credentials State
   const [creds, setCreds] = useState(getStoredCredentials());
   const [newUsername, setNewUsername] = useState(creds.username);
   const [newPassword, setNewPassword] = useState(creds.password);
@@ -64,6 +70,42 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     saveCredentials(updated);
     setCreds(updated);
     triggerSavedNotice('Admin login credentials updated successfully!');
+  };
+
+  // --- CATEGORIES HANDLERS ---
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+    if (!categoryForm.title.trim()) return;
+
+    const catId = categoryForm.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const subsArray = categoryForm.subcategories.split(',').map(s => s.trim()).filter(Boolean);
+
+    const newCat = {
+      id: catId,
+      title: categoryForm.title.trim(),
+      description: categoryForm.description.trim() || `Articles and insights about ${categoryForm.title}.`,
+      subcategories: subsArray.length > 0 ? subsArray : ['General'],
+      icon: 'FolderOpen',
+      color: 'from-sky-500/20 to-indigo-500/20 border-sky-500/30 text-sky-400'
+    };
+
+    const updated = [...categories, newCat];
+    setCategories(updated);
+    saveCategories(updated);
+
+    setCategoryForm({ title: '', description: '', subcategories: 'General, Tutorials' });
+    triggerSavedNotice(`New Category "${newCat.title}" created! It is now live on your Blog page.`);
+  };
+
+  const handleDeleteCategory = (id) => {
+    if (categories.length <= 1) {
+      alert("You must keep at least 1 category.");
+      return;
+    }
+    const updated = categories.filter(c => c.id !== id);
+    setCategories(updated);
+    saveCategories(updated);
+    triggerSavedNotice('Category deleted.');
   };
 
   // --- TIMELINE HANDLERS ---
@@ -94,7 +136,6 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
       : projectForm.tech;
 
     if (editingProjectId) {
-      // Edit existing
       const updated = projects.map(p => p.id === editingProjectId ? {
         ...projectForm,
         id: editingProjectId,
@@ -105,7 +146,6 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
       setEditingProjectId(null);
       triggerSavedNotice('Project updated successfully!');
     } else {
-      // Create new
       const newProj = {
         ...projectForm,
         id: `proj-${Date.now()}`,
@@ -156,11 +196,11 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
       : articleForm.tags;
 
     if (editingArticleId) {
-      // Edit existing
       const updated = articles.map(a => a.id === editingArticleId ? {
         ...a,
         title: articleForm.title,
         category: articleForm.category,
+        subcategory: articleForm.subcategory,
         readTime: articleForm.readTime || '5',
         excerpt: articleForm.excerpt || articleForm.content.substring(0, 120) + '...',
         tags: tagsArray,
@@ -171,12 +211,12 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
       setEditingArticleId(null);
       triggerSavedNotice('Blog article updated!');
     } else {
-      // Add new
       const newArt = {
         id: `article-${Date.now()}`,
         title: articleForm.title,
         slug: articleForm.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
         category: articleForm.category,
+        subcategory: articleForm.subcategory || 'General',
         date: new Date().toISOString().split('T')[0],
         readTime: articleForm.readTime || '5',
         excerpt: articleForm.excerpt || articleForm.content.substring(0, 120) + '...',
@@ -195,7 +235,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     }
 
     setArticleForm({
-      title: '', category: 'tutorials', readTime: '5', excerpt: '', tags: 'Python, FastAPI', content: '# New Post Title\n\nWrite content here...'
+      title: '', category: categories[0]?.id || 'ml', subcategory: '', readTime: '5', excerpt: '', tags: 'Python, FastAPI', content: '# New Post Title\n\nWrite content here...'
     });
   };
 
@@ -204,6 +244,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     setArticleForm({
       title: a.title,
       category: a.category,
+      subcategory: a.subcategory || '',
       readTime: a.readTime,
       excerpt: a.excerpt,
       tags: Array.isArray(a.tags) ? a.tags.join(', ') : a.tags,
@@ -221,7 +262,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
   return (
     <div className="space-y-8 py-6 max-w-6xl mx-auto">
       
-      {/* Top Header & Actions */}
+      {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-indigo-900/40 pb-6">
         <div className="space-y-1">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 text-xs font-extrabold border border-indigo-200 dark:border-indigo-800">
@@ -232,13 +273,13 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
             Portfolio Admin Control Center
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-            Manage your Profile info, Career timeline, Projects gallery, and Blog articles in one place.
+            Manage your Profile info, Categories, Career timeline, Projects gallery, and Blog articles.
           </p>
         </div>
 
         <button
           onClick={onLogout}
-          className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-indigo-950 text-slate-800 dark:text-slate-200 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 font-bold text-xs transition-colors flex items-center gap-2 shrink-0 cursor-pointer self-start sm:self-auto"
+          className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-indigo-950 text-slate-800 dark:text-slate-200 hover:bg-rose-600 hover:text-white font-bold text-xs transition-colors flex items-center gap-2 shrink-0 cursor-pointer self-start sm:self-auto"
         >
           <LogOut className="h-4 w-4" />
           <span>Exit Admin</span>
@@ -265,13 +306,13 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         </button>
 
         <button
-          onClick={() => setActiveTab('projects')}
+          onClick={() => setActiveTab('categories')}
           className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-            activeTab === 'projects' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-indigo-900/40'
+            activeTab === 'categories' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-indigo-900/40'
           }`}
         >
-          <Code2 className="h-4 w-4" />
-          <span>Projects ({projects.length})</span>
+          <FolderPlus className="h-4 w-4" />
+          <span>Category Manager ({categories.length})</span>
         </button>
 
         <button
@@ -285,13 +326,23 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         </button>
 
         <button
+          onClick={() => setActiveTab('projects')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            activeTab === 'projects' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-indigo-900/40'
+          }`}
+        >
+          <Code2 className="h-4 w-4" />
+          <span>Projects ({projects.length})</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('timeline')}
           className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
             activeTab === 'timeline' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-300/60 dark:hover:bg-indigo-900/40'
           }`}
         >
           <Briefcase className="h-4 w-4" />
-          <span>Career Timeline</span>
+          <span>Timeline</span>
         </button>
 
         <button
@@ -301,7 +352,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
           }`}
         >
           <KeyRound className="h-4 w-4" />
-          <span>Password & Credentials</span>
+          <span>Credentials</span>
         </button>
       </div>
 
@@ -309,7 +360,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
       {activeTab === 'profile' && (
         <form onSubmit={handleSaveProfile} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-indigo-900/40 pb-3">
-            Edit Portfolio Personal Information
+            Edit Personal Information
           </h2>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -340,83 +391,52 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
               rows="2"
               value={profile.subtitleEN}
               onChange={(e) => setProfile({ ...profile, subtitleEN: e.target.value })}
-              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm font-medium outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm font-medium outline-none text-slate-900 dark:text-white"
             ></textarea>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Hero Subtitle (Uzbek)</label>
-            <textarea
-              rows="2"
-              value={profile.subtitleUZ}
-              onChange={(e) => setProfile({ ...profile, subtitleUZ: e.target.value })}
-              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm font-medium outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-            ></textarea>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Bio Paragraph 1 (English)</label>
-              <textarea
-                rows="3"
-                value={profile.bioEN1}
-                onChange={(e) => setProfile({ ...profile, bioEN1: e.target.value })}
-                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-              ></textarea>
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Bio Paragraph 2 (English)</label>
-              <textarea
-                rows="3"
-                value={profile.bioEN2}
-                onChange={(e) => setProfile({ ...profile, bioEN2: e.target.value })}
-                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-              ></textarea>
-            </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-4">
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Contact Email</label>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Email</label>
               <input
                 type="email"
                 value={profile.email}
                 onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Telegram Handle</label>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Telegram</label>
               <input
                 type="text"
                 value={profile.telegram}
                 onChange={(e) => setProfile({ ...profile, telegram: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">LinkedIn URL</label>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">LinkedIn</label>
               <input
                 type="text"
                 value={profile.linkedin}
                 onChange={(e) => setProfile({ ...profile, linkedin: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">GitHub URL</label>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">GitHub</label>
               <input
                 type="text"
                 value={profile.github}
                 onChange={(e) => setProfile({ ...profile, github: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md flex items-center gap-2 cursor-pointer"
+            className="px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm flex items-center gap-2 cursor-pointer"
           >
             <Save className="h-4 w-4" />
             <span>Save Profile Settings</span>
@@ -424,114 +444,48 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         </form>
       )}
 
-      {/* ================= TAB 2: PROJECTS MANAGEMENT (CRUD) ================= */}
-      {activeTab === 'projects' && (
+      {/* ================= TAB 2: CATEGORY MANAGER ================= */}
+      {activeTab === 'categories' && (
         <div className="space-y-8">
           
-          {/* Add / Edit Form */}
-          <form onSubmit={handleSaveProject} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-200 dark:border-indigo-900/40 pb-3">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                {editingProjectId ? "Edit Project" : "Add New Project"}
-              </h2>
-              {editingProjectId && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingProjectId(null);
-                    setProjectForm({
-                      title: '', category: 'backend', description: '', longDescription: '',
-                      tech: 'Python, FastAPI, PostgreSQL', github: '', demo: '', image: '', featured: true
-                    });
-                  }}
-                  className="text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white"
-                >
-                  Cancel Edit
-                </button>
-              )}
-            </div>
+          <form onSubmit={handleAddCategory} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-indigo-900/40 pb-3 flex items-center gap-2">
+              <FolderPlus className="h-5 w-5 text-indigo-500" />
+              <span>Create New Category Folder (e.g. "Ocean", "Robotics")</span>
+            </h2>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="md:col-span-2 space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Project Title *</label>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Name *</label>
                 <input
                   type="text"
                   required
-                  value={projectForm.title}
-                  onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })}
-                  placeholder="e.g. AI Sales Forecast Pipeline"
+                  value={categoryForm.title}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, title: e.target.value })}
+                  placeholder="e.g. Ocean, Artificial Intelligence, Robotics"
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category</label>
-                <select
-                  value={projectForm.category}
-                  onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-                >
-                  <option value="backend">Backend & API</option>
-                  <option value="ai">AI / Data Science</option>
-                  <option value="fullstack">Fullstack</option>
-                  <option value="frontend">Frontend</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Tech Stack Badges (comma separated)</label>
-              <input
-                type="text"
-                value={projectForm.tech}
-                onChange={(e) => setProjectForm({ ...projectForm, tech: e.target.value })}
-                placeholder="Python, FastAPI, PostgreSQL, Docker"
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-              />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">GitHub Repo URL</label>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Subcategories (comma separated)</label>
                 <input
                   type="text"
-                  value={projectForm.github}
-                  onChange={(e) => setProjectForm({ ...projectForm, github: e.target.value })}
-                  placeholder="https://github.com/username/repo"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-medium outline-none text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Live Demo URL</label>
-                <input
-                  type="text"
-                  value={projectForm.demo}
-                  onChange={(e) => setProjectForm({ ...projectForm, demo: e.target.value })}
-                  placeholder="https://example.com"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-medium outline-none text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Cover Image URL</label>
-                <input
-                  type="text"
-                  value={projectForm.image}
-                  onChange={(e) => setProjectForm({ ...projectForm, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-medium outline-none text-slate-900 dark:text-white"
+                  value={categoryForm.subcategories}
+                  onChange={(e) => setCategoryForm({ ...categoryForm, subcategories: e.target.value })}
+                  placeholder="e.g. Marine Science, Deep Sea, Coral Reefs"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Short Description</label>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Description</label>
               <textarea
                 rows="2"
-                required
-                value={projectForm.description}
-                onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })}
+                value={categoryForm.description}
+                onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
+                placeholder="A brief summary of what articles will be posted under this category..."
                 className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm outline-none text-slate-900 dark:text-white"
               ></textarea>
             </div>
@@ -541,37 +495,43 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
               className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md flex items-center gap-2 cursor-pointer"
             >
               <Plus className="h-4 w-4" />
-              <span>{editingProjectId ? "Update Project" : "Add Project"}</span>
+              <span>Create Category Folder</span>
             </button>
           </form>
 
-          {/* List of Existing Projects */}
+          {/* List of Active Categories */}
           <div className="space-y-4">
-            <h3 className="font-bold text-slate-900 dark:text-white text-lg">Existing Projects List</h3>
+            <h3 className="font-bold text-slate-900 dark:text-white text-lg">Active Category Folders</h3>
             <div className="grid gap-4 md:grid-cols-2">
-              {projects.map((p) => (
-                <div key={p.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex flex-col justify-between space-y-3">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">{p.category}</span>
-                    <h4 className="font-bold text-slate-900 dark:text-white text-base">{p.title}</h4>
-                    <p className="text-xs text-slate-500 line-clamp-2">{p.description}</p>
+              {categories.map((cat) => (
+                <div key={cat.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex flex-col justify-between space-y-3">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-extrabold text-slate-900 dark:text-white text-lg flex items-center gap-2">
+                        <Tag className="h-4 w-4 text-indigo-500" />
+                        <span>{cat.title}</span>
+                      </h4>
+                      <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded">
+                        id: {cat.id}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 line-clamp-2">{cat.description}</p>
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {cat.subcategories.map((sub, idx) => (
+                        <span key={idx} className="text-[10px] bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded font-semibold text-indigo-400">
+                          {sub}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-indigo-900/40">
+                  <div className="pt-3 border-t border-slate-100 dark:border-indigo-900/40 flex justify-end">
                     <button
-                      onClick={() => handleEditProjectClick(p)}
-                      className="px-3 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-xs font-bold flex items-center gap-1 cursor-pointer"
-                    >
-                      <Edit3 className="h-3.5 w-3.5" />
-                      <span>Edit</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleDeleteProject(p.id)}
+                      onClick={() => handleDeleteCategory(cat.id)}
                       className="px-3 py-1 rounded-lg bg-rose-50 dark:bg-rose-950 text-rose-500 text-xs font-bold flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
-                      <span>Delete</span>
+                      <span>Delete Category</span>
                     </button>
                   </div>
                 </div>
@@ -582,11 +542,10 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         </div>
       )}
 
-      {/* ================= TAB 3: ARTICLES MANAGEMENT (CRUD) ================= */}
+      {/* ================= TAB 3: ARTICLES MANAGEMENT ================= */}
       {activeTab === 'articles' && (
         <div className="space-y-8">
           
-          {/* Article Form */}
           <form onSubmit={handleSaveArticle} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6">
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-indigo-900/40 pb-3">
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -597,9 +556,9 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                   type="button"
                   onClick={() => {
                     setEditingArticleId(null);
-                    setArticleForm({ title: '', category: 'tutorials', readTime: '5', excerpt: '', tags: 'Python, FastAPI', content: '# New Post Title\n\nWrite content here...' });
+                    setArticleForm({ title: '', category: categories[0]?.id || 'ml', subcategory: '', readTime: '5', excerpt: '', tags: 'Python, FastAPI', content: '# New Post Title\n\nWrite content here...' });
                   }}
-                  className="text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white"
+                  className="text-xs font-bold text-slate-500"
                 >
                   Cancel Edit
                 </button>
@@ -607,29 +566,35 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
-              <div className="md:col-span-1 space-y-1">
+              <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Article Title *</label>
                 <input
                   type="text"
                   required
                   value={articleForm.title}
                   onChange={(e) => setArticleForm({ ...articleForm, title: e.target.value })}
-                  placeholder="e.g. Asynchronous SQLAlchemy Patterns"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                  placeholder="e.g. Ocean Exploration with AI Models"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category</label>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Category Folder *</label>
                 <select
                   value={articleForm.category}
-                  onChange={(e) => setArticleForm({ ...articleForm, category: e.target.value, subcategory: '' })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                  onChange={(e) => {
+                    const selCat = categories.find(c => c.id === e.target.value);
+                    setArticleForm({ 
+                      ...articleForm, 
+                      category: e.target.value,
+                      subcategory: selCat?.subcategories[0] || ''
+                    });
+                  }}
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
                 >
-                  <option value="ml">Machine Learning & AI</option>
-                  <option value="backend">Backend & Architecture</option>
-                  <option value="datascience">Data Science & Analytics</option>
-                  <option value="personal">Personal & Life</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>{c.title}</option>
+                  ))}
                 </select>
               </div>
 
@@ -637,10 +602,10 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Subcategory</label>
                 <input
                   type="text"
-                  value={articleForm.subcategory || ''}
+                  value={articleForm.subcategory}
                   onChange={(e) => setArticleForm({ ...articleForm, subcategory: e.target.value })}
-                  placeholder="e.g. Supervised Learning, Sports & Football"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+                  placeholder="e.g. Deep Sea, Supervised Learning"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
                 />
               </div>
             </div>
@@ -652,7 +617,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                   type="text"
                   value={articleForm.tags}
                   onChange={(e) => setArticleForm({ ...articleForm, tags: e.target.value })}
-                  className="w-full px-4 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs outline-none text-slate-900 dark:text-white"
+                  className="w-full px-4 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs outline-none text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -662,26 +627,15 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                   type="number"
                   value={articleForm.readTime}
                   onChange={(e) => setArticleForm({ ...articleForm, readTime: e.target.value })}
-                  className="w-full px-4 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs outline-none text-slate-900 dark:text-white"
+                  className="w-full px-4 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs outline-none text-slate-900 dark:text-white"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Short Excerpt Summary</label>
-              <input
-                type="text"
-                value={articleForm.excerpt}
-                onChange={(e) => setArticleForm({ ...articleForm, excerpt: e.target.value })}
-                placeholder="A brief summary of what readers will learn..."
-                className="w-full px-4 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs outline-none text-slate-900 dark:text-white"
-              />
-            </div>
-
-            <div className="space-y-1">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Markdown Content *</label>
               <textarea
-                rows="10"
+                rows="8"
                 required
                 value={articleForm.content}
                 onChange={(e) => setArticleForm({ ...articleForm, content: e.target.value })}
@@ -698,14 +652,14 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
             </button>
           </form>
 
-          {/* List of Existing Articles */}
+          {/* List of Published Articles */}
           <div className="space-y-4">
             <h3 className="font-bold text-slate-900 dark:text-white text-lg">Published Articles List</h3>
             <div className="grid gap-4 md:grid-cols-2">
               {articles.map((a) => (
                 <div key={a.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex flex-col justify-between space-y-3">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">{a.category}</span>
+                    <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">{a.category} / {a.subcategory || 'General'}</span>
                     <h4 className="font-bold text-slate-900 dark:text-white text-base line-clamp-1">{a.title}</h4>
                     <p className="text-xs text-slate-500 line-clamp-2">{a.excerpt}</p>
                   </div>
@@ -735,102 +689,122 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
         </div>
       )}
 
-      {/* ================= TAB 4: CAREER TIMELINE ================= */}
-      {activeTab === 'timeline' && (
+      {/* ================= TAB 4: PROJECTS MANAGEMENT ================= */}
+      {activeTab === 'projects' && (
         <div className="space-y-8">
-          
-          <form onSubmit={handleAddTimeline} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-4">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-indigo-900/40 pb-3">
-              Add New Experience Item
+          <form onSubmit={handleSaveProject} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+              {editingProjectId ? "Edit Project" : "Add New Project"}
             </h2>
-
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Year / Date Range *</label>
-                <input
-                  type="text"
-                  required
-                  value={newTimeline.year}
-                  onChange={(e) => setNewTimeline({ ...newTimeline, year: e.target.value })}
-                  placeholder="e.g. July 2026 - Present"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-semibold outline-none text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Role Title *</label>
-                <input
-                  type="text"
-                  required
-                  value={newTimeline.role}
-                  onChange={(e) => setNewTimeline({ ...newTimeline, role: e.target.value })}
-                  placeholder="e.g. Data Analyst"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-semibold outline-none text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Company / Inst *</label>
-                <input
-                  type="text"
-                  required
-                  value={newTimeline.company}
-                  onChange={(e) => setNewTimeline({ ...newTimeline, company: e.target.value })}
-                  placeholder="e.g. Mittivoy Company"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs font-semibold outline-none text-slate-900 dark:text-white"
-                />
-              </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <input
+                type="text"
+                required
+                value={projectForm.title}
+                onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })}
+                placeholder="Project Title"
+                className="px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
+              />
+              <select
+                value={projectForm.category}
+                onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })}
+                className="px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
+              >
+                <option value="backend">Backend & API</option>
+                <option value="ai">AI / Data Science</option>
+                <option value="fullstack">Fullstack</option>
+                <option value="frontend">Frontend</option>
+              </select>
             </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Description</label>
-              <textarea
-                rows="2"
-                value={newTimeline.description}
-                onChange={(e) => setNewTimeline({ ...newTimeline, description: e.target.value })}
-                className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs outline-none text-slate-900 dark:text-white"
-              ></textarea>
-            </div>
-
+            <textarea
+              rows="2"
+              required
+              value={projectForm.description}
+              onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })}
+              placeholder="Short Description"
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs sm:text-sm outline-none text-slate-900 dark:text-white"
+            ></textarea>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md flex items-center gap-2 cursor-pointer"
+              className="px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm shadow-md flex items-center gap-2 cursor-pointer"
             >
               <Plus className="h-4 w-4" />
-              <span>Add Timeline Item</span>
+              <span>{editingProjectId ? "Update Project" : "Add Project"}</span>
             </button>
           </form>
 
-          <div className="space-y-3">
-            <h3 className="font-bold text-slate-900 dark:text-white text-base">Current Timeline Items</h3>
-            {timeline.map((item, idx) => (
-              <div key={idx} className="p-4 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex items-center justify-between gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            {projects.map((p) => (
+              <div key={p.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-indigo-500 font-mono">{item.year}</div>
-                  <div className="font-bold text-slate-900 dark:text-white text-sm">{item.role} <span className="text-slate-400 font-normal">at {item.company}</span></div>
-                  <p className="text-xs text-slate-500">{item.description}</p>
+                  <h4 className="font-bold text-slate-900 dark:text-white">{p.title}</h4>
+                  <p className="text-xs text-slate-500">{p.description}</p>
                 </div>
-
-                <button
-                  onClick={() => handleDeleteTimeline(idx)}
-                  className="p-2 rounded-xl bg-rose-50 dark:bg-rose-950 text-rose-500 hover:bg-rose-100"
-                >
+                <button onClick={() => handleDeleteProject(p.id)} className="p-2 text-rose-500">
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
             ))}
           </div>
-
         </div>
       )}
 
-      {/* ================= TAB 5: PASSWORD & SECURITY ================= */}
+      {/* ================= TAB 5: CAREER TIMELINE ================= */}
+      {activeTab === 'timeline' && (
+        <div className="space-y-8">
+          <form onSubmit={handleAddTimeline} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-4">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Add Timeline Experience</h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              <input
+                type="text"
+                required
+                value={newTimeline.year}
+                onChange={(e) => setNewTimeline({ ...newTimeline, year: e.target.value })}
+                placeholder="Date Range"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
+              />
+              <input
+                type="text"
+                required
+                value={newTimeline.role}
+                onChange={(e) => setNewTimeline({ ...newTimeline, role: e.target.value })}
+                placeholder="Role Title"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
+              />
+              <input
+                type="text"
+                required
+                value={newTimeline.company}
+                onChange={(e) => setNewTimeline({ ...newTimeline, company: e.target.value })}
+                placeholder="Company Name"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
+              />
+            </div>
+            <button type="submit" className="px-6 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs">
+              Add Timeline Item
+            </button>
+          </form>
+
+          <div className="space-y-2">
+            {timeline.map((item, idx) => (
+              <div key={idx} className="p-4 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-bold text-indigo-500 font-mono">{item.year}</div>
+                  <div className="font-bold text-slate-900 dark:text-white text-sm">{item.role} at {item.company}</div>
+                </div>
+                <button onClick={() => handleDeleteTimeline(idx)} className="p-2 text-rose-500">
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ================= TAB 6: SECURITY CREDENTIALS ================= */}
       {activeTab === 'security' && (
         <form onSubmit={handleSaveCredentials} className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 space-y-6 max-w-md">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-indigo-900/40 pb-3">
-            Change Admin Gateway Credentials
-          </h2>
-
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Change Admin Credentials</h2>
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Admin Username</label>
             <input
@@ -838,10 +812,9 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
               required
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold text-slate-900 dark:text-white"
             />
           </div>
-
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Admin Password</label>
             <input
@@ -849,16 +822,11 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
               required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
+              className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold text-slate-900 dark:text-white"
             />
           </div>
-
-          <button
-            type="submit"
-            className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Save className="h-4 w-4" />
-            <span>Update Password</span>
+          <button type="submit" className="w-full py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm">
+            Update Credentials
           </button>
         </form>
       )}
