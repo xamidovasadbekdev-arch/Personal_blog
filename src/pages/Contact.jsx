@@ -17,42 +17,51 @@ export default function Contact({ lang }) {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
 
     const emailSubject = encodeURIComponent(formData.subject || `Portfolio Message from ${formData.name}`);
     const emailBody = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
 
-    // 1. Direct Mailto dispatch (opens local mail client pre-filled to xamidovasadbek.dev@gmail.com)
+    // 1. Direct Mailto dispatch (Opens email app pre-filled to xamidovasadbek.dev@gmail.com)
     window.location.href = `mailto:xamidovasadbek.dev@gmail.com?subject=${emailSubject}&body=${emailBody}`;
 
-    // 2. Formspree API Submission (Backup background HTTP POST)
+    // 2. Background HTTP POST dispatch via Web3Forms API to deliver email straight to inbox
     try {
-      await fetch("https://formspree.io/f/xamidovasadbek.dev@gmail.com", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
         body: JSON.stringify({
+          access_key: "4a88f7be-7696-4a4b-a7e8-e501d5dd578e", // Web3Forms direct key
           name: formData.name,
           email: formData.email,
-          subject: formData.subject,
+          subject: formData.subject || `New Portfolio Message from ${formData.name}`,
           message: formData.message,
-          _replyto: formData.email
+          to_email: "xamidovasadbek.dev@gmail.com"
         })
       });
+
+      const res = await response.json();
+      if (res.success) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setSubmitted(true);
+      }
     } catch (err) {
-      console.log("Direct mailto opened");
+      setSubmitted(true);
     }
 
     setIsSubmitting(false);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
   return (
