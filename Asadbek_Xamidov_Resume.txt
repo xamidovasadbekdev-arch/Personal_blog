@@ -1,0 +1,39 @@
+================================================================================
+XAMIDOV ASADBEK — RESUME / CURRICULUM VITAE
+Backend Developer & AI/ML Engineer, Data Scientist
+Tashkent, Uzbekistan | Email: xamidovasadbek.dev@gmail.com
+Telegram: @homiidov | GitHub: https://github.com/xamidovasadbekdev-arch
+LinkedIn: https://www.linkedin.com/in/asadbekxamidov/
+================================================================================
+
+SUMMARY:
+Data Analyst at Mittivoy, Machine Learning Engineering Intern at FLyrank, and Business 
+Information Systems Full Scholarship Awardee at WIUT. Specialized in Python backend 
+engineering with FastAPI, machine learning model building, SQL data pipelines, 
+and data science analytics.
+
+EDUCATION & SCHOLARSHIPS:
+- Westminster International University in Tashkent (WIUT) | 2024 - Present
+  BSc Business Information Systems (Full Scholarship Awardee)
+- Uzcard Data Science Program | May 2026 - Present
+  Machine Learning, Predictive Modeling, Statistical Analysis
+- Backend Development Intensive | Nov 2025 - Mar 2026
+  Python, FastAPI Async Patterns, PostgreSQL, Docker, Clean Architecture
+
+WORK EXPERIENCE:
+1. Data Analyst | Mittivoy Company (July 2026 - Present)
+   - Built automated SQL data pipelines and executive performance dashboards.
+   - Extracted insights from business data to optimize decision-making processes.
+
+2. Machine Learning Engineering Intern | FLyrank (July 2026 - Present)
+   - Developing ML models, integrating RESTful API endpoints, and optimizing query performance.
+
+3. Junior Backend Developer (Freelance) | Jan 2026 - Apr 2026
+   - Architected async REST APIs with FastAPI, PostgreSQL, Redis caching, and Docker containers.
+
+TECHNICAL SKILLS:
+- Languages: Python, SQL, JavaScript, HTML5/CSS3, Go (Basics)
+- Machine Learning & Data Science: Supervised Learning, Unsupervised Learning, Pandas, NumPy, Scikit-Learn
+- Frameworks: FastAPI, React.js, Next.js, Node.js
+- Databases & Infrastructure: PostgreSQL, Redis, Docker, Git, Linux, Vercel
+================================================================================
