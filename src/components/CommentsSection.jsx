@@ -36,11 +36,14 @@ export default function CommentsSection({ articleId, lang = 'en' }) {
     e.preventDefault();
     if (!name.trim() || !text.trim()) return;
 
+    // Format current timestamp in Asia/Tashkent timezone (UTC+5)
+    const tashkentTime = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Tashkent' }).replace('T', ' ').substring(0, 16);
+
     const newComment = {
       id: `comment-${Date.now()}`,
       name: name.trim(),
       text: text.trim(),
-      date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      date: tashkentTime,
       avatar: `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(name)}`
     };
 

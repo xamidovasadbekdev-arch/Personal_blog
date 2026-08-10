@@ -121,7 +121,7 @@ export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, 
               className="ml-1 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-600 rounded-xl transition-all shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 cursor-pointer flex items-center gap-1.5"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              <span>Let's Talk</span>
+              <span>{t.letsTalk}</span>
             </button>
           </div>
 

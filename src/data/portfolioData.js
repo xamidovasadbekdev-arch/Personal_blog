@@ -67,6 +67,7 @@ export const translations = {
       contact: "Contact",
       admin: "Admin Studio",
       available: "👋 Available for Opportunities",
+      letsTalk: "Let's Talk",
     },
     hero: {
       badge: "Available for Opportunities",
@@ -197,6 +198,7 @@ export const translations = {
       contact: "Aloqa",
       admin: "Admin Studiya",
       available: "👋 Takliflar va loyihalar uchun ochiq",
+      letsTalk: "Bog'lanish",
     },
     hero: {
       badge: "Takliflar uchun ochiq",
