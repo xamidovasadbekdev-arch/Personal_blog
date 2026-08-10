@@ -12,6 +12,9 @@ export default function ArticleCard({ article, onSelectArticle, t, lang = 'en' }
       : taxItem.label;
   }
 
+  const title = typeof article.title === 'object' ? (article.title[lang] || article.title.en) : article.title;
+  const excerpt = typeof article.excerpt === 'object' ? (article.excerpt[lang] || article.excerpt.en) : article.excerpt;
+
   return (
     <article 
       onClick={() => onSelectArticle(article.id)}
@@ -48,17 +51,17 @@ export default function ArticleCard({ article, onSelectArticle, t, lang = 'en' }
 
         {/* Title */}
         <h3 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
-          {article.title}
+          {title}
         </h3>
 
         {/* Excerpt */}
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
-          {article.excerpt}
+          {excerpt}
         </p>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-1.5 pt-1">
-          {article.tags.map((tag, idx) => (
+          {article.tags && article.tags.map((tag, idx) => (
             <span 
               key={idx}
               className="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-indigo-950/60 px-2 py-0.5 rounded-md"

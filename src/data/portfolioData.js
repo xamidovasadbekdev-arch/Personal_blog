@@ -464,20 +464,27 @@ export const projectsData = [
 export const articlesData = [
   {
     id: "supervised-learning-classification-guide",
-    title: "Supervised Learning: Building Classifier Models with Scikit-Learn",
+    title: {
+      en: "Supervised Learning: Building Classifier Models with Scikit-Learn",
+      uz: "Nazorat Qilinadigan O'rganish: Scikit-Learn Bilan Klassifikator Modellari"
+    },
     slug: "supervised-learning-classification-guide",
     category: "ml",
     subcategory: "Supervised Learning",
     date: "2026-08-02",
     readTime: "6",
-    excerpt: "A practical guide to supervised machine learning algorithms, cross-validation, feature scaling, and model evaluation metrics.",
+    excerpt: {
+      en: "A practical guide to supervised machine learning algorithms, cross-validation, feature scaling, and model evaluation metrics.",
+      uz: "Nazorat qilinadigan machine learning algoritmlari, kross-validatsiya, belgilarni masshtablash va modelni baholash bo'yicha amaliy qo'llanma."
+    },
     author: {
       name: "Xamidov Asadbek",
       role: "Backend Developer & AI/ML Engineer",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
     },
     tags: ["Machine Learning", "Supervised Learning", "Python", "Scikit-Learn"],
-    content: `
+    content: {
+      en: `
 # Supervised Learning: Building Classifier Models with Scikit-Learn
 
 Supervised Machine Learning algorithms learn mappings from input features to target labels. In this article, we explore classification models using **Scikit-Learn**.
@@ -504,24 +511,60 @@ model = RandomForestClassifier(n_estimators=100)
 model.fit(X_train_scaled, y_train)
 print(f"Accuracy Score: {model.score(X_test_scaled, y_test):.4f}")
 \`\`\`
+`,
+      uz: `
+# Nazorat Qilinadigan O'rganish: Scikit-Learn Bilan Klassifikator Modellari
+
+Nazorat qilinadigan Machine Learning (Supervised Learning) algoritmlari kirish belgilaridan maqsadli belgilarga akslantirishni o'rganadi. Ushbu maqolada **Scikit-Learn** yordamida klassifikatsiya modellarini ko'rib chiqamiz.
+
+---
+
+## 1. Ma'lumotlarni Tayyorlash va Masshtablash
+
+\`\`\`python
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+
+# Belgilar va maqsadli o'zgaruvchini bo'lish
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Masshtablash
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Modelni o'rgatish
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train_scaled, y_train)
+print(f"Akkuratlik Darajasi: {model.score(X_test_scaled, y_test):.4f}")
+\`\`\`
 `
+    }
   },
   {
     id: "unsupervised-learning-clustering-guide",
-    title: "Unsupervised Learning: K-Means & Hierarchical Clustering Patterns",
+    title: {
+      en: "Unsupervised Learning: K-Means & Hierarchical Clustering Patterns",
+      uz: "Nazoratsiz O'rganish: K-Means va Klasterlash Usullari"
+    },
     slug: "unsupervised-learning-clustering-guide",
     category: "ml",
     subcategory: "Unsupervised Learning",
     date: "2026-07-20",
     readTime: "7",
-    excerpt: "Explore how unsupervised algorithms discover hidden structures in unlabelled dataset clusters using K-Means and PCA dimensionality reduction.",
+    excerpt: {
+      en: "Explore how unsupervised algorithms discover hidden structures in unlabelled dataset clusters using K-Means and PCA dimensionality reduction.",
+      uz: "Belgilanmagan ma'lumotlar to'plamida K-Means va PCA o'lchamlarini qisqartirish yordamida yashirin tuzilmalarni aniqlashni o'rganing."
+    },
     author: {
       name: "Xamidov Asadbek",
       role: "Backend Developer & AI/ML Engineer",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
     },
     tags: ["Unsupervised Learning", "Clustering", "K-Means", "PCA"],
-    content: `
+    content: {
+      en: `
 # Unsupervised Learning: K-Means & Hierarchical Clustering Patterns
 
 Unsupervised learning algorithms process data without explicit target labels to discover natural groupings and clusters.
@@ -542,24 +585,54 @@ X_pca = pca.fit_transform(X)
 kmeans = KMeans(n_clusters=3, random_state=42)
 labels = kmeans.fit_predict(X_pca)
 \`\`\`
+`,
+      uz: `
+# Nazoratsiz O'rganish: K-Means va Klasterlash Usullari
+
+Nazoratsiz o'rganish (Unsupervised Learning) algoritmlari aniq maqsadli belgilarsiz ma'lumotlarni qayta ishlab, ularning tabiiy guruhlanishlarini va klasterlarini aniqlaydi.
+
+---
+
+## 1. K-Means Klasterlash Misoli
+
+\`\`\`python
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+# PCA yordamida o'lchamlarni kamaytirish
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# K-Means Klasterlash
+kmeans = KMeans(n_clusters=3, random_state=42)
+labels = kmeans.fit_predict(X_pca)
+\`\`\`
 `
+    }
   },
   {
     id: "football-tournament-medal-milestone",
-    title: "Personal Milestone: Winning 1st Place Gold Medal in University Football Tournament",
+    title: {
+      en: "Personal Milestone: Winning 1st Place Gold Medal in University Football Tournament",
+      uz: "Shaxsiy Yutuq: Universitet Futbol Turnirida 1-O'rin Oltin Medali 🏆⚽"
+    },
     slug: "football-tournament-medal-milestone",
     category: "personal",
     subcategory: "Sports & Football",
     date: "2026-06-10",
     readTime: "4",
-    excerpt: "Sharing my personal achievement winning the football tournament gold medal, teamwork lessons, and balancing sports with software engineering.",
+    excerpt: {
+      en: "Sharing my personal achievement winning the football tournament gold medal, teamwork lessons, and balancing sports with software engineering.",
+      uz: "Universitet futbol turnirida oltin medalni qo'lga kiritish, jamoaviy mehnat hamda sport va dasturlashni birga olib borish bo'yicha shaxsiy maqola."
+    },
     author: {
       name: "Xamidov Asadbek",
       role: "Backend Developer & Data Scientist",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
     },
     tags: ["Personal", "Football", "Medal", "Achievement", "Sports"],
-    content: `
+    content: {
+      en: `
 # Personal Milestone: Winning 1st Place Gold Medal in University Football Tournament 🏆⚽
 
 Outside of coding REST APIs and training Machine Learning models, playing football is one of my favorite passions for staying disciplined, focused, and healthy.
@@ -569,11 +642,18 @@ Outside of coding REST APIs and training Machine Learning models, playing footba
 ## ⚽ The Championship Journey
 
 Our university team competed in a 16-team knockout tournament. Through intense training, tactical teamwork, and resilience, we made it to the final match and secured 1st place!
+`,
+      uz: `
+# Shaxsiy Yutuq: Universitet Futbol Turnirida 1-O'rin Oltin Medali 🏆⚽
 
-### Key Takeaways from Football Applied to Software Engineering:
-1. **Team Communication**: Just like microservices need seamless API contracts, football teams require constant vocal communication on the field.
-2. **Resilience Under Pressure**: Remaining calm in penalty shootouts translates directly to debugging production backend errors under tight deadlines.
-3. **Continuous Training**: Practice makes perfect, whether practicing free kicks or mastering async Python algorithms.
+REST API'larni kodlash va Machine Learning modellarini o'rgatishdan tashqari, futbol o'ynash mening intizomli va diqqat-e'tiborli bo'lib qolishimdagi eng sevimli mashg'ulotlarimdan biridir.
+
+---
+
+## ⚽ Chempionlik Yo'li
+
+Universitetimiz jamoasi 16 ta jamoa ishtirok etgan pley-off turnirida qatnashdi. Shiddatli mashg'ulotlar va jamoaviy mehnat evaziga biz finalga chiqdik va 1-o'rinni egalladik!
 `
+    }
   }
 ];

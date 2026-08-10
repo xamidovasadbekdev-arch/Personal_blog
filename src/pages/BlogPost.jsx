@@ -35,6 +35,9 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang = 'e
     );
   }
 
+  const title = typeof article.title === 'object' ? (article.title[lang] || article.title.en) : article.title;
+  const rawContent = typeof article.content === 'object' ? (article.content[lang] || article.content.en) : article.content;
+
   const taxItem = blogTaxonomy[article.category];
   let categoryLabel = article.category;
   if (taxItem) {
@@ -59,8 +62,8 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang = 'e
     }
   };
 
-  const renderFormattedContent = (rawContent) => {
-    const content = rawContent || `# ${article.title}\n\n${article.excerpt || ''}`;
+  const renderFormattedContent = (contentStr) => {
+    const content = contentStr || `# ${title}\n\n${typeof article.excerpt === 'object' ? (article.excerpt[lang] || article.excerpt.en) : (article.excerpt || '')}`;
     const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
     const parts = [];
     let lastIndex = 0;
@@ -184,7 +187,7 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang = 'e
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-          {article.title}
+          {title}
         </h1>
 
         {/* Meta details */}
@@ -213,7 +216,7 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang = 'e
 
       {/* Article Content */}
       <div className="pt-2">
-        {renderFormattedContent(article.content)}
+        {renderFormattedContent(rawContent)}
       </div>
 
       {/* Like Button & Tags */}
