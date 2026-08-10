@@ -1,164 +1,150 @@
 import React, { useState } from 'react';
-import { Terminal as TerminalIcon, Code, Cpu, ShieldCheck, Copy, Check } from 'lucide-react';
+import { Terminal, Check, Copy, Flame, Sparkles, Cpu, Layers } from 'lucide-react';
+import { getStoredProfile } from '../data/dataStore';
 
-export default function TerminalVisual() {
-  const [activeTab, setActiveTab] = useState('shell'); // shell, json, log
-  const [inputCmd, setInputCmd] = useState('');
+export default function TerminalVisual({ lang = 'en' }) {
   const [copied, setCopied] = useState(false);
-
-  const [history, setHistory] = useState([
-    { type: 'input', text: 'neofetch' },
-    { type: 'output', text: 'OS: Arch Linux x86_64 | Kernel: 6.9.3-arch1-1' },
-    { type: 'output', text: 'Uptime: 99.98% | Shell: zsh 5.9 | CPU: Ryzen 9 7950X' },
-    { type: 'input', text: 'cat architecture.json' },
-    { type: 'output', text: '{"stack": ["FastAPI", "React", "PostgreSQL", "Docker", "Go"], "status": "Available"}' }
-  ]);
-
-  const handleCommand = (e) => {
-    e.preventDefault();
-    const cleanCmd = inputCmd.trim().toLowerCase();
-    if (!cleanCmd) return;
-
-    let response = '';
-    if (cleanCmd === 'help') {
-      response = 'Commands: whoami, skills, projects, arch, contact, clear';
-    } else if (cleanCmd === 'whoami') {
-      response = 'Asadbek Xamidov — Software Engineer & Backend Architect';
-    } else if (cleanCmd === 'skills') {
-      response = 'Python, FastAPI, Go, TypeScript, React, Next.js, PostgreSQL, Redis, Docker, Kubernetes';
-    } else if (cleanCmd === 'projects') {
-      response = 'Personal Blog Engine, FastAPI Microservice, Analytics Portal, AI Prompt Suite';
-    } else if (cleanCmd === 'arch') {
-      response = 'Microservices architecture with FastAPI async handlers & Redis caching';
-    } else if (cleanCmd === 'contact') {
-      response = 'Email: asadbek.xamidov.dev@gmail.com | Telegram: @asadbek_dev';
-    } else if (cleanCmd === 'clear') {
-      setHistory([]);
-      setInputCmd('');
-      return;
-    } else {
-      response = `zsh: command not found: ${cleanCmd}. Type 'help' for available commands.`;
-    }
-
-    setHistory((prev) => [
-      ...prev,
-      { type: 'input', text: inputCmd },
-      { type: 'output', text: response }
-    ]);
-    setInputCmd('');
-  };
+  const [activeTab, setActiveTab] = useState('shell');
+  const profile = getStoredProfile();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`git clone https://github.com/xamidovasadbekdev-arch/Personal_blog.git`);
+    const text = `curl -s https://xamidovasadbek.dev/api/profile`;
+    navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  return (
-    <div className="relative overflow-hidden aspect-[4/3] rounded-3xl bg-[#090d1a] border border-indigo-500/30 shadow-2xl p-4 sm:p-5 flex flex-col justify-between group">
-      
-      {/* Ambient Radial Grids */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-600/10 rounded-full blur-2xl pointer-events-none"></div>
+  const isUzbek = lang === 'uz';
 
-      {/* Terminal Window Header */}
-      <div className="flex items-center justify-between px-3 py-2 bg-[#0d1428] rounded-xl border border-indigo-900/50 relative z-10">
-        
-        {/* Window Controls */}
+  return (
+    <div className="w-full rounded-2xl overflow-hidden border border-slate-300 dark:border-indigo-900/60 bg-slate-900 text-slate-100 shadow-2xl font-mono text-xs sm:text-sm">
+      
+      {/* Top Window Bar */}
+      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-950 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-rose-500/90 shadow-xs"></div>
-          <div className="w-3 h-3 rounded-full bg-amber-500/90 shadow-xs"></div>
-          <div className="w-3 h-3 rounded-full bg-emerald-500/90 shadow-xs"></div>
+          <div className="w-3 h-3 rounded-full bg-rose-500"></div>
+          <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+          <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+          <span className="ml-2 text-[11px] text-slate-400 font-bold flex items-center gap-1.5">
+            <Terminal className="h-3.5 w-3.5 text-indigo-400" />
+            asadbek@arch:~ (zsh)
+          </span>
         </div>
 
-        {/* Console Tabs */}
-        <div className="flex items-center gap-1 bg-[#070b15] p-1 rounded-lg border border-indigo-900/40 text-[11px] font-mono">
+        {/* Tab Buttons */}
+        <div className="flex items-center gap-1">
           <button
             onClick={() => setActiveTab('shell')}
-            className={`px-2.5 py-0.5 rounded-md font-bold transition-all cursor-pointer ${
+            className={`px-2.5 py-0.5 rounded text-[11px] font-bold cursor-pointer ${
               activeTab === 'shell' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
             }`}
           >
-            zsh ~ studio
+            Shell
           </button>
           <button
             onClick={() => setActiveTab('json')}
-            className={`px-2.5 py-0.5 rounded-md font-bold transition-all cursor-pointer ${
+            className={`px-2.5 py-0.5 rounded text-[11px] font-bold cursor-pointer ${
               activeTab === 'json' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
             }`}
           >
-            stack.json
+            JSON Spec
           </button>
         </div>
-
-        <button
-          onClick={handleCopy}
-          title="Copy clone link"
-          className="p-1 rounded-lg text-slate-400 hover:text-indigo-400 transition-colors"
-        >
-          {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-        </button>
-
       </div>
 
-      {/* Terminal Content Views */}
-      <div className="flex-1 p-3 sm:p-4 font-mono text-xs sm:text-sm text-indigo-100 overflow-y-auto relative z-10 my-2 rounded-xl bg-[#060a16]/90 border border-indigo-950/80">
-        
+      {/* Terminal Content Body */}
+      <div className="p-4 sm:p-6 space-y-4 bg-[#070a14] min-h-[300px]">
         {activeTab === 'shell' ? (
-          <div className="space-y-2">
-            {history.map((item, idx) => (
-              <div key={idx} className="leading-relaxed">
-                {item.type === 'input' ? (
-                  <div className="flex items-center gap-2 text-indigo-300">
-                    <span className="text-emerald-400 font-bold">asadbek@arch ➜</span>
-                    <span className="text-purple-300 font-bold">{item.text}</span>
-                  </div>
-                ) : (
-                  <div className="text-slate-300 pl-4 border-l-2 border-indigo-800/40 my-1 text-xs">
-                    {item.text}
-                  </div>
-                )}
-              </div>
-            ))}
+          <div className="space-y-3">
+            
+            {/* Command 1 */}
+            <div className="flex items-center gap-2 text-indigo-400">
+              <span className="text-emerald-400 font-bold">asadbek@arch</span>
+              <span className="text-slate-400">➜</span>
+              <span className="text-amber-300 font-bold">whoami</span>
+            </div>
+            
+            <div className="pl-4 text-slate-300 space-y-1">
+              <p className="font-bold text-white text-sm sm:text-base">
+                {profile.name}
+              </p>
+              <p className="text-indigo-300 font-semibold">
+                {profile.headline}
+              </p>
+              <p className="text-slate-400 text-xs">
+                {isUzbek 
+                  ? "WIUT Granti Sohibi | Mittivoy Data Analitigi | FLyrank ML Stajyori" 
+                  : "WIUT Scholar | Mittivoy Data Analyst | FLyrank ML Intern"}
+              </p>
+            </div>
 
-            <form onSubmit={handleCommand} className="flex items-center gap-2 text-indigo-300 pt-1">
-              <span className="text-emerald-400 font-bold">asadbek@arch ➜</span>
-              <input
-                type="text"
-                value={inputCmd}
-                onChange={(e) => setInputCmd(e.target.value)}
-                placeholder="Type 'help' or commands..."
-                className="flex-1 bg-transparent border-none outline-none text-purple-200 placeholder-indigo-500/40 font-mono text-xs sm:text-sm"
-              />
-            </form>
+            {/* Command 2 */}
+            <div className="flex items-center gap-2 text-indigo-400 pt-2 border-t border-slate-900">
+              <span className="text-emerald-400 font-bold">asadbek@arch</span>
+              <span className="text-slate-400">➜</span>
+              <span className="text-amber-300 font-bold">neofetch --stack</span>
+            </div>
+
+            <div className="pl-4 space-y-1 text-xs font-mono">
+              <div className="flex justify-between text-slate-400">
+                <span>OS:</span>
+                <span className="text-emerald-400 font-bold">Arch Linux x86_64</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>{isUzbek ? "Asosiy Tillar:" : "Core Language:"}</span>
+                <span className="text-purple-400 font-bold">Python 3.12, SQL, JS</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>{isUzbek ? "Freyomvork:" : "Framework:"}</span>
+                <span className="text-sky-400 font-bold">FastAPI, Scikit-Learn, React</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>{isUzbek ? "Ma'lumotlar Bazasi:" : "Database & Tools:"}</span>
+                <span className="text-amber-400 font-bold">PostgreSQL, Redis, Docker</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>{isUzbek ? "Status:" : "Status:"}</span>
+                <span className="text-emerald-400 font-bold flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  {isUzbek ? "Takliflar uchun ochiq" : "Available for Hire"}
+                </span>
+              </div>
+            </div>
+
+            {/* Copy Command */}
+            <div className="pt-3 border-t border-slate-900 flex items-center justify-between">
+              <span className="text-[11px] text-slate-400 truncate">
+                $ curl -s https://xamidovasadbek.dev/api
+              </span>
+              <button
+                onClick={handleCopy}
+                className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs text-indigo-300 font-bold flex items-center gap-1.5 cursor-pointer shrink-0"
+              >
+                {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                <span>{copied ? (isUzbek ? "Nusxalandi!" : "Copied!") : (isUzbek ? "Nusxalash" : "Copy API")}</span>
+              </button>
+            </div>
+
           </div>
         ) : (
-          <pre className="text-xs text-emerald-300 leading-relaxed overflow-x-auto">
-{`{
-  "engineer": "Asadbek Xamidov",
-  "role": "Software & Backend Engineer",
-  "location": "Tashkent, Uzbekistan",
-  "specialties": [
-    "FastAPI & Microservices Architecture",
-    "High-throughput REST & GraphQL APIs",
-    "PostgreSQL Async Pooling & Redis Caching",
-    "React & Modern Frontend Performance"
+          <div className="space-y-2 text-xs font-mono text-indigo-200 leading-relaxed overflow-x-auto">
+            <pre>{`{
+  "developer": "${profile.name}",
+  "title": "${profile.headline}",
+  "scholarship": "WIUT BIS Awardee",
+  "positions": [
+    "Data Analyst at Mittivoy",
+    "ML Engineering Intern at FLyrank",
+    "Uzcard Data Science Program"
   ],
-  "availability": "Freelance / Full-Time"
-}`}
-          </pre>
+  "contacts": {
+    "email": "${profile.email}",
+    "telegram": "${profile.telegram}",
+    "github": "${profile.github}"
+  }
+}`}</pre>
+          </div>
         )}
-
-      </div>
-
-      {/* Footer Status Bar */}
-      <div className="flex items-center justify-between text-[10px] text-indigo-400/70 font-mono relative z-10 px-1">
-        <span className="flex items-center gap-1">
-          <Cpu className="h-3 w-3 text-indigo-400" /> Arch Linux Studio v3.2
-        </span>
-        <span className="text-emerald-400 flex items-center gap-1 font-bold">
-          <ShieldCheck className="h-3.5 w-3.5 inline" /> 99.9% Uptime
-        </span>
       </div>
 
     </div>

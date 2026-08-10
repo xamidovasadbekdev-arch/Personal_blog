@@ -214,7 +214,7 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
       </div>
 
       {/* Working Interactive Comments Engine */}
-      <CommentsSection articleId={article.id} />
+      <CommentsSection articleId={article.id} lang={lang} />
 
     </article>
   );

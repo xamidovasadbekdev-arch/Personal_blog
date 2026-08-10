@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowRight, Send, Compass, Sparkles, Code2, Zap, Terminal, Flame } from 'lucide-react';
 import { translations, skillsData } from '../data/portfolioData';
 import { getStoredProfile, getStoredProjects, getStoredArticles } from '../data/dataStore';
-import { GithubIcon, LinkedinIcon, TwitterIcon } from '../components/BrandIcons';
+import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
 import TerminalVisual from '../components/TerminalVisual';
 import ProjectCard from '../components/ProjectCard';
 import ArticleCard from '../components/ArticleCard';
@@ -10,7 +10,7 @@ import SkillCard from '../components/SkillCard';
 import Typewriter from '../components/Typewriter';
 
 export default function Home({ setActiveTab, setSelectArticleId, lang }) {
-  const t = translations[lang];
+  const t = translations[lang] || translations.en;
   const profile = getStoredProfile();
   const projects = getStoredProjects();
   const articles = getStoredArticles();
@@ -18,7 +18,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
   const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
   const recentArticles = articles.slice(0, 2);
 
-  const typewriterWords = [
+  const typewriterWords = t.hero.typewriter || [
     "FastAPI Microservices",
     "Scalable Backend Systems",
     "Machine Learning Models",
@@ -46,13 +46,13 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
 
           {/* Main Headline with Typewriter Typing Animation */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15] min-h-[120px]">
-            Architecting <br />
+            {lang === 'uz' ? "Muhandislik va" : "Architecting"} <br />
             <Typewriter words={typewriterWords} speed={100} delay={2000} />
           </h1>
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-            Hi, I'm <strong className="text-slate-900 dark:text-white font-bold">{profile.name}</strong> — {lang === 'en' ? profile.subtitleEN : profile.subtitleUZ}
+            {lang === 'en' ? "Hi, I'm " : "Salom, men "} <strong className="text-slate-900 dark:text-white font-bold">{profile.name}</strong> — {lang === 'en' ? profile.subtitleEN : profile.subtitleUZ}
           </p>
 
           {/* Action Buttons */}
@@ -104,7 +104,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
 
         {/* Hero Right Column: Animated Studio Visual */}
         <div className="w-full lg:w-[480px] shrink-0 animate-levitate">
-          <TerminalVisual />
+          <TerminalVisual lang={lang} />
         </div>
       </section>
 
@@ -137,6 +137,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
               project={project} 
               onSelect={() => setActiveTab('projects')}
               t={t.projects}
+              lang={lang}
             />
           ))}
         </div>
@@ -159,7 +160,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
           {skillsData.map((item, idx) => (
             <SkillCard 
               key={idx}
-              category={item.category}
+              category={typeof item.category === 'object' ? item.category[lang] || item.category.en : item.category}
               iconName={item.icon}
               skills={item.skills}
             />
@@ -199,6 +200,7 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
                 setActiveTab('blog');
               }}
               t={t.blog}
+              lang={lang}
             />
           ))}
         </div>
@@ -231,15 +233,15 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
         <div className="relative rounded-3xl overflow-hidden p-8 bg-gradient-to-br from-indigo-950 via-[#0d122b] to-purple-950 border border-indigo-800/40 text-white space-y-6 shadow-xl animate-levitate">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-indigo-200">
             <Flame className="h-4 w-4 text-amber-400 animate-pulse" />
-            <span>Open for Opportunities</span>
+            <span>{t.sections.openBadge}</span>
           </div>
 
           <div className="space-y-2">
             <h3 className="text-2xl font-black tracking-tight leading-snug">
-              Have a backend or AI project in mind?
+              {t.sections.bannerTitle}
             </h3>
             <p className="text-xs text-indigo-200/80 leading-relaxed">
-              I am available for API architecture consultations, system performance tuning, and fullstack contract development.
+              {t.sections.bannerSub}
             </p>
           </div>
 

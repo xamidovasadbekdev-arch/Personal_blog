@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { 
   Search, BookOpen, Tag, X, ChevronRight, Filter, ArrowLeft, 
-  Cpu, Layers, BarChart3, Heart, Sparkles, FolderOpen, Globe 
+  Cpu, Layers, BarChart3, Heart, FolderOpen 
 } from 'lucide-react';
-import { translations } from '../data/portfolioData';
+import { translations, blogTaxonomy } from '../data/portfolioData';
 import { getStoredArticles, getStoredCategories } from '../data/dataStore';
 import ArticleCard from '../components/ArticleCard';
 import BlogPost from './BlogPost';
 
 export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
-  const t = translations[lang].blog;
+  const t = translations[lang]?.blog || translations.en.blog;
   
   // Drill-down view states
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -17,7 +17,28 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const allArticles = getStoredArticles();
-  const categoriesList = getStoredCategories();
+  const rawCategories = getStoredCategories();
+
+  // Helper to format category for current language
+  const categoriesList = rawCategories.map(cat => {
+    const taxItem = blogTaxonomy[cat.id];
+    let title = cat.title;
+    let description = cat.description;
+    let subcategories = cat.subcategories;
+
+    if (taxItem) {
+      if (typeof taxItem.label === 'object') title = taxItem.label[lang] || taxItem.label.en;
+      if (typeof taxItem.description === 'object') description = taxItem.description[lang] || taxItem.description.en;
+      if (typeof taxItem.subcategories === 'object') subcategories = taxItem.subcategories[lang] || taxItem.subcategories.en;
+    }
+
+    return {
+      ...cat,
+      title,
+      description,
+      subcategories
+    };
+  });
 
   // LEVEL 3: Full Article Reader View
   if (selectedArticleId) {
@@ -48,7 +69,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
   // LEVEL 2: Articles List within a Category (or Active Search)
   if (selectedCategory !== null || searchQuery !== '') {
     const categoryInfo = categoriesList.find(c => c.id === selectedCategory) || {
-      title: "Search & Filtered Results",
+      title: lang === 'uz' ? "Qidiruv Natijalari" : "Search & Filtered Results",
       subcategories: []
     };
 
@@ -66,11 +87,11 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-indigo-950/60 border border-slate-200 dark:border-indigo-900/60 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>All Category Folders</span>
+            <span>{t.backToBlog}</span>
           </button>
 
           <span className="text-xs font-mono text-slate-400">
-            {filteredArticles.length} Article{filteredArticles.length === 1 ? '' : 's'} Found
+            {filteredArticles.length} {t.articlesFound}
           </span>
         </div>
 
@@ -88,7 +109,9 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
         {/* Subcategories Filter Chips */}
         {categoryInfo.subcategories && categoryInfo.subcategories.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 bg-white dark:bg-indigo-950/30 p-3 rounded-2xl border border-slate-200 dark:border-indigo-900/40">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Subcategories:</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              {lang === 'uz' ? "Subkategoriyalar:" : "Subcategories:"}
+            </span>
             <button
               onClick={() => setActiveSubcategory('all')}
               className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
@@ -97,7 +120,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
                   : 'bg-slate-100 dark:bg-indigo-900/40 text-slate-600 dark:text-slate-400'
               }`}
             >
-              All
+              {lang === 'uz' ? "Barchasi" : "All"}
             </button>
             {categoryInfo.subcategories.map((sub) => (
               <button
@@ -124,6 +147,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
                 article={article} 
                 onSelectArticle={(id) => setSelectArticleId(id)}
                 t={t}
+                lang={lang}
               />
             ))}
           </div>
@@ -131,7 +155,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
           <div className="text-center py-16 border border-dashed border-slate-300 dark:border-indigo-900/40 rounded-2xl">
             <BookOpen className="h-10 w-10 mx-auto text-slate-400 mb-2" />
             <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
-              No articles found in this category section.
+              {t.noArticles}
             </p>
           </div>
         )}
@@ -147,10 +171,10 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
       {/* Header */}
       <div className="space-y-3 max-w-2xl">
         <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-          Knowledge Base & Article Categories
+          {t.kbTitle}
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-          Select a category folder below to explore machine learning guides, backend architecture breakdowns, data science tutorials, and custom topics.
+          {t.kbSub}
         </p>
       </div>
 
@@ -161,7 +185,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search all articles by keyword, title, or tag..."
+          placeholder={t.searchPlaceholder}
           className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white dark:bg-indigo-950/40 border border-slate-200 dark:border-indigo-900/40 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 transition-colors shadow-sm"
         />
       </div>
@@ -185,7 +209,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
                   </div>
 
                   <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-indigo-950 text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">
-                    {count} Article{count === 1 ? '' : 's'}
+                    {count} {lang === 'uz' ? 'ta Maqola' : 'Article'}{count === 1 || lang === 'uz' ? '' : 's'}
                   </span>
                 </div>
 
@@ -216,7 +240,7 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
 
               {/* Action Folder Arrow Button */}
               <div className="pt-4 border-t border-slate-100 dark:border-indigo-900/40 flex items-center justify-between text-xs font-bold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-500">
-                <span>Explore Category Articles</span>
+                <span>{t.exploreCategory}</span>
                 <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-950 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all group-hover:translate-x-1">
                   <ChevronRight className="h-4 w-4" />
                 </div>

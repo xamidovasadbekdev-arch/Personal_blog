@@ -1,19 +1,59 @@
 export const blogTaxonomy = {
   ml: {
-    label: "Machine Learning & AI",
-    subcategories: ["Supervised Learning", "Unsupervised Learning", "Deep Learning", "NLP & LLMs"]
+    label: {
+      en: "Machine Learning & AI",
+      uz: "Machine Learning va Sun'iy Intellekt"
+    },
+    description: {
+      en: "Supervised Learning algorithms, Unsupervised clustering models, Neural Networks, and NLP.",
+      uz: "Supervised Learning algoritmlari, Unsupervised klasterlash modellari, Neyron tarmoqlari va NLP."
+    },
+    subcategories: {
+      en: ["Supervised Learning", "Unsupervised Learning", "Deep Learning", "NLP & LLMs"],
+      uz: ["Supervised Learning", "Unsupervised Learning", "Chuqur O'rgatish", "NLP va LLMlar"]
+    }
   },
   backend: {
-    label: "Backend & Architecture",
-    subcategories: ["FastAPI & Microservices", "Databases & SQL", "Distributed Systems", "Caching & Performance"]
+    label: {
+      en: "Backend & Architecture",
+      uz: "Backend va Arxitektura"
+    },
+    description: {
+      en: "FastAPI microservices, PostgreSQL async sessions, REST API design, Redis caching, and Docker.",
+      uz: "FastAPI mikroxizmatlari, PostgreSQL asinxron seanslar, REST API loyihalash, Redis kesh va Docker."
+    },
+    subcategories: {
+      en: ["FastAPI & Microservices", "Databases & SQL", "Distributed Systems", "Caching & Performance"],
+      uz: ["FastAPI va Mikroxizmatlar", "Ma'lumotlar Bazasi va SQL", "Taqsimlangan Tizimlar", "Kesh va Unumdorlik"]
+    }
   },
   datascience: {
-    label: "Data Science & Analytics",
-    subcategories: ["Exploratory Data Analysis", "Pandas & Pipelines", "Data Visualization"]
+    label: {
+      en: "Data Science & Analytics",
+      uz: "Data Science va Tahlil"
+    },
+    description: {
+      en: "Exploratory data analysis, Pandas & NumPy data pipelines, statistical modeling, and insights.",
+      uz: "Ma'lumotlarni tahlil qilish, Pandas va NumPy quvurlari, statistik modellashtirish va xulosalar."
+    },
+    subcategories: {
+      en: ["Exploratory Data Analysis", "Pandas & Pipelines", "Data Visualization"],
+      uz: ["Dastlabki Ma'lumot Tahlili", "Pandas va Pipeline'lar", "Ma'lumotlar Vizualizatsiyasi"]
+    }
   },
   personal: {
-    label: "Personal & Life",
-    subcategories: ["Achievements & Medals", "University & WIUT", "Career Journey", "Sports & Football"]
+    label: {
+      en: "Personal & Life",
+      uz: "Shaxsiy va Hayot"
+    },
+    description: {
+      en: "Personal achievements, football tournament gold medals, WIUT university life, and career milestones.",
+      uz: "Shaxsiy yutuqlar, futbol turniridagi oltin medallar, WIUT universiteti hayoti va karyera bosqichlari."
+    },
+    subcategories: {
+      en: ["Achievements & Medals", "University & WIUT", "Career Journey", "Sports & Football"],
+      uz: ["Yutuqlar va Medallar", "Universitet va WIUT", "Karyera Yo'li", "Sport va Futbol"]
+    }
   }
 };
 
@@ -39,6 +79,12 @@ export const translations = {
       yearsExp: "2+ Years Exp.",
       projectsCount: "15+ Projects",
       dedication: "100% Dedicated",
+      typewriter: [
+        "FastAPI Microservices",
+        "Scalable Backend Systems",
+        "Machine Learning Models",
+        "Data Analytics Pipelines"
+      ]
     },
     sections: {
       featuredProjects: "Featured Projects",
@@ -53,6 +99,9 @@ export const translations = {
       readMoreAbout: "Read Full Bio",
       contactTitle: "Let's Build Something Great Together",
       contactSub: "Have an exciting project idea, job opportunity, or AI/data query? Feel free to reach out anytime.",
+      bannerTitle: "Have a backend or AI project in mind?",
+      bannerSub: "I am available for API architecture consultations, system performance tuning, and fullstack contract development.",
+      openBadge: "Open for Opportunities",
     },
     projects: {
       all: "All Projects",
@@ -65,6 +114,7 @@ export const translations = {
       liveDemo: "Live Demo",
       details: "View Details",
       noProjects: "No projects match your filter.",
+      technologiesUsed: "Technologies Used",
     },
     blog: {
       searchPlaceholder: "Search articles by title, tag, category, or subcategory...",
@@ -77,7 +127,14 @@ export const translations = {
       share: "Share Article",
       copied: "Link copied to clipboard!",
       relatedPosts: "Related Articles",
-      backToBlog: "← Back to Articles",
+      backToBlog: "← Back to Categories",
+      allFolders: "All Category Folders",
+      articlesFound: "Articles Found",
+      exploreCategory: "Explore Category Articles",
+      noArticles: "No articles found in this category section.",
+      clearFilters: "Clear all filters",
+      kbTitle: "Knowledge Base & Article Categories",
+      kbSub: "Select a category folder below to explore machine learning guides, backend architecture breakdowns, data science tutorials, and custom topics.",
     },
     about: {
       title: "About Xamidov Asadbek",
@@ -88,6 +145,16 @@ export const translations = {
       experienceTitle: "Education & Career Timeline",
       skillsHeading: "Technical Proficiency",
       downloadResume: "Download Resume (PDF)",
+      downloadingResume: "Downloading Resume File...",
+      profileBadge: "Engineering Profile",
+    },
+    philosophy: {
+      cleanArchTitle: "Clean Architecture",
+      cleanArchSub: "Prioritizing self-documenting code, async REST APIs with FastAPI, and modular patterns.",
+      aiDataTitle: "AI & Data Analytics",
+      aiDataSub: "Building data pipelines with Pandas, machine learning models, and analytical dashboards.",
+      wiutTitle: "WIUT Scholar",
+      wiutSub: "Scholarship Awardee studying Business Information Systems at WIUT in Tashkent.",
     },
     contact: {
       title: "Get In Touch",
@@ -104,6 +171,19 @@ export const translations = {
       sending: "Sending Email...",
       success: "Thank you! Your message has been sent directly to Asadbek.",
       directContact: "Direct Contacts",
+    },
+    footer: {
+      tagline: "Backend Developer, AI/ML Engineer & Data Scientist.",
+      rights: "All Rights Reserved.",
+      quickLinks: "Quick Navigation",
+    },
+    comments: {
+      title: "Article Comments",
+      yourName: "Your Name",
+      writeComment: "Write a Comment",
+      placeholder: "Share your thoughts, questions, or feedback on this post...",
+      postBtn: "Post Comment",
+      postedMsg: "Your comment has been posted!",
     }
   },
   uz: {
@@ -127,6 +207,12 @@ export const translations = {
       yearsExp: "2+ Yillik tajriba",
       projectsCount: "15+ Loyihalar",
       dedication: "100% Bag'ishlangan",
+      typewriter: [
+        "FastAPI Mikroxizmatlari",
+        "Yuqori Yuklamali Backend",
+        "Machine Learning Modellar",
+        "Data Analytics Quvurlari"
+      ]
     },
     sections: {
       featuredProjects: "Saralangan Loyihalar",
@@ -135,12 +221,15 @@ export const translations = {
       skillsTitle: "Texnik Asboblar",
       skillsSub: "Backend, AI/ML modellar, ma'lumotlar bazasi va tahliliy vositalarim.",
       recentPosts: "So'nggi Maqolalar",
-      recentPostsSub: "Machine Learning, FastAPI va shaxsiy muvaffaqiyatlar bo'yicha maqolalar.",
+      recentPostsSub: "Machine Learning, FastAPI arxitekturasi va shaxsiy muvaffaqiyatlar bo'yicha maqolalar.",
       readAllPosts: "Barcha maqolalar",
       aboutSnippetTitle: "Men Haqimda",
       readMoreAbout: "Batafsil o'qish",
       contactTitle: "Birgalikda Loyiha Yaratamiz",
       contactSub: "Backend, Data Science yoki AI loyihangiz bo'lsa, istalgan vaqtda murojaat qiling.",
+      bannerTitle: "Backend yoki AI loyihangiz bormi?",
+      bannerSub: "API arxitekturasini loyihalash, tizim unumdorligini oshirish hamda shartnoma asosida fullstack loyihalar uchun ochiqman.",
+      openBadge: "Takliflar uchun ochiq",
     },
     projects: {
       all: "Barchasi",
@@ -153,6 +242,7 @@ export const translations = {
       liveDemo: "Jonli Namoyish",
       details: "Batafsil",
       noProjects: "Filtringizga mos loyihalar topilmadi.",
+      technologiesUsed: "Ishlatilgan Texnologiyalar",
     },
     blog: {
       searchPlaceholder: "Maqolalarni sarlavha, teg, kategoriya va subkategoriya bo'yicha qidirish...",
@@ -165,7 +255,14 @@ export const translations = {
       share: "Ulashish",
       copied: "Nusxalandi!",
       relatedPosts: "O'xshash Maqolalar",
-      backToBlog: "← Maqolalarga qaytish",
+      backToBlog: "← Kategoriyalarga qaytish",
+      allFolders: "Barcha Kategoriya Jildlari",
+      articlesFound: "ta Maqola Topildi",
+      exploreCategory: "Kategoriya Maqolalarini Ko'rish",
+      noArticles: "Ushbu bo'limda maqolalar topilmadi.",
+      clearFilters: "Barcha filtrlarni tozalash",
+      kbTitle: "Bilimlar Bazasi va Maqola Kategoriyalari",
+      kbSub: "Quyidagi jildlardan birini tanlab, machine learning qo'llanmalari, backend arxitekturasi va shaxsiy maqolalarni o'qing.",
     },
     about: {
       title: "Xamidov Asadbek Haqida",
@@ -176,6 +273,16 @@ export const translations = {
       experienceTitle: "Ta'lim va Ish Tajribasi Timeline",
       skillsHeading: "Texnik Ko'nikmalar",
       downloadResume: "Rezyumeni Yuklab Olish (PDF)",
+      downloadingResume: "Rezyume Fayli Yuklanmoqda...",
+      profileBadge: "Muhandislik Profili",
+    },
+    philosophy: {
+      cleanArchTitle: "Taza Arxitektura",
+      cleanArchSub: "FastAPI bilan asinxron REST API'lar, toza kod va modulli loyihalash tamoyillari.",
+      aiDataTitle: "AI va Data Analitika",
+      aiDataSub: "Pandas bilan ma'lumotlar quvuri, machine learning modellar hamda tahliliy panellar.",
+      wiutTitle: "WIUT Granti Sohibi",
+      wiutSub: "Toshkentdagi Xalqaro Vestminster Universitetining Biznes Axborot Tizimlari granti sohibi.",
     },
     contact: {
       title: "Bog'lanish",
@@ -192,23 +299,36 @@ export const translations = {
       sending: "E-mail yuborilmoqda...",
       success: "Rahmat! Xabaringiz Asadbekning e-mailiga yuborildi.",
       directContact: "Doimiy Aloqa",
+    },
+    footer: {
+      tagline: "Backend Dasturchi, AI/ML Muhandisi va Data Scientist.",
+      rights: "Barcha huquqlar himoyalangan.",
+      quickLinks: "Tezkor Navigatsiya",
+    },
+    comments: {
+      title: "Maqola Izohlari",
+      yourName: "Ismingiz",
+      writeComment: "Izoh qoldirish",
+      placeholder: "Ushbu maqola bo'yicha fikr va savollaringizni yozib qoldiring...",
+      postBtn: "Izohni Yuborish",
+      postedMsg: "Izohingiz muvaffaqiyatli joylashtirildi!",
     }
   }
 };
 
 export const skillsData = [
   {
-    category: "Backend & Languages",
+    category: { en: "Backend & Languages", uz: "Backend va Dasturlash Tillar" },
     icon: "Terminal",
     skills: ["Python", "FastAPI", "SQL", "JavaScript", "Go (Basics)", "RESTful APIs"]
   },
   {
-    category: "Data Science & AI/ML",
+    category: { en: "Data Science & AI/ML", uz: "Data Science va AI/ML" },
     icon: "Cpu",
     skills: ["Supervised Learning", "Unsupervised Learning", "Pandas & NumPy", "Scikit-Learn", "Machine Learning", "Data Pipelines"]
   },
   {
-    category: "Databases & Tools",
+    category: { en: "Databases & Tools", uz: "Ma'lumotlar Bazasi va Asboblar" },
     icon: "Layers",
     skills: ["PostgreSQL", "Docker", "Git / GitHub", "Linux", "VS Code", "Vercel"]
   }
@@ -217,39 +337,57 @@ export const skillsData = [
 export const experienceTimeline = [
   {
     year: "July 2026 - Present",
-    role: "Data Analyst",
+    role: { en: "Data Analyst", uz: "Data Analitik" },
     company: "Mittivoy Company",
-    description: "Analyzing business metrics, building SQL data pipelines, and creating executive dashboards to drive data-driven decision making.",
+    description: {
+      en: "Analyzing business metrics, building SQL data pipelines, and creating executive dashboards to drive data-driven decision making.",
+      uz: "Biznes ko'rsatkichlarini tahlil qilish, SQL ma'lumotlar quvurlarini qurish hamda boshqaruv panellarini yaratish."
+    }
   },
   {
     year: "July 2026 - Present",
-    role: "Machine Learning Engineering Intern",
+    role: { en: "Machine Learning Engineering Intern", uz: "Machine Learning Muhandis Stajyor" },
     company: "FLyrank",
-    description: "Developing machine learning models, backend features, integrating REST APIs, and optimizing database queries in an agile engineering environment.",
+    description: {
+      en: "Developing machine learning models, backend features, integrating REST APIs, and optimizing database queries in an agile engineering environment.",
+      uz: "Machine learning modellarini yaratish, backend funksiyalarini ishlab chiqish hamda REST API funksiyalarini integratsiya qilish."
+    }
   },
   {
     year: "May 2026 - Present",
-    role: "Data Science Scholar",
+    role: { en: "Data Science Scholar", uz: "Data Science Tinglovchisi" },
     company: "Uzcard Data Science Program",
-    description: "Deep-diving into machine learning algorithms, predictive modeling, data cleaning, and statistical analysis.",
+    description: {
+      en: "Deep-diving into machine learning algorithms, predictive modeling, data cleaning, and statistical analysis.",
+      uz: "Machine learning algoritmlari, bashoratli modellashtirish, ma'lumotlarni tozalash va statistik tahlil."
+    }
   },
   {
     year: "Jan 2026 - Apr 2026",
-    role: "Junior Backend Developer",
+    role: { en: "Junior Backend Developer", uz: "Junior Backend Dasturchi" },
     company: "Freelance",
-    description: "Architected REST APIs with FastAPI and PostgreSQL for clients, implemented JWT authentication, and containerized apps with Docker.",
+    description: {
+      en: "Architected REST APIs with FastAPI and PostgreSQL for clients, implemented JWT authentication, and containerized apps with Docker.",
+      uz: "FastAPI va PostgreSQL texnologiyalarida REST API loyihalarini yaratish, JWT autentifikatsiyasi hamda Docker konteynerlashtirish."
+    }
   },
   {
     year: "Nov 2025 - Mar 2026",
-    role: "Backend Development Intensive",
+    role: { en: "Backend Development Intensive", uz: "Backend Dasturlash Intensiv Dasturi" },
     company: "Specialized Training",
-    description: "Mastered Python backend development, asynchronous database patterns, API design, and clean architecture principles.",
+    description: {
+      en: "Mastered Python backend development, asynchronous database patterns, API design, and clean architecture principles.",
+      uz: "Python backend dasturlash, asinxron ma'lumotlar bazasi namunalari hamda toza arxitektura tamoyillarini o'zlashtirish."
+    }
   },
   {
     year: "2024 - Present",
-    role: "BSc Business Information Systems",
+    role: { en: "BSc Business Information Systems", uz: "Biznes Axborot Tizimlari Bakalavr" },
     company: "WIUT (Scholarship Awardee)",
-    description: "Awarded full scholarship at Westminster International University in Tashkent. Studying software engineering, database management, and information systems.",
+    description: {
+      en: "Awarded full scholarship at Westminster International University in Tashkent. Studying software engineering, database management, and information systems.",
+      uz: "Toshkentdagi Xalqaro Vestminster Universitetida to'liq grant asosida ta'lim olish. Dasturiy ta'minot muhandisligi va axborot tizimlarini o'rganish."
+    }
   }
 ];
 
@@ -261,7 +399,7 @@ export const projectsData = [
     description: "High-performance portfolio and blog built with React, Vite, Tailwind CSS, bilingual support (EN/UZ), interactive terminal visuals, and markdown reader.",
     tech: ["React", "Vite", "Tailwind CSS", "JavaScript"],
     github: "https://github.com/xamidovasadbekdev-arch/Personal_blog",
-    demo: "#",
+    demo: "https://xamidovasadbek.dev",
     featured: true,
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
     longDescription: "A full-featured personal website built to display software engineering projects, publish technical articles, and showcase AI & Data Science skills."
@@ -405,42 +543,6 @@ Our university team competed in a 16-team knockout tournament. Through intense t
 1. **Team Communication**: Just like microservices need seamless API contracts, football teams require constant vocal communication on the field.
 2. **Resilience Under Pressure**: Remaining calm in penalty shootouts translates directly to debugging production backend errors under tight deadlines.
 3. **Continuous Training**: Practice makes perfect, whether practicing free kicks or mastering async Python algorithms.
-`
-  },
-  {
-    id: "building-scalable-fastapi-backend",
-    title: "Building Scalable Async REST APIs with FastAPI & PostgreSQL",
-    slug: "building-scalable-fastapi-backend",
-    category: "backend",
-    subcategory: "FastAPI & Microservices",
-    date: "2026-07-28",
-    readTime: "7",
-    excerpt: "Learn how to structure enterprise Python APIs using FastAPI async route handlers, SQLAlchemy async sessions, and Redis query caching.",
-    author: {
-      name: "Xamidov Asadbek",
-      role: "Backend Developer & Data Scientist",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-    },
-    tags: ["FastAPI", "Python", "PostgreSQL", "Backend"],
-    content: `
-# Building Scalable Async REST APIs with FastAPI & PostgreSQL
-
-Building modern backend APIs requires speed, maintainability, and clean architecture. **FastAPI** has quickly emerged as Python's premier web framework due to its native asynchronous support, auto-generated OpenAPI docs, and type safety with Pydantic.
-
----
-
-## 1. Asynchronous Database Connection
-
-\`\`\`python
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-
-engine = create_async_engine("postgresql+asyncpg://user:pass@localhost/db", echo=False)
-AsyncSessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
-
-async def get_db_session():
-    async with AsyncSessionLocal() as session:
-        yield session
-\`\`\`
 `
   }
 ];

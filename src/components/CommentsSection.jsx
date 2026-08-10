@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Send, User, Clock, CheckCircle2 } from 'lucide-react';
+import { translations } from '../data/portfolioData';
 
-export default function CommentsSection({ articleId }) {
+export default function CommentsSection({ articleId, lang = 'en' }) {
   const storageKey = `comments_${articleId}`;
+  const t = translations[lang]?.comments || translations.en.comments;
 
   const loadComments = () => {
     try {
@@ -10,8 +12,8 @@ export default function CommentsSection({ articleId }) {
       return data ? JSON.parse(data) : [
         {
           id: 'default-1',
-          name: 'Developer Community',
-          text: 'Great article! Looking forward to more backend and machine learning posts.',
+          name: lang === 'uz' ? 'Dasturchilar Hamjamiyati' : 'Developer Community',
+          text: lang === 'uz' ? 'Ajoyib maqola! Backend va machine learning bo\'yicha yangi postlarni kutib qolamiz.' : 'Great article! Looking forward to more backend and machine learning posts.',
           date: '2026-08-05 14:30',
           avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80'
         }
@@ -28,7 +30,7 @@ export default function CommentsSection({ articleId }) {
 
   useEffect(() => {
     setComments(loadComments());
-  }, [articleId]);
+  }, [articleId, lang]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,7 +60,7 @@ export default function CommentsSection({ articleId }) {
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-indigo-500" />
-          <span>Article Comments ({comments.length})</span>
+          <span>{t.title} ({comments.length})</span>
         </h3>
       </div>
 
@@ -68,30 +70,30 @@ export default function CommentsSection({ articleId }) {
         {postedSuccess && (
           <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-xs font-bold flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4" />
-            <span>Your comment has been posted!</span>
+            <span>{t.postedMsg}</span>
           </div>
         )}
 
         <div className="space-y-1">
-          <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Your Name *</label>
+          <label className="text-xs font-bold text-slate-700 dark:text-slate-300">{t.yourName} *</label>
           <input
             type="text"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Alex Johnson"
+            placeholder={lang === 'uz' ? "Masalan: Ali Valiyev" : "e.g. Alex Johnson"}
             className="w-full px-4 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Write a Comment *</label>
+          <label className="text-xs font-bold text-slate-700 dark:text-slate-300">{t.writeComment} *</label>
           <textarea
             rows="3"
             required
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Share your thoughts, questions, or feedback on this post..."
+            placeholder={t.placeholder}
             className="w-full p-3 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm outline-none focus:border-indigo-500 text-slate-900 dark:text-white resize-none"
           ></textarea>
         </div>
@@ -101,7 +103,7 @@ export default function CommentsSection({ articleId }) {
           className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md flex items-center gap-2 cursor-pointer"
         >
           <Send className="h-3.5 w-3.5" />
-          <span>Post Comment</span>
+          <span>{t.postBtn}</span>
         </button>
       </form>
 

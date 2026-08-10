@@ -1,9 +1,16 @@
 import React from 'react';
-import { Clock, Calendar, ArrowRight, Tag, Layers } from 'lucide-react';
+import { Clock, Calendar, ArrowRight, Tag } from 'lucide-react';
 import { blogTaxonomy } from '../data/portfolioData';
 
-export default function ArticleCard({ article, onSelectArticle, t }) {
-  const catObj = blogTaxonomy[article.category] || { label: article.category };
+export default function ArticleCard({ article, onSelectArticle, t, lang = 'en' }) {
+  const taxItem = blogTaxonomy[article.category];
+  
+  let categoryLabel = article.category;
+  if (taxItem) {
+    categoryLabel = typeof taxItem.label === 'object' 
+      ? (taxItem.label[lang] || taxItem.label.en) 
+      : taxItem.label;
+  }
 
   return (
     <article 
@@ -17,7 +24,7 @@ export default function ArticleCard({ article, onSelectArticle, t }) {
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-800/50 text-[11px] capitalize flex items-center gap-1">
               <Tag className="h-3 w-3" />
-              {catObj.label || article.category}
+              {categoryLabel}
             </span>
 
             {article.subcategory && (
@@ -76,7 +83,7 @@ export default function ArticleCard({ article, onSelectArticle, t }) {
         </div>
 
         <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-          Read Article <ArrowRight className="h-3.5 w-3.5" />
+          {lang === 'uz' ? "Maqolani O'qish" : "Read Article"} <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </div>
     </article>
