@@ -8,6 +8,14 @@ import { getStoredArticles, getStoredCategories } from '../data/dataStore';
 import ArticleCard from '../components/ArticleCard';
 import BlogPost from './BlogPost';
 
+const getStr = (val, lang = 'en') => {
+  if (!val) return '';
+  if (typeof val === 'object' && !Array.isArray(val)) {
+    return val[lang] || val.en || val.uz || '';
+  }
+  return String(val);
+};
+
 export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
   const t = translations[lang]?.blog || translations.en.blog;
   
@@ -22,8 +30,8 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
   // Helper to format category for current language
   const categoriesList = rawCategories.map(cat => {
     const taxItem = blogTaxonomy[cat.id];
-    let title = cat.title;
-    let description = cat.description;
+    let title = getStr(cat.title, lang);
+    let description = getStr(cat.description, lang);
     let subcategories = cat.subcategories;
 
     if (taxItem) {
@@ -54,14 +62,18 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
 
   // Filtered articles for Level 2 or Search
   const filteredArticles = allArticles.filter(article => {
+    const titleStr = getStr(article.title, lang);
+    const excerptStr = getStr(article.excerpt, lang);
+    const subcatStr = getStr(article.subcategory, lang);
+    
     const matchesCategory = selectedCategory === null || article.category === selectedCategory;
     const matchesSubcategory = activeSubcategory === 'all' || article.subcategory === activeSubcategory;
     
     const matchesSearch = searchQuery === '' ||
-      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (article.subcategory && article.subcategory.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (article.tags && article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())));
+      titleStr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      excerptStr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      subcatStr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (article.tags && article.tags.some(tag => getStr(tag, lang).toLowerCase().includes(searchQuery.toLowerCase())));
 
     return matchesCategory && matchesSubcategory && matchesSearch;
   });

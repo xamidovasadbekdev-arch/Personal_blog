@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   User, Briefcase, Code2, BookOpen, KeyRound, Save, Plus, Trash2, Edit3, CheckCircle2, 
   X, Lock, LogOut, ExternalLink, Sparkles, Layers, ShieldCheck, FolderPlus, Tag
 } from 'lucide-react';
-import { GithubIcon } from '../components/BrandIcons';
 import { 
   getStoredProfile, saveProfile, 
   getStoredTimeline, saveTimeline,
@@ -12,6 +11,15 @@ import {
   getStoredCredentials, saveCredentials,
   getStoredCategories, saveCategories
 } from '../data/dataStore';
+
+// Safe helper to extract string from string or bilingual object
+const getStr = (val) => {
+  if (!val) return '';
+  if (typeof val === 'object' && !Array.isArray(val)) {
+    return val.en || val.uz || '';
+  }
+  return String(val);
+};
 
 export default function AdminPanel({ onLogout, onDataUpdated }) {
   const [activeTab, setActiveTab] = useState('profile'); // profile, categories, projects, articles, timeline, security
@@ -95,9 +103,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     setCategories(updated);
     saveCategories(updated);
 
-    // Also update article form selection to newly created category
     setArticleForm(prev => ({ ...prev, category: newCat.id, subcategory: newCat.subcategories[0] || 'General' }));
-
     setCategoryForm({ title: '', description: '', subcategories: 'General, Tutorials' });
     triggerSavedNotice(`New Category "${newCat.title}" created and selected!`);
   };
@@ -120,7 +126,6 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     setCategories(updated);
     saveCategories(updated);
 
-    // Select the new category in article form
     setArticleForm(prev => ({ ...prev, category: newCat.id, subcategory: 'General' }));
     setNewCatInlineTitle('');
     setShowInlineCatModal(false);
@@ -136,7 +141,6 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
     setCategories(updated);
     saveCategories(updated);
 
-    // If active category was deleted, fallback to remaining
     if (articleForm.category === id) {
       setArticleForm(prev => ({ ...prev, category: updated[0]?.id || 'ml' }));
     }
@@ -203,10 +207,10 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
   const handleEditProjectClick = (p) => {
     setEditingProjectId(p.id);
     setProjectForm({
-      title: p.title,
+      title: getStr(p.title),
       category: p.category,
-      description: p.description,
-      longDescription: p.longDescription || p.description,
+      description: getStr(p.description),
+      longDescription: getStr(p.longDescription) || getStr(p.description),
       tech: Array.isArray(p.tech) ? p.tech.join(', ') : p.tech,
       github: p.github || '',
       demo: p.demo || '',
@@ -278,13 +282,13 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
   const handleEditArticleClick = (a) => {
     setEditingArticleId(a.id);
     setArticleForm({
-      title: a.title,
+      title: getStr(a.title),
       category: a.category,
       subcategory: a.subcategory || '',
       readTime: a.readTime,
-      excerpt: a.excerpt,
+      excerpt: getStr(a.excerpt),
       tags: Array.isArray(a.tags) ? a.tags.join(', ') : a.tags,
-      content: a.content
+      content: getStr(a.content)
     });
   };
 
@@ -568,7 +572,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                     className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold outline-none text-slate-900 dark:text-white"
                   >
                     {categories.map((c) => (
-                      <option key={c.id} value={c.id}>{c.title}</option>
+                      <option key={c.id} value={c.id}>{getStr(c.title)}</option>
                     ))}
                   </select>
                 )}
@@ -636,8 +640,8 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                 <div key={a.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex flex-col justify-between space-y-3">
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">{a.category} / {a.subcategory || 'General'}</span>
-                    <h4 className="font-bold text-slate-900 dark:text-white text-base line-clamp-1">{a.title}</h4>
-                    <p className="text-xs text-slate-500 line-clamp-2">{a.excerpt}</p>
+                    <h4 className="font-bold text-slate-900 dark:text-white text-base line-clamp-1">{getStr(a.title)}</h4>
+                    <p className="text-xs text-slate-500 line-clamp-2">{getStr(a.excerpt)}</p>
                   </div>
 
                   <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-indigo-900/40">
@@ -730,19 +734,19 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                     <div className="flex items-center justify-between">
                       <h4 className="font-extrabold text-slate-900 dark:text-white text-lg flex items-center gap-2">
                         <Tag className="h-4 w-4 text-indigo-500" />
-                        <span>{cat.title}</span>
+                        <span>{getStr(cat.title)}</span>
                       </h4>
                       <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded">
                         id: {cat.id}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-500 line-clamp-2">{cat.description}</p>
+                    <p className="text-xs text-slate-500 line-clamp-2">{getStr(cat.description)}</p>
                     <div className="flex flex-wrap gap-1 pt-1">
-                      {cat.subcategories.map((sub, idx) => (
+                      {Array.isArray(cat.subcategories) ? cat.subcategories.map((sub, idx) => (
                         <span key={idx} className="text-[10px] bg-slate-100 dark:bg-indigo-950 px-2 py-0.5 rounded font-semibold text-indigo-400">
-                          {sub}
+                          {getStr(sub)}
                         </span>
-                      ))}
+                      )) : null}
                     </div>
                   </div>
 
@@ -811,12 +815,17 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
             {projects.map((p) => (
               <div key={p.id} className="p-5 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white">{p.title}</h4>
-                  <p className="text-xs text-slate-500">{p.description}</p>
+                  <h4 className="font-bold text-slate-900 dark:text-white">{getStr(p.title)}</h4>
+                  <p className="text-xs text-slate-500">{getStr(p.description)}</p>
                 </div>
-                <button onClick={() => handleDeleteProject(p.id)} className="p-2 text-rose-500">
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button onClick={() => handleEditProjectClick(p)} className="p-2 text-indigo-500 cursor-pointer">
+                    <Edit3 className="h-4 w-4" />
+                  </button>
+                  <button onClick={() => handleDeleteProject(p.id)} className="p-2 text-rose-500 cursor-pointer">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -854,7 +863,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
                 className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-xs font-semibold text-slate-900 dark:text-white"
               />
             </div>
-            <button type="submit" className="px-6 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs">
+            <button type="submit" className="px-6 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs cursor-pointer">
               Add Timeline Item
             </button>
           </form>
@@ -864,9 +873,9 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
               <div key={idx} className="p-4 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-indigo-500 font-mono">{item.year}</div>
-                  <div className="font-bold text-slate-900 dark:text-white text-sm">{item.role} at {item.company}</div>
+                  <div className="font-bold text-slate-900 dark:text-white text-sm">{getStr(item.role)} at {item.company}</div>
                 </div>
-                <button onClick={() => handleDeleteTimeline(idx)} className="p-2 text-rose-500">
+                <button onClick={() => handleDeleteTimeline(idx)} className="p-2 text-rose-500 cursor-pointer">
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
@@ -899,7 +908,7 @@ export default function AdminPanel({ onLogout, onDataUpdated }) {
               className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border text-sm font-semibold text-slate-900 dark:text-white"
             />
           </div>
-          <button type="submit" className="w-full py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm">
+          <button type="submit" className="w-full py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm cursor-pointer">
             Update Credentials
           </button>
         </form>
