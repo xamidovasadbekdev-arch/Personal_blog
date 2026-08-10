@@ -1,5 +1,5 @@
 import React from 'react';
-import { Send, Heart } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './BrandIcons';
 import { getStoredProfile } from '../data/dataStore';
 
@@ -20,8 +20,8 @@ export default function Footer({ setActiveTab, lang = 'en' }) {
             >
               {profile.name}
             </button>
-            <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-              © {new Date().getFullYear()} · {isUzbek ? "Barcha huquqlar himoyalangan." : "All rights reserved."} {isUzbek ? "React & Tailwind bilan yaratilgan" : "Crafted with"} <Heart className="h-3 w-3 text-rose-500 fill-rose-500 inline" />.
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              © {new Date().getFullYear()} · {isUzbek ? "Barcha huquqlar himoyalangan." : "All rights reserved."}
             </p>
           </div>
 

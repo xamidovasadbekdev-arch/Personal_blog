@@ -104,6 +104,8 @@ export const translations = {
       openBadge: "Open for Opportunities",
     },
     projects: {
+      title: "Portfolio Projects",
+      sub: "Explore my open-source applications, API architecture microservices, data science pipelines, and machine learning models.",
       all: "All Projects",
       fullstack: "Fullstack",
       backend: "Backend & API",
@@ -232,6 +234,8 @@ export const translations = {
       openBadge: "Takliflar uchun ochiq",
     },
     projects: {
+      title: "Portfolio Loyihalari",
+      sub: "Ochiq manbali ilovalarim, API mikroxizmatlarim, data science quvurlarim va AI modellarim bilan tanishing.",
       all: "Barchasi",
       fullstack: "Fullstack",
       backend: "Backend & API",
@@ -394,39 +398,66 @@ export const experienceTimeline = [
 export const projectsData = [
   {
     id: "personal-blog",
-    title: "Personal Developer Portfolio & Engineering Blog",
+    title: {
+      en: "Personal Developer Portfolio & Engineering Blog",
+      uz: "Shaxsiy Dasturchi Portfoliosi va Muhandislik Blogi"
+    },
     category: "fullstack",
-    description: "High-performance portfolio and blog built with React, Vite, Tailwind CSS, bilingual support (EN/UZ), interactive terminal visuals, and markdown reader.",
+    description: {
+      en: "High-performance portfolio and blog built with React, Vite, Tailwind CSS, bilingual support (EN/UZ), interactive terminal visuals, and markdown reader.",
+      uz: "React, Vite va Tailwind CSS texnologiyalarida yaratilgan yuqori unumdorlikka ega shaxsiy portfolio va blog (EN/UZ tildagi qo'llab-quvvatlash bilan)."
+    },
     tech: ["React", "Vite", "Tailwind CSS", "JavaScript"],
     github: "https://github.com/xamidovasadbekdev-arch/Personal_blog",
     demo: "https://xamidovasadbek.dev",
     featured: true,
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-    longDescription: "A full-featured personal website built to display software engineering projects, publish technical articles, and showcase AI & Data Science skills."
+    longDescription: {
+      en: "A full-featured personal website built to display software engineering projects, publish technical articles, and showcase AI & Data Science skills.",
+      uz: "Dasturiy muhandislik loyihalarini namoyish etish, texnik maqolalarni chop etish hamda AI va Data Science ko'nikmalarini ko'rsatish uchun yaratilgan to'liq shaxsiy veb-sayt."
+    }
   },
   {
     id: "fastapi-microservice",
-    title: "Scalable FastAPI Backend & Authentication Service",
+    title: {
+      en: "Scalable FastAPI Backend & Authentication Service",
+      uz: "Moslashuvchan FastAPI Backend va Autentifikatsiya Xizmati"
+    },
     category: "backend",
-    description: "Async Python REST API microservice with JWT authentication, PostgreSQL integration, Redis caching, and Docker setup.",
+    description: {
+      en: "Async Python REST API microservice with JWT authentication, PostgreSQL integration, Redis caching, and Docker setup.",
+      uz: "JWT autentifikatsiyasi, PostgreSQL, Redis kesh va Docker konfiguratsiyasiga ega asinxron Python REST API mikroxizmati."
+    },
     tech: ["FastAPI", "Python", "PostgreSQL", "Redis", "Docker"],
     github: "https://github.com/xamidovasadbekdev-arch",
     demo: "#",
     featured: true,
     image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=800&q=80",
-    longDescription: "Enterprise async REST API microservice structure designed for high throughput, OpenAPI specs, and Pytest coverage."
+    longDescription: {
+      en: "Enterprise async REST API microservice structure designed for high throughput, OpenAPI specs, and Pytest coverage.",
+      uz: "Yuqori yuklama, OpenAPI hujjatlari hamda Pytest sinovlari uchun mo'ljallangan korporativ asinxron REST API mikroxizmati arxitekturasi."
+    }
   },
   {
     id: "data-analytics-pipeline",
-    title: "Automated Data Analytics & Sales Insights Pipeline",
+    title: {
+      en: "Automated Data Analytics & Sales Insights Pipeline",
+      uz: "Avtomatlashtirilgan Data Analitika va Sotuv Tahlili Quvuri"
+    },
     category: "ai",
-    description: "Automated pandas/SQL data pipeline for extracting, cleaning, and visualizing core business performance metrics.",
+    description: {
+      en: "Automated pandas/SQL data pipeline for extracting, cleaning, and visualizing core business performance metrics.",
+      uz: "Asosiy biznes ko'rsatkichlarini ajratib olish, tozalash va vizualizatsiya qilish uchun avtomatlashtirilgan pandas/SQL ma'lumotlar quvuri."
+    },
     tech: ["Python", "Pandas", "SQL", "Scikit-Learn", "Matplotlib"],
     github: "https://github.com/xamidovasadbekdev-arch",
     demo: "#",
     featured: true,
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-    longDescription: "Data analytics solution designed to process raw transactional data, perform statistical analysis, and generate predictive sales reports."
+    longDescription: {
+      en: "Data analytics solution designed to process raw transactional data, perform statistical analysis, and generate predictive sales reports.",
+      uz: "Xom transaktsiya ma'lumotlarini qayta ishlash, statistik tahlil o'tkazish hamda bashoratli sotuv hisobotlarini shakllantirish uchun Data Science yechimi."
+    }
   }
 ];
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Clock, Calendar, Share2, Tag, Copy, Check, ThumbsUp } from 'lucide-react';
+import { ArrowLeft, Clock, Calendar, Share2, Tag, Copy, Check, ThumbsUp, BookOpen } from 'lucide-react';
 import { translations, blogTaxonomy } from '../data/portfolioData';
 import { getStoredArticles } from '../data/dataStore';
 import CommentsSection from '../components/CommentsSection';
 
-export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
-  const t = translations[lang].blog;
+export default function BlogPost({ articleId, onBack, onSelectArticle, lang = 'en' }) {
+  const t = translations[lang]?.blog || translations.en.blog;
   const articles = getStoredArticles();
   const article = articles.find(a => a.id === articleId) || articles[0];
 
@@ -14,9 +14,34 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
   const [liked, setLiked] = useState(false);
   const [copiedCodeIdx, setCopiedCodeIdx] = useState(null);
 
-  if (!article) return null;
+  // Bulletproof fallback if no article exists
+  if (!article) {
+    return (
+      <div className="py-16 text-center space-y-4 max-w-md mx-auto">
+        <BookOpen className="h-12 w-12 mx-auto text-indigo-400" />
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+          {lang === 'uz' ? "Maqola topilmadi" : "Article Not Found"}
+        </h2>
+        <p className="text-sm text-slate-500">
+          {lang === 'uz' ? "Siz qidirgan maqola o'chirilgan yoki mavjud emas." : "The article you are looking for has been moved or deleted."}
+        </p>
+        <button
+          onClick={onBack}
+          className="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs"
+        >
+          {t.backToBlog}
+        </button>
+      </div>
+    );
+  }
 
-  const catObj = blogTaxonomy[article.category] || { label: article.category };
+  const taxItem = blogTaxonomy[article.category];
+  let categoryLabel = article.category;
+  if (taxItem) {
+    categoryLabel = typeof taxItem.label === 'object' 
+      ? (taxItem.label[lang] || taxItem.label.en) 
+      : taxItem.label;
+  }
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -34,7 +59,8 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
     }
   };
 
-  const renderFormattedContent = (content) => {
+  const renderFormattedContent = (rawContent) => {
+    const content = rawContent || `# ${article.title}\n\n${article.excerpt || ''}`;
     const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
     const parts = [];
     let lastIndex = 0;
@@ -84,12 +110,12 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
                 {isCopied ? (
                   <>
                     <Check className="h-3.5 w-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied!</span>
+                    <span className="text-emerald-400">{lang === 'uz' ? "Nusxalandi!" : "Copied!"}</span>
                   </>
                 ) : (
                   <>
                     <Copy className="h-3.5 w-3.5" />
-                    <span>Copy Code</span>
+                    <span>{lang === 'uz' ? "Kodni Nusxalash" : "Copy Code"}</span>
                   </>
                 )}
               </button>
@@ -148,7 +174,7 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
         {/* Category & Subcategory Badges */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider border border-indigo-200 dark:border-indigo-800">
-            {catObj.label || article.category}
+            {categoryLabel}
           </span>
           {article.subcategory && (
             <span className="px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 font-bold text-xs uppercase tracking-wider border border-purple-200 dark:border-purple-800">
@@ -193,7 +219,7 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
       {/* Like Button & Tags */}
       <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-200 dark:border-indigo-900/40">
         <div className="flex flex-wrap gap-2">
-          {article.tags.map((tag, idx) => (
+          {article.tags && article.tags.map((tag, idx) => (
             <span key={idx} className="text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-indigo-950/60 px-3 py-1 rounded-lg">
               #{tag}
             </span>
@@ -209,7 +235,7 @@ export default function BlogPost({ articleId, onBack, onSelectArticle, lang }) {
           }`}
         >
           <ThumbsUp className="h-4 w-4" />
-          <span>{likes} Likes</span>
+          <span>{likes} {lang === 'uz' ? "Layklar" : "Likes"}</span>
         </button>
       </div>
 

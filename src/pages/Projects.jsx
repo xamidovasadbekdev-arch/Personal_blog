@@ -5,8 +5,8 @@ import { getStoredProjects } from '../data/dataStore';
 import { GithubIcon } from '../components/BrandIcons';
 import ProjectCard from '../components/ProjectCard';
 
-export default function Projects({ lang }) {
-  const t = translations[lang].projects;
+export default function Projects({ lang = 'en' }) {
+  const t = translations[lang]?.projects || translations.en.projects;
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
@@ -22,11 +22,14 @@ export default function Projects({ lang }) {
   ];
 
   const filteredProjects = projectsData.filter(project => {
+    const titleStr = typeof project.title === 'object' ? (project.title[lang] || project.title.en) : project.title;
+    const descStr = typeof project.description === 'object' ? (project.description[lang] || project.description.en) : project.description;
+
     const matchesCategory = activeCategory === 'all' || project.category === activeCategory;
     const matchesSearch = searchQuery === '' || 
-      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (Array.isArray(project.tech) && project.tech.some(t => t.toLowerCase().includes(searchQuery.toLowerCase())));
+      titleStr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      descStr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (Array.isArray(project.tech) && project.tech.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase())));
     
     return matchesCategory && matchesSearch;
   });
@@ -37,10 +40,10 @@ export default function Projects({ lang }) {
       {/* Header */}
       <div className="space-y-4 max-w-2xl">
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          Portfolio Projects
+          {t.title}
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-          Explore my open-source applications, API architecture microservices, data science pipelines, and machine learning models.
+          {t.sub}
         </p>
       </div>
 
@@ -95,6 +98,7 @@ export default function Projects({ lang }) {
               project={project} 
               onSelect={(p) => setSelectedProject(p)}
               t={t}
+              lang={lang}
             />
           ))}
         </div>
@@ -114,17 +118,20 @@ export default function Projects({ lang }) {
             
             <button 
               onClick={() => setSelectedProject(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 dark:bg-indigo-950 text-slate-500 hover:text-slate-900 dark:hover:text-white"
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 dark:bg-indigo-950 text-slate-500 hover:text-slate-900 dark:hover:text-white z-20 cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
 
+            {/* Modal Image - Fully Visible Styling */}
             {selectedProject.image && (
-              <img 
-                src={selectedProject.image} 
-                alt={selectedProject.title} 
-                className="w-full h-56 object-cover rounded-2xl"
-              />
+              <div className="w-full max-h-80 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-indigo-900/40 flex items-center justify-center p-1">
+                <img 
+                  src={selectedProject.image} 
+                  alt={typeof selectedProject.title === 'object' ? (selectedProject.title[lang] || selectedProject.title.en) : selectedProject.title} 
+                  className="w-full max-h-76 object-contain rounded-xl"
+                />
+              </div>
             )}
 
             <div className="space-y-3">
@@ -132,16 +139,18 @@ export default function Projects({ lang }) {
                 {selectedProject.category}
               </span>
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-                {selectedProject.title}
+                {typeof selectedProject.title === 'object' ? (selectedProject.title[lang] || selectedProject.title.en) : selectedProject.title}
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                {selectedProject.longDescription || selectedProject.description}
+                {typeof selectedProject.longDescription === 'object' 
+                  ? (selectedProject.longDescription[lang] || selectedProject.longDescription.en) 
+                  : (selectedProject.longDescription || (typeof selectedProject.description === 'object' ? (selectedProject.description[lang] || selectedProject.description.en) : selectedProject.description))}
               </p>
             </div>
 
             {/* Tech Badges */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Technologies Used</h4>
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">{t.technologiesUsed}</h4>
               <div className="flex flex-wrap gap-2">
                 {Array.isArray(selectedProject.tech) ? selectedProject.tech.map((item, idx) => (
                   <span key={idx} className="px-3 py-1 rounded-lg bg-slate-100 dark:bg-indigo-950 text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -165,7 +174,7 @@ export default function Projects({ lang }) {
                   className="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-indigo-950 text-slate-800 dark:text-slate-200 font-semibold text-xs sm:text-sm text-center hover:bg-slate-200 dark:hover:bg-indigo-900/60 flex items-center justify-center gap-2"
                 >
                   <GithubIcon className="h-4 w-4" />
-                  <span>Source Code</span>
+                  <span>{t.viewCode}</span>
                 </a>
               )}
 
@@ -177,7 +186,7 @@ export default function Projects({ lang }) {
                   className="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-xs sm:text-sm text-center hover:bg-indigo-700 flex items-center justify-center gap-2"
                 >
                   <ExternalLink className="h-4 w-4" />
-                  <span>Live Demo</span>
+                  <span>{t.liveDemo}</span>
                 </a>
               )}
             </div>
