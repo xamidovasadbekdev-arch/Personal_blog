@@ -76,7 +76,9 @@ export default function About({ lang }) {
 
         <div className="relative border-l-2 border-slate-200 dark:border-indigo-900/50 ml-4 pl-6 space-y-10">
           {timeline.map((item, idx) => {
-            const role = typeof item.role === 'object' ? (item.role[lang] || item.role.en) : item.role;
+            const yearStr = typeof item.year === 'object' ? (item.year[lang] || item.year.en) : item.year;
+            const roleStr = typeof item.role === 'object' ? (item.role[lang] || item.role.en) : item.role;
+            const companyStr = typeof item.company === 'object' ? (item.company[lang] || item.company.en) : item.company;
             const desc = typeof item.description === 'object' ? (item.description[lang] || item.description.en) : item.description;
 
             return (
@@ -86,10 +88,18 @@ export default function About({ lang }) {
 
                 <div className="space-y-1">
                   <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 font-mono tracking-wider">
-                    {item.year}
+                    {yearStr}
                   </span>
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {role} <span className="text-slate-400 font-normal">at {item.company}</span>
+                    {lang === 'uz' ? (
+                      <>
+                        {companyStr} <span className="text-slate-400 font-normal">— {roleStr}</span>
+                      </>
+                    ) : (
+                      <>
+                        {roleStr} <span className="text-slate-400 font-normal">at {companyStr}</span>
+                      </>
+                    )}
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
                     {desc}

@@ -342,54 +342,54 @@ export const skillsData = [
 
 export const experienceTimeline = [
   {
-    year: "July 2026 - Present",
+    year: { en: "July 2026 - Present", uz: "Iyul 2026 - Hozirgacha" },
     role: { en: "Data Analyst", uz: "Data Analitik" },
-    company: "Mittivoy Company",
+    company: { en: "Mittivoy Company", uz: "Mittivoy kompaniyasi" },
     description: {
       en: "Analyzing business metrics, building SQL data pipelines, and creating executive dashboards to drive data-driven decision making.",
       uz: "Biznes ko'rsatkichlarini tahlil qilish, SQL ma'lumotlar quvurlarini qurish hamda boshqaruv panellarini yaratish."
     }
   },
   {
-    year: "July 2026 - Present",
+    year: { en: "July 2026 - Present", uz: "Iyul 2026 - Hozirgacha" },
     role: { en: "Machine Learning Engineering Intern", uz: "Machine Learning Muhandis Stajyor" },
-    company: "FLyrank",
+    company: { en: "FLyrank", uz: "FLyrank kompaniyasi" },
     description: {
       en: "Developing machine learning models, backend features, integrating REST APIs, and optimizing database queries in an agile engineering environment.",
       uz: "Machine learning modellarini yaratish, backend funksiyalarini ishlab chiqish hamda REST API funksiyalarini integratsiya qilish."
     }
   },
   {
-    year: "May 2026 - Present",
+    year: { en: "May 2026 - Present", uz: "May 2026 - Hozirgacha" },
     role: { en: "Data Science Scholar", uz: "Data Science Tinglovchisi" },
-    company: "Uzcard Data Science Program",
+    company: { en: "Uzcard Data Science Program", uz: "Uzcard Data Science Dasturi" },
     description: {
       en: "Deep-diving into machine learning algorithms, predictive modeling, data cleaning, and statistical analysis.",
       uz: "Machine learning algoritmlari, bashoratli modellashtirish, ma'lumotlarni tozalash va statistik tahlil."
     }
   },
   {
-    year: "Jan 2026 - Apr 2026",
+    year: { en: "Jan 2026 - Apr 2026", uz: "Yan 2026 - Apr 2026" },
     role: { en: "Junior Backend Developer", uz: "Junior Backend Dasturchi" },
-    company: "Freelance",
+    company: { en: "Freelance", uz: "Frilans" },
     description: {
       en: "Architected REST APIs with FastAPI and PostgreSQL for clients, implemented JWT authentication, and containerized apps with Docker.",
       uz: "FastAPI va PostgreSQL texnologiyalarida REST API loyihalarini yaratish, JWT autentifikatsiyasi hamda Docker konteynerlashtirish."
     }
   },
   {
-    year: "Nov 2025 - Mar 2026",
+    year: { en: "Nov 2025 - Mar 2026", uz: "Noy 2025 - Mar 2026" },
     role: { en: "Backend Development Intensive", uz: "Backend Dasturlash Intensiv Dasturi" },
-    company: "Specialized Training",
+    company: { en: "Specialized Training", uz: "Maxsus Trening" },
     description: {
       en: "Mastered Python backend development, asynchronous database patterns, API design, and clean architecture principles.",
       uz: "Python backend dasturlash, asinxron ma'lumotlar bazasi namunalari hamda toza arxitektura tamoyillarini o'zlashtirish."
     }
   },
   {
-    year: "2024 - Present",
+    year: { en: "2024 - Present", uz: "2024 - Hozirgacha" },
     role: { en: "BSc Business Information Systems", uz: "Biznes Axborot Tizimlari Bakalavr" },
-    company: "WIUT (Scholarship Awardee)",
+    company: { en: "WIUT (Scholarship Awardee)", uz: "WIUT (Grant Sohibi)" },
     description: {
       en: "Awarded full scholarship at Westminster International University in Tashkent. Studying software engineering, database management, and information systems.",
       uz: "Toshkentdagi Xalqaro Vestminster Universitetida to'liq grant asosida ta'lim olish. Dasturiy ta'minot muhandisligi va axborot tizimlarini o'rganish."
