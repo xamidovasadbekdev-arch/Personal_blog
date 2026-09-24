@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import Projects from './pages/Projects';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
-import About from './pages/About';
-import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+
+// Home ships in the main bundle; other pages load on first visit.
+const Projects = lazy(() => import('./pages/Projects'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 const readPref = (key, fallback, allowed) => {
   try {
@@ -61,6 +63,7 @@ export default function App() {
       <Navbar lang={lang} setLang={setLang} theme={theme} toggleTheme={toggleTheme} />
 
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <Suspense fallback={<div className="min-h-[60vh]" />}>
         <Routes>
           <Route path="/" element={<Home lang={lang} />} />
           <Route path="/projects" element={<Projects lang={lang} />} />
@@ -70,6 +73,7 @@ export default function App() {
           <Route path="/contact" element={<Contact lang={lang} />} />
           <Route path="*" element={<NotFound lang={lang} />} />
         </Routes>
+        </Suspense>
       </main>
 
       <Footer lang={lang} />

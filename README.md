@@ -1,89 +1,72 @@
-# 🚀 Xamidov Asadbek — Personal Developer Portfolio & Engineering Blog
+# xamidov.dev — portfolio & blog
 
-[![Live Demo](https://img.shields.io/badge/Live%20Website-xamidovasadbek.dev-6366f1?style=for-the-badge&logo=googlechrome&logoColor=white)](https://xamidovasadbek.dev)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Preview-22c55e?style=for-the-badge&logo=github&logoColor=white)](https://xamidovasadbekdev-arch.github.io/Personal_blog/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-amber-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+Personal site of **Asadbek Xamidov**, backend developer and ML engineer in Tashkent.
+Live at **[xamidovasadbek.dev](https://xamidovasadbek.dev)**.
 
-> Personal portfolio, technical publications hub, and project showcase built by **Xamidov Asadbek** — Data Analyst at Mittivoy, Machine Learning Engineering Intern at FLyrank, and Business Information Systems Scholarship Awardee at WIUT.
+A static React site: no server, no database. Content lives in the repo, and every push to `main` redeploys on Vercel.
 
----
+## Stack
 
-## 🌐 Live URLs
+- React 19, Vite, Tailwind CSS v4, React Router
+- Articles in Markdown, rendered with `react-markdown` + GFM
+- Comments via [giscus](https://giscus.app) (GitHub Discussions)
+- Contact form via [Web3Forms](https://web3forms.com)
+- English and Uzbek, dark and light themes
 
-- **Primary Custom Domain**: [https://xamidovasadbek.dev](https://xamidovasadbek.dev)
-- **GitHub Pages Preview**: [https://xamidovasadbekdev-arch.github.io/Personal_blog/](https://xamidovasadbekdev-arch.github.io/Personal_blog/)
-- **GitHub Repository**: [https://github.com/xamidovasadbekdev-arch/Personal_blog](https://github.com/xamidovasadbekdev-arch/Personal_blog)
-
----
-
-## ✨ Key Features & Architecture
-
-- **🎨 Modern Dark/Light Theme Engine**: Tailwind CSS v4 class-based theme switcher with particle constellation canvas background and typewriter headline animations.
-- **🔐 Password-Protected Admin Control Center (`/admin`)**: Secured CMS gateway allowing real-time CRUD management over:
-  - Personal Bio & Headline details
-  - Custom Category Folders (e.g. `Machine Learning & AI`, `Backend & Architecture`, `Ocean`, `Robotics`, `Personal`)
-  - Work Experience Timeline items
-  - Projects Gallery
-  - Blog Articles & Markdown Content
-- **📁 3-Level Blog Category Drill-Down Layout**:
-  - *Level 1*: Category Folder Cards with subcategory chips & article counters.
-  - *Level 2*: Filtered Category Articles List with subcategory pills.
-  - *Level 3*: Markdown Article Reader with 1-click code block copy buttons and language badges.
-- **💬 Interactive Article Comment Engine**: Readers can post comments under articles with LocalStorage persistence.
-- **📄 Real Resume File Downloader**: 1-click download of formatted resume (`Asadbek_Xamidov_Resume.txt`).
-- **✉️ Direct Email & Telegram Integration**: Direct mail client dispatch to `xamidovasadbek.dev@gmail.com` and Telegram link to `@homiidov`.
-
----
-
-## 🛠️ Technology Stack
-
-- **Frontend**: React 19, Vite, Tailwind CSS v4, Lucide Icons, Canvas API
-- **Data & CMS**: LocalStorage Persistence Store (`dataStore.js`), Markdown Reader
-- **Deployment**: GitHub Pages (`gh-pages`), Vercel Cloud, Custom DNS (`xamidovasadbek.dev`)
-
----
-
-## 💻 Local Development Setup
+## Run locally
 
 ```bash
-# Clone the repository
-git clone https://github.com/xamidovasadbekdev-arch/Personal_blog.git
-
-# Navigate to project directory
-cd Personal_blog
-
-# Install dependencies
 npm install
-
-# Start local development server
 npm run dev
 ```
 
-Open `http://localhost:5173/` in your browser to view the application locally.
+Open http://localhost:5173.
 
+## Editing content
+
+| What | Where |
+|---|---|
+| Name, bio, links, résumé path | `src/data/portfolioData.js` → `profile` |
+| Projects | `src/data/portfolioData.js` → `projectsData` |
+| Experience timeline, skills | `src/data/portfolioData.js` → `experienceTimeline`, `skillsData` |
+| UI text (EN/UZ) | `src/data/portfolioData.js` → `translations` |
+| Blog categories | `src/data/portfolioData.js` → `blogTaxonomy` |
+| Articles | `src/content/blog/<slug>/en.md` and `uz.md` |
+
+### Adding an article
+
+Create `src/content/blog/my-new-post/en.md`:
+
+```markdown
+---
+title: "My new post"
+excerpt: "One or two sentences shown in lists and link previews."
+date: 2026-10-01
+category: backend
+subcategory: "FastAPI & Microservices"
+tags: ["FastAPI", "Python"]
 ---
 
-## 📦 Production Deployment
-
-```bash
-# Build for production
-npm run build
-
-# Deploy to GitHub Pages
-npm run deploy
+Write the article here in Markdown. Code blocks get a copy button.
 ```
 
----
+Optionally add `uz.md` in the same folder with its own `title`, `excerpt` and body; without it the Uzbek site shows the English version. `category` must be a key of `blogTaxonomy`, and `subcategory` one of its English subcategory names. The URL becomes `/blog/my-new-post`, read time is calculated automatically, and the post is added to `sitemap.xml` at build time.
 
-## 👤 Author & Contact
+Then `git push`, and Vercel deploys it.
 
-**Xamidov Asadbek**
-- **Headline**: Backend Developer, AI/ML Engineer & Data Scientist
-- **Email**: [xamidovasadbek.dev@gmail.com](mailto:xamidovasadbek.dev@gmail.com)
-- **Telegram**: [@homiidov](https://t.me/homiidov)
-- **LinkedIn**: [in/asadbekxamidov](https://www.linkedin.com/in/asadbekxamidov/)
-- **GitHub**: [@xamidovasadbekdev-arch](https://github.com/xamidovasadbekdev-arch)
+## Turning on comments
 
----
+1. In the GitHub repo settings, enable **Discussions**.
+2. Install the [giscus app](https://github.com/apps/giscus) on this repo.
+3. On [giscus.app](https://giscus.app), enter the repo, choose the **Announcements** category, and copy `data-repo-id` and `data-category-id`.
+4. Paste them into `GISCUS` in `src/components/GiscusComments.jsx`.
 
-*Licensed under the [MIT License](LICENSE).*
+Until both IDs are set, the comments section stays hidden.
+
+## Deploy
+
+Vercel builds with `npm run build` and serves `dist/`. `vercel.json` rewrites every path to `index.html` so direct links like `/blog/<slug>` work.
+
+## Contact
+
+[xamidovasadbek.dev@gmail.com](mailto:xamidovasadbek.dev@gmail.com) · [Telegram](https://t.me/homiidov) · [LinkedIn](https://www.linkedin.com/in/asadbekxamidov/) · [GitHub](https://github.com/xamidovasadbekdev-arch)
