@@ -26,7 +26,11 @@ Open http://localhost:5173.
 
 Every piece of text on the site is editable at **https://xamidovasadbek.dev/admin** (Sveltia CMS). Saving commits to `main` on GitHub, and Vercel redeploys in about a minute.
 
-**First sign-in:** create a [fine-grained GitHub token](https://github.com/settings/personal-access-tokens/new) limited to this repository with **Contents: Read and write**, then choose **Sign In Using Access Token** on the admin page and paste it. The token stays in that browser only.
+**Sign-in:** click **Sign In with GitHub** on /admin. Despite the label, it opens our own email + password window (`api/auth.js`). Change or reset the password at **/admin/account**.
+
+How it works: `/api/login` checks the password against a bcrypt hash in Upstash Redis and returns a 12-hour session. The admin sends every GitHub request through `/api/gh`, which checks the session and adds the real `GITHUB_TOKEN` on the server. The token never reaches the browser, and changing the password signs out all sessions. Five wrong attempts from one address lock sign-in for 15 minutes.
+
+Vercel environment variables: `GITHUB_TOKEN` (can write to this repo), `ADMIN_EMAIL`, `ADMIN_SETUP_CODE` (recovery code for the first password or a forgotten one), plus the Upstash Redis variables added by the Vercel integration.
 
 | In the admin | File in the repo |
 |---|---|

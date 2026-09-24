@@ -1,6 +1,18 @@
 {
   "rewrites": [
+    { "source": "/api/gh/(.*)", "destination": "/api/gh?path=$1" },
     { "source": "/admin", "destination": "/admin/index.html" },
-    { "source": "/((?!admin/).*)", "destination": "/index.html" }
+    { "source": "/admin/account", "destination": "/admin/account/index.html" },
+    { "source": "/((?!admin/|api/).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/admin(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
   ]
 }

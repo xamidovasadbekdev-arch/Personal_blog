@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Admin account · xamidov.dev</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #14120f; color: #c4baa9; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 440px; margin: 0 auto; padding: 56px 20px; display: grid; gap: 40px; }
+  h1 { margin: 0; color: #f2ebdf; font-size: 26px; font-weight: 600; }
+  h2 { margin: 0; color: #f2ebdf; font-size: 18px; font-weight: 600; }
+  p { margin: 0; font-size: 13px; color: #8b8272; }
+  form { display: grid; gap: 12px; padding: 22px; border: 1px solid rgba(240,228,206,.09); border-radius: 16px; background: #1b1814; }
+  label { display: grid; gap: 6px; font-size: 13px; color: #f2ebdf; }
+  input { width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid rgba(240,228,206,.2);
+          background: #14120f; color: #f2ebdf; font: inherit; outline: none; }
+  input:focus { border-color: #e4ac48; }
+  button { margin-top: 4px; padding: 11px; border: 0; border-radius: 999px; background: #f2ebdf; color: #14120f;
+           font: inherit; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .6; cursor: default; }
+  .status { min-height: 20px; font-size: 13px; }
+  .status.error { color: #f0a58a; }
+  .status.ok { color: #9fd49a; }
+  a { color: #e4ac48; }
+</style>
+</head>
+<body>
+<main>
+  <div style="display:grid;gap:8px">
+    <h1>Admin account</h1>
+    <p>Password for <a href="/admin">xamidovasadbek.dev/admin</a>. At least 10 characters.</p>
+  </div>
+
+  <form data-endpoint="/api/password">
+    <h2>Change password</h2>
+    <label>Email <input name="email" type="email" autocomplete="username" required></label>
+    <label>Current password <input name="current" type="password" autocomplete="current-password" required></label>
+    <label>New password <input name="next" type="password" autocomplete="new-password" minlength="10" required></label>
+    <label>Repeat new password <input name="repeat" type="password" autocomplete="new-password" minlength="10" required></label>
+    <div class="status" role="status"></div>
+    <button>Change password</button>
+  </form>
+
+  <form data-endpoint="/api/setup">
+    <h2>Set first password / forgot password</h2>
+    <p>Uses the recovery code saved as <code>ADMIN_SETUP_CODE</code> in Vercel.</p>
+    <label>Email <input name="email" type="email" autocomplete="username" required></label>
+    <label>Recovery code <input name="code" type="password" autocomplete="off" required></label>
+    <label>New password <input name="password" type="password" autocomplete="new-password" minlength="10" required></label>
+    <label>Repeat new password <input name="repeat" type="password" autocomplete="new-password" minlength="10" required></label>
+    <div class="status" role="status"></div>
+    <button>Save password</button>
+  </form>
+</main>
+<script>
+  for (const form of document.querySelectorAll('form')) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const status = form.querySelector('.status');
+      const button = form.querySelector('button');
+      const data = Object.fromEntries(new FormData(form));
+      const newPassword = data.next ?? data.password;
+      status.className = 'status error';
+      if (newPassword !== data.repeat) {
+        status.textContent = 'The new passwords do not match.';
+        return;
+      }
+      delete data.repeat;
+      button.disabled = true;
+      try {
+        const response = await fetch(form.dataset.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'Something went wrong.');
+        form.reset();
+        status.className = 'status ok';
+        status.textContent = 'Saved. Sign in at /admin with the new password.';
+      } catch (error) {
+        status.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>
+</body>
+</html>
