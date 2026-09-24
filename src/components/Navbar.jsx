@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { Menu, X, Sun, Moon, Sparkles } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { translations, profile } from '../data/portfolioData';
 
-export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, toggleTheme }) {
+export default function Navbar({ lang, setLang, theme, toggleTheme }) {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const activeTab = pathname === '/' ? 'home' : pathname.split('/')[1];
+  const setActiveTab = (id) => navigate(id === 'home' ? '/' : `/${id}`);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[lang].nav;
 

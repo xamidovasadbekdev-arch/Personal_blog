@@ -1,8 +1,9 @@
 import React from 'react';
 import { Clock, Calendar, ArrowRight, Tag } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { blogTaxonomy } from '../data/portfolioData';
 
-export default function ArticleCard({ article, onSelectArticle, t, lang = 'en' }) {
+export default function ArticleCard({ article, t, lang = 'en' }) {
   const taxItem = blogTaxonomy[article.category];
   
   let categoryLabel = article.category;
@@ -16,8 +17,8 @@ export default function ArticleCard({ article, onSelectArticle, t, lang = 'en' }
   const excerpt = typeof article.excerpt === 'object' ? (article.excerpt[lang] || article.excerpt.en) : article.excerpt;
 
   return (
-    <article 
-      onClick={() => onSelectArticle(article.id)}
+    <Link
+      to={`/blog/${article.slug || article.id}`}
       className="group relative rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 p-6 transition-all duration-300 hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/10 cursor-pointer flex flex-col justify-between"
     >
       <div className="space-y-3">
@@ -89,6 +90,6 @@ export default function ArticleCard({ article, onSelectArticle, t, lang = 'en' }
           {lang === 'uz' ? "Maqolani O'qish" : "Read Article"} <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </div>
-    </article>
+    </Link>
   );
 }
