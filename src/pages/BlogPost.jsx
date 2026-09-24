@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Clock, Calendar, Share2, Tag, Copy, Check, ThumbsUp, BookOpen } from 'lucide-react';
-import { translations, blogTaxonomy } from '../data/portfolioData';
-import { getStoredArticles } from '../data/dataStore';
+import { ArrowLeft, Clock, Calendar, Share2, Copy, Check, ThumbsUp, BookOpen } from 'lucide-react';
+import { translations, blogTaxonomy, articlesData } from '../data/portfolioData';
 import CommentsSection from '../components/CommentsSection';
 
 export default function BlogPost({ articleId, onBack, onSelectArticle, lang = 'en' }) {
   const t = translations[lang]?.blog || translations.en.blog;
-  const articles = getStoredArticles();
+  const articles = articlesData;
   const article = articles.find(a => a.id === articleId) || articles[0];
 
   const [copied, setCopied] = useState(false);

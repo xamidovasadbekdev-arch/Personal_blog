@@ -65,7 +65,6 @@ export const translations = {
       blog: "Blog",
       about: "About",
       contact: "Contact",
-      admin: "Admin Studio",
       available: "👋 Available for Opportunities",
       letsTalk: "Let's Talk",
     },
@@ -196,7 +195,6 @@ export const translations = {
       blog: "Maqolalar",
       about: "Men haqimda",
       contact: "Aloqa",
-      admin: "Admin Studiya",
       available: "👋 Takliflar va loyihalar uchun ochiq",
       letsTalk: "Bog'lanish",
     },
@@ -659,3 +657,21 @@ Universitetimiz jamoasi 16 ta jamoa ishtirok etgan pley-off turnirida qatnashdi.
     }
   }
 ];
+
+export const profile = {
+  name: 'Xamidov Asadbek',
+  headline: 'Backend Developer & AI/ML Engineer, Data Scientist',
+  subtitleEN: 'Data Analyst at Mittivoy, Machine Learning Engineering Intern at FLyrank, & WIUT Scholarship Awardee. Specializing in Python, FastAPI, Machine Learning, and Data Science.',
+  subtitleUZ: "Mittivoy kompaniyasida Data Analitik, FLyrank kompaniyasida ML Muhandis Stajyor va WIUT granti sohibi. Python, FastAPI, AI va Data Science bo'yicha mutaxassis.",
+  bioEN1: 'I am Xamidov Asadbek, a Business Information System Scholarship Awardee at WIUT (Westminster International University in Tashkent). I currently work as a Data Analyst at Mittivoy company and a Machine Learning Engineering Intern at FLyrank.',
+  bioEN2: 'My expertise spans backend software engineering with FastAPI & Python, data analysis, and machine learning models in the Uzcard Data Science program. I love dissecting complex data problems and building scalable software solutions.',
+  bioUZ1: "Men Xamidov Asadbek, WIUT (Westminster International University in Tashkent) universitetining Business Information System yo'nalishi granti sohibiman. Hozirda Mittivoy kompaniyasida Data Analyst va FLyrank kompaniyasida Machine Learning Engineering Intern (ML Muhandis Stajyor) sifatida faoliyat yuritaman.",
+  bioUZ2: "Uzcard Data Science dasturida machine learning va sun'iy intellect bo'yicha bilimlarimni oshirib kelmoqdaman. Backend (FastAPI, Python) hamda ma'lumotlar tahlili loyihalarini yaratishni yaxshi ko'raman.",
+  email: 'xamidovasadbek.dev@gmail.com',
+  telegram: '@homiidov',
+  telegramUrl: 'https://t.me/homiidov',
+  linkedin: 'https://www.linkedin.com/in/asadbekxamidov/',
+  github: 'https://github.com/xamidovasadbekdev-arch',
+  yearsExp: '2+ Years Exp.',
+  projectsCount: '15+ Projects',
+};

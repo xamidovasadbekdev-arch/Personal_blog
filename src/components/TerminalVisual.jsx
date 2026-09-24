@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Terminal, Check, Copy, Flame, Sparkles, Cpu, Layers } from 'lucide-react';
-import { getStoredProfile } from '../data/dataStore';
+import { Terminal, Check, Copy } from 'lucide-react';
+import { profile } from '../data/portfolioData';
 
 export default function TerminalVisual({ lang = 'en' }) {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('shell');
-  const profile = getStoredProfile();
 
   const handleCopy = () => {
     const text = `curl -s https://xamidovasadbek.dev/api/profile`;

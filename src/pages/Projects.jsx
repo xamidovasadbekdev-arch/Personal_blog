@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Search, Filter, X, ExternalLink, Layers } from 'lucide-react';
-import { translations } from '../data/portfolioData';
-import { getStoredProjects } from '../data/dataStore';
+import { Search, X, ExternalLink, Layers } from 'lucide-react';
+import { translations, projectsData } from '../data/portfolioData';
 import { GithubIcon } from '../components/BrandIcons';
 import ProjectCard from '../components/ProjectCard';
 
@@ -10,8 +9,6 @@ export default function Projects({ lang = 'en' }) {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState(null);
-
-  const projectsData = getStoredProjects();
 
   const categories = [
     { id: 'all', label: t.all },

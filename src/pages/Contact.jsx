@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Mail, Send, MapPin, CheckCircle2, Sparkles, MessageSquare, AlertCircle } from 'lucide-react';
-import { translations } from '../data/portfolioData';
-import { getStoredProfile } from '../data/dataStore';
+import { Mail, Send, MapPin, CheckCircle2 } from 'lucide-react';
+import { translations, profile } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
 
 export default function Contact({ lang }) {
   const t = translations[lang].contact;
-  const profile = getStoredProfile();
 
   const [formData, setFormData] = useState({
     name: '',

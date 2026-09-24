@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  Search, BookOpen, Tag, X, ChevronRight, Filter, ArrowLeft, 
-  Cpu, Layers, BarChart3, Heart, FolderOpen 
-} from 'lucide-react';
-import { translations, blogTaxonomy } from '../data/portfolioData';
-import { getStoredArticles, getStoredCategories } from '../data/dataStore';
+import { Search, BookOpen, ChevronRight, ArrowLeft, FolderOpen } from 'lucide-react';
+import { translations, blogTaxonomy, articlesData } from '../data/portfolioData';
 import ArticleCard from '../components/ArticleCard';
 import BlogPost from './BlogPost';
 
@@ -24,29 +20,14 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
   const [activeSubcategory, setActiveSubcategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const allArticles = getStoredArticles();
-  const rawCategories = getStoredCategories();
+  const allArticles = articlesData;
 
-  // Helper to format category for current language
-  const categoriesList = rawCategories.map(cat => {
-    const taxItem = blogTaxonomy[cat.id];
-    let title = getStr(cat.title, lang);
-    let description = getStr(cat.description, lang);
-    let subcategories = cat.subcategories;
-
-    if (taxItem) {
-      if (typeof taxItem.label === 'object') title = taxItem.label[lang] || taxItem.label.en;
-      if (typeof taxItem.description === 'object') description = taxItem.description[lang] || taxItem.description.en;
-      if (typeof taxItem.subcategories === 'object') subcategories = taxItem.subcategories[lang] || taxItem.subcategories.en;
-    }
-
-    return {
-      ...cat,
-      title,
-      description,
-      subcategories
-    };
-  });
+  const categoriesList = Object.entries(blogTaxonomy).map(([id, tax]) => ({
+    id,
+    title: getStr(tax.label, lang),
+    description: getStr(tax.description, lang),
+    subcategories: tax.subcategories[lang] || tax.subcategories.en,
+  }));
 
   // LEVEL 3: Full Article Reader View
   if (selectedArticleId) {
