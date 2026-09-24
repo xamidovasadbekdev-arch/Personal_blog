@@ -1,0 +1,61 @@
+{
+  "name": "Xamidov Asadbek",
+  "headline": {
+    "en": "Backend Developer & AI/ML Engineer",
+    "uz": "Backend dasturchi va AI/ML muhandisi"
+  },
+  "subtitle": {
+    "en": "I'm Asadbek — a Data Analyst at Mittivoy and Machine Learning Engineering Intern at FLyrank. I build Python and FastAPI backends, data pipelines, and ML models.",
+    "uz": "Men Asadbek — Mittivoy kompaniyasida Data Analitik va FLyrank'da Machine Learning muhandis stajyori. Python va FastAPI'da backendlar, ma'lumotlar quvurlari va ML modellar yarataman."
+  },
+  "bio": [
+    {
+      "en": "I study Business Information Systems at WIUT (Westminster International University in Tashkent) on a scholarship. I currently work as a Data Analyst at Mittivoy and as a Machine Learning Engineering Intern at FLyrank.",
+      "uz": "Men WIUT (Westminster International University in Tashkent) universitetida Biznes Axborot Tizimlari yo'nalishida grant asosida o'qiyman. Hozirda Mittivoy kompaniyasida Data Analitik va FLyrank'da Machine Learning muhandis stajyori bo'lib ishlayman."
+    },
+    {
+      "en": "My work spans backend engineering with FastAPI and Python, data analysis, and machine learning, which I keep sharpening through the Uzcard Data Science program. I like taking messy data problems apart and turning them into software that scales.",
+      "uz": "Ishim FastAPI va Python bilan backend, ma'lumotlar tahlili va machine learningni qamrab oladi. Bu bilimlarimni Uzcard Data Science dasturida oshirib boryapman. Murakkab ma'lumotlar muammolarini tahlil qilib, kengayadigan dasturlarga aylantirishni yaxshi ko'raman."
+    }
+  ],
+  "email": "xamidovasadbek.dev@gmail.com",
+  "telegram": "@homiidov",
+  "telegramUrl": "https://t.me/homiidov",
+  "linkedin": "https://www.linkedin.com/in/asadbekxamidov/",
+  "github": "https://github.com/xamidovasadbekdev-arch",
+  "location": {
+    "en": "Tashkent, Uzbekistan",
+    "uz": "Toshkent, O'zbekiston"
+  },
+  "resume": "/Asadbek_Xamidov_Resume.txt",
+  "terminalStack": [
+    {
+      "label": {
+        "en": "languages",
+        "uz": "tillar"
+      },
+      "value": "Python · SQL · JavaScript"
+    },
+    {
+      "label": {
+        "en": "backend",
+        "uz": "backend"
+      },
+      "value": "FastAPI · Django · PostgreSQL"
+    },
+    {
+      "label": {
+        "en": "ml",
+        "uz": "ml"
+      },
+      "value": "scikit-learn · XGBoost · pandas"
+    },
+    {
+      "label": {
+        "en": "tools",
+        "uz": "asboblar"
+      },
+      "value": "Docker · Git · Linux"
+    }
+  ]
+}

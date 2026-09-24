@@ -1,0 +1,116 @@
+{
+  "items": [
+    {
+      "id": "ml",
+      "label": {
+        "en": "Machine Learning & AI",
+        "uz": "Machine Learning va Sun'iy Intellekt"
+      },
+      "description": {
+        "en": "Supervised Learning algorithms, Unsupervised clustering models, Neural Networks, and NLP.",
+        "uz": "Supervised Learning algoritmlari, Unsupervised klasterlash modellari, Neyron tarmoqlari va NLP."
+      },
+      "subcategories": [
+        {
+          "en": "Supervised Learning",
+          "uz": "Supervised Learning"
+        },
+        {
+          "en": "Unsupervised Learning",
+          "uz": "Unsupervised Learning"
+        },
+        {
+          "en": "Deep Learning",
+          "uz": "Chuqur O'rgatish"
+        },
+        {
+          "en": "NLP & LLMs",
+          "uz": "NLP va LLMlar"
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "label": {
+        "en": "Backend & Architecture",
+        "uz": "Backend va Arxitektura"
+      },
+      "description": {
+        "en": "FastAPI microservices, PostgreSQL async sessions, REST API design, Redis caching, and Docker.",
+        "uz": "FastAPI mikroxizmatlari, PostgreSQL asinxron seanslar, REST API loyihalash, Redis kesh va Docker."
+      },
+      "subcategories": [
+        {
+          "en": "FastAPI & Microservices",
+          "uz": "FastAPI va Mikroxizmatlar"
+        },
+        {
+          "en": "Databases & SQL",
+          "uz": "Ma'lumotlar Bazasi va SQL"
+        },
+        {
+          "en": "Distributed Systems",
+          "uz": "Taqsimlangan Tizimlar"
+        },
+        {
+          "en": "Caching & Performance",
+          "uz": "Kesh va Unumdorlik"
+        }
+      ]
+    },
+    {
+      "id": "datascience",
+      "label": {
+        "en": "Data Science & Analytics",
+        "uz": "Data Science va Tahlil"
+      },
+      "description": {
+        "en": "Exploratory data analysis, Pandas & NumPy data pipelines, statistical modeling, and insights.",
+        "uz": "Ma'lumotlarni tahlil qilish, Pandas va NumPy quvurlari, statistik modellashtirish va xulosalar."
+      },
+      "subcategories": [
+        {
+          "en": "Exploratory Data Analysis",
+          "uz": "Dastlabki Ma'lumot Tahlili"
+        },
+        {
+          "en": "Pandas & Pipelines",
+          "uz": "Pandas va Pipeline'lar"
+        },
+        {
+          "en": "Data Visualization",
+          "uz": "Ma'lumotlar Vizualizatsiyasi"
+        }
+      ]
+    },
+    {
+      "id": "personal",
+      "label": {
+        "en": "Personal & Life",
+        "uz": "Shaxsiy va Hayot"
+      },
+      "description": {
+        "en": "Personal achievements, football tournament gold medals, WIUT university life, and career milestones.",
+        "uz": "Shaxsiy yutuqlar, futbol turniridagi oltin medallar, WIUT universiteti hayoti va karyera bosqichlari."
+      },
+      "subcategories": [
+        {
+          "en": "Achievements & Medals",
+          "uz": "Yutuqlar va Medallar"
+        },
+        {
+          "en": "University & WIUT",
+          "uz": "Universitet va WIUT"
+        },
+        {
+          "en": "Career Journey",
+          "uz": "Karyera Yo'li"
+        },
+        {
+          "en": "Sports & Football",
+          "uz": "Sport va Futbol"
+        }
+      ]
+    }
+  ]
+}

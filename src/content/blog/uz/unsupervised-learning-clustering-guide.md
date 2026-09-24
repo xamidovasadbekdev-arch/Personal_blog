@@ -1,6 +1,15 @@
 ---
 title: "Nazoratsiz O'rganish: K-Means va Klasterlash Usullari"
-excerpt: "Belgilanmagan ma'lumotlar to'plamida K-Means va PCA o'lchamlarini qisqartirish yordamida yashirin tuzilmalarni aniqlashni o'rganing."
+excerpt: Belgilanmagan ma'lumotlar to'plamida K-Means va PCA o'lchamlarini
+  qisqartirish yordamida yashirin tuzilmalarni aniqlashni o'rganing.
+date: 2026-07-20
+category: ml
+subcategory: Unsupervised Learning
+tags:
+  - Unsupervised Learning
+  - Clustering
+  - K-Means
+  - PCA
 ---
 
 Nazoratsiz o'rganish (Unsupervised Learning) algoritmlari aniq maqsadli belgilarsiz ma'lumotlarni qayta ishlab, ularning tabiiy guruhlanishlarini va klasterlarini aniqlaydi.

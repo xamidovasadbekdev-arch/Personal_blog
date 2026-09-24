@@ -1,0 +1,244 @@
+{
+  "en": {
+    "nav": {
+      "home": "Home",
+      "projects": "Projects",
+      "blog": "Writing",
+      "about": "About",
+      "contact": "Contact",
+      "letsTalk": "Let's talk",
+      "brand": "xamidov.dev",
+      "tagline": "/ backend · ai"
+    },
+    "hero": {
+      "eyebrow": "Assalomu alaykum.",
+      "titleTop": "I build backends",
+      "titleMark": "that learn",
+      "titleEnd": ".",
+      "viewProjects": "View projects",
+      "readBlog": "Read the blog",
+      "getInTouch": "Get in touch"
+    },
+    "sections": {
+      "workEyebrow": "Selected work.",
+      "featuredProjects": "Things I've built",
+      "viewAllProjects": "All projects",
+      "toolboxEyebrow": "Toolbox.",
+      "skillsTitle": "What I work with",
+      "writingEyebrow": "Writing.",
+      "recentPosts": "Recent articles",
+      "readAllPosts": "All articles",
+      "aboutEyebrow": "About.",
+      "aboutSnippetTitle": "A little about me",
+      "readMoreAbout": "Read more",
+      "bannerTitle": "Have a backend or AI project in mind?",
+      "bannerSub": "I'm open to API design, data pipelines, ML work, and freelance backend projects. Tell me what you're building."
+    },
+    "projects": {
+      "eyebrow": "Projects.",
+      "title": "Things I've built",
+      "sub": "Backend services, data pipelines, and machine learning work.",
+      "all": "All",
+      "filterLabel": "Filter by category",
+      "categories": {
+        "backend": "Backend & API",
+        "ai": "AI / Data Science",
+        "fullstack": "Fullstack",
+        "frontend": "Frontend"
+      },
+      "searchPlaceholder": "Search projects",
+      "viewCode": "Source code",
+      "liveDemo": "Live demo",
+      "noProjects": "No projects match your filter.",
+      "technologiesUsed": "Built with"
+    },
+    "blog": {
+      "eyebrow": "Writing.",
+      "title": "Articles & notes",
+      "sub": "Machine learning walkthroughs, backend architecture, and the occasional personal milestone.",
+      "all": "All",
+      "topics": "Topics",
+      "filterLabel": "Filter by category",
+      "searchPlaceholder": "Search articles",
+      "readTime": "min read",
+      "share": "Share",
+      "copied": "Link copied",
+      "backToBlog": "All articles",
+      "noArticles": "No articles match your search.",
+      "comments": "Comments",
+      "copyCode": "Copy",
+      "codeCopied": "Copied"
+    },
+    "about": {
+      "eyebrow": "About.",
+      "title": "Hi, I'm Asadbek.",
+      "timelineEyebrow": "Timeline.",
+      "experienceTitle": "Education & experience",
+      "downloadResume": "Download résumé"
+    },
+    "principles": [
+      {
+        "title": "Clean architecture",
+        "text": "Self-documenting code, async REST APIs with FastAPI, and modular design."
+      },
+      {
+        "title": "Data first",
+        "text": "Pipelines with pandas and SQL, models with scikit-learn, and dashboards people actually use."
+      },
+      {
+        "title": "Always learning",
+        "text": "Scholarship student in Business Information Systems at WIUT, Tashkent."
+      }
+    ],
+    "contact": {
+      "eyebrow": "Contact.",
+      "title": "Let's talk",
+      "subtitle": "Send a message below, or reach me directly on Telegram or email. I usually reply within a day.",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "subject": "Subject",
+      "optional": "optional",
+      "subjectPlaceholder": "Project, job, or question",
+      "message": "Message",
+      "messagePlaceholder": "Tell me a little about what you have in mind",
+      "send": "Send message",
+      "sending": "Sending…",
+      "success": "Thanks! Your message arrived. I'll get back to you soon.",
+      "error": "The message couldn't be sent. Please try again, or email me directly at",
+      "directContact": "Or reach me directly",
+      "locationLabel": "Based in",
+      "formSubjectPrefix": "New message from"
+    },
+    "terminal": {
+      "status": "open to opportunities"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "text": "There is nothing at this address.",
+      "back": "Back home"
+    }
+  },
+  "uz": {
+    "nav": {
+      "home": "Bosh sahifa",
+      "projects": "Loyihalar",
+      "blog": "Maqolalar",
+      "about": "Men haqimda",
+      "contact": "Aloqa",
+      "letsTalk": "Bog'lanish",
+      "brand": "xamidov.dev",
+      "tagline": "/ backend · ai"
+    },
+    "hero": {
+      "eyebrow": "Assalomu alaykum.",
+      "titleTop": "Aqlli backend",
+      "titleMark": "tizimlar quraman",
+      "titleEnd": ".",
+      "viewProjects": "Loyihalarni ko'rish",
+      "readBlog": "Maqolalarni o'qish",
+      "getInTouch": "Bog'lanish"
+    },
+    "sections": {
+      "workEyebrow": "Tanlangan ishlar.",
+      "featuredProjects": "Men yaratgan loyihalar",
+      "viewAllProjects": "Barcha loyihalar",
+      "toolboxEyebrow": "Asboblar.",
+      "skillsTitle": "Nimalar bilan ishlayman",
+      "writingEyebrow": "Maqolalar.",
+      "recentPosts": "So'nggi maqolalar",
+      "readAllPosts": "Barcha maqolalar",
+      "aboutEyebrow": "Men haqimda.",
+      "aboutSnippetTitle": "Qisqacha men haqimda",
+      "readMoreAbout": "Batafsil",
+      "bannerTitle": "Backend yoki AI loyihangiz bormi?",
+      "bannerSub": "API loyihalash, ma'lumotlar quvurlari, ML va frilans backend loyihalar uchun ochiqman. Nima qurayotganingizni yozing."
+    },
+    "projects": {
+      "eyebrow": "Loyihalar.",
+      "title": "Men yaratgan loyihalar",
+      "sub": "Backend xizmatlari, ma'lumotlar quvurlari va machine learning ishlari.",
+      "all": "Barchasi",
+      "filterLabel": "Kategoriya bo'yicha saralash",
+      "categories": {
+        "backend": "Backend & API",
+        "ai": "AI / Data Science",
+        "fullstack": "Fullstack",
+        "frontend": "Frontend"
+      },
+      "searchPlaceholder": "Loyihalarni qidirish",
+      "viewCode": "Manba kodi",
+      "liveDemo": "Jonli demo",
+      "noProjects": "Filtrga mos loyiha topilmadi.",
+      "technologiesUsed": "Texnologiyalar"
+    },
+    "blog": {
+      "eyebrow": "Maqolalar.",
+      "title": "Maqolalar va qaydlar",
+      "sub": "Machine learning qo'llanmalari, backend arxitekturasi va shaxsiy yutuqlar.",
+      "all": "Barchasi",
+      "topics": "Mavzular",
+      "filterLabel": "Kategoriya bo'yicha saralash",
+      "searchPlaceholder": "Maqolalarni qidirish",
+      "readTime": "daqiqa",
+      "share": "Ulashish",
+      "copied": "Havola nusxalandi",
+      "backToBlog": "Barcha maqolalar",
+      "noArticles": "Qidiruvga mos maqola topilmadi.",
+      "comments": "Izohlar",
+      "copyCode": "Nusxalash",
+      "codeCopied": "Nusxalandi"
+    },
+    "about": {
+      "eyebrow": "Men haqimda.",
+      "title": "Salom, men Asadbek.",
+      "timelineEyebrow": "Yo'l.",
+      "experienceTitle": "Ta'lim va tajriba",
+      "downloadResume": "Rezyumeni yuklab olish"
+    },
+    "principles": [
+      {
+        "title": "Toza arxitektura",
+        "text": "O'qilishi oson kod, FastAPI'da asinxron REST API'lar va modulli loyihalash."
+      },
+      {
+        "title": "Avval ma'lumot",
+        "text": "pandas va SQL bilan quvurlar, scikit-learn modellari va foydali panellar."
+      },
+      {
+        "title": "Doimiy o'rganish",
+        "text": "Toshkentdagi WIUT'da Biznes Axborot Tizimlari yo'nalishi grant talabasi."
+      }
+    ],
+    "contact": {
+      "eyebrow": "Aloqa.",
+      "title": "Bog'lanish",
+      "subtitle": "Quyidagi forma orqali xabar yuboring yoki Telegram va e-mail orqali to'g'ridan-to'g'ri yozing. Odatda bir kun ichida javob beraman.",
+      "name": "Ism",
+      "namePlaceholder": "Ismingiz",
+      "email": "E-mail",
+      "emailPlaceholder": "siz@example.com",
+      "subject": "Mavzu",
+      "optional": "ixtiyoriy",
+      "subjectPlaceholder": "Loyiha, ish taklifi yoki savol",
+      "message": "Xabar",
+      "messagePlaceholder": "Nimani nazarda tutganingizni qisqacha yozing",
+      "send": "Yuborish",
+      "sending": "Yuborilmoqda…",
+      "success": "Rahmat! Xabaringiz yetib keldi. Tez orada javob beraman.",
+      "error": "Xabar yuborilmadi. Qaytadan urinib ko'ring yoki to'g'ridan-to'g'ri yozing:",
+      "directContact": "Yoki to'g'ridan-to'g'ri yozing",
+      "locationLabel": "Manzil",
+      "formSubjectPrefix": "Yangi xabar:"
+    },
+    "terminal": {
+      "status": "takliflar uchun ochiq"
+    },
+    "notFound": {
+      "title": "Sahifa topilmadi",
+      "text": "Bu manzilda hech narsa yo'q.",
+      "back": "Bosh sahifa"
+    }
+  }
+}

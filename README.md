@@ -22,37 +22,27 @@ npm run dev
 
 Open http://localhost:5173.
 
-## Editing content
+## Editing content — xamidovasadbek.dev/admin
 
-| What | Where |
+Every piece of text on the site is editable at **https://xamidovasadbek.dev/admin** (Sveltia CMS). Saving commits to `main` on GitHub, and Vercel redeploys in about a minute.
+
+**First sign-in:** create a [fine-grained GitHub token](https://github.com/settings/personal-access-tokens/new) limited to this repository with **Contents: Read and write**, then choose **Sign In Using Access Token** on the admin page and paste it. The token stays in that browser only.
+
+| In the admin | File in the repo |
 |---|---|
-| Name, bio, links, résumé path | `src/data/portfolioData.js` → `profile` |
-| Projects | `src/data/portfolioData.js` → `projectsData` |
-| Experience timeline, skills | `src/data/portfolioData.js` → `experienceTimeline`, `skillsData` |
-| UI text (EN/UZ) | `src/data/portfolioData.js` → `translations` |
-| Blog categories | `src/data/portfolioData.js` → `blogTaxonomy` |
-| Articles | `src/content/blog/<slug>/en.md` and `uz.md` |
+| Articles (EN + UZ side by side, drafts, tags) | `src/content/blog/{en,uz}/<slug>.md` |
+| Profile: name, headline, intro, bio, links, résumé, terminal card | `src/content/site/profile.json` |
+| Projects | `src/content/site/projects.json` |
+| Experience timeline | `src/content/site/experience.json` |
+| Skills | `src/content/site/skills.json` |
+| Blog categories and topics | `src/content/site/categories.json` |
+| UI text: buttons, headings, labels | `src/content/site/ui.json` |
 
-### Adding an article
+Uploaded files (résumé PDF, images) go to `public/uploads/`.
 
-Create `src/content/blog/my-new-post/en.md`:
+The admin config (`public/admin/config.yml`) is generated from `scripts/cms-config.mjs` on every dev start and build. New keys added to `ui.json` appear in the admin automatically.
 
-```markdown
----
-title: "My new post"
-excerpt: "One or two sentences shown in lists and link previews."
-date: 2026-10-01
-category: backend
-subcategory: "FastAPI & Microservices"
-tags: ["FastAPI", "Python"]
----
-
-Write the article here in Markdown. Code blocks get a copy button.
-```
-
-Optionally add `uz.md` in the same folder with its own `title`, `excerpt` and body; without it the Uzbek site shows the English version. `category` must be a key of `blogTaxonomy`, and `subcategory` one of its English subcategory names. The URL becomes `/blog/my-new-post`, read time is calculated automatically, and the post is added to `sitemap.xml` at build time.
-
-Then `git push`, and Vercel deploys it.
+You can still edit the files by hand and `git push`; an article is a Markdown file with YAML frontmatter (`title`, `excerpt`, `date`, `category`, `subcategory`, `tags`, optional `draft: true`). A missing Uzbek file falls back to English.
 
 ## Turning on comments
 
@@ -65,7 +55,7 @@ Until both IDs are set, the comments section stays hidden.
 
 ## Deploy
 
-Vercel builds with `npm run build` and serves `dist/`. `vercel.json` rewrites every path to `index.html` so direct links like `/blog/<slug>` work.
+Vercel builds with `npm run build` and serves `dist/`. `vercel.json` sends `/admin` to the CMS and every other path to `index.html`, so direct links like `/blog/<slug>` work.
 
 ## Contact
 
