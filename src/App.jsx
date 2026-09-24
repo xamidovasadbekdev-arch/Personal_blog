@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import BackgroundCanvas from './components/BackgroundCanvas';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Blog from './pages/Blog';
@@ -55,13 +54,13 @@ export default function App() {
   const toggleTheme = () => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#070913] text-slate-900 dark:text-slate-100 selection:bg-indigo-600 selection:text-white transition-colors duration-300 relative">
+    <div className="min-h-screen flex flex-col relative">
       <ScrollToTop />
-      <BackgroundCanvas />
+      <div className="page-glow" aria-hidden="true" />
 
       <Navbar lang={lang} setLang={setLang} theme={theme} toggleTheme={toggleTheme} />
 
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <Routes>
           <Route path="/" element={<Home lang={lang} />} />
           <Route path="/projects" element={<Projects lang={lang} />} />

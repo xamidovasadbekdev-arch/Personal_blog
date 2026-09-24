@@ -1,142 +1,81 @@
 import React from 'react';
-import { ArrowRight, Send, Compass, Code2, Zap, Flame } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { translations, skillsData, profile, projectsData, articlesData } from '../data/portfolioData';
-import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import { translations, skillsData, profile, projectsData, pick } from '../data/portfolioData';
+import { articles } from '../content/articles';
 import TerminalVisual from '../components/TerminalVisual';
 import ProjectCard from '../components/ProjectCard';
 import ArticleCard from '../components/ArticleCard';
-import SkillCard from '../components/SkillCard';
-import Typewriter from '../components/Typewriter';
+import { SocialLinks } from '../components/Footer';
+import usePageMeta from '../hooks/usePageMeta';
+
+function SectionHeader({ eyebrow, title, linkTo, linkLabel }) {
+  return (
+    <div className="flex items-end justify-between gap-4 mb-8">
+      <div className="space-y-2">
+        <p className="eyebrow">{eyebrow}</p>
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-ink">{title}</h2>
+      </div>
+      {linkTo && (
+        <Link to={linkTo} className="shrink-0 inline-flex items-center gap-1.5 text-sm text-body hover:text-ink transition-colors">
+          {linkLabel} <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      )}
+    </div>
+  );
+}
 
 export default function Home({ lang }) {
+  const t = translations[lang];
   const navigate = useNavigate();
-  const setActiveTab = (id) => navigate(`/${id}`);
-  const t = translations[lang] || translations.en;
-  const projects = projectsData;
-  const articles = articlesData;
+  usePageMeta({ description: pick(profile.subtitle, lang) });
 
-  const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
-  const recentArticles = articles.slice(0, 2);
-
-  const typewriterWords = t.hero.typewriter || [
-    "FastAPI Microservices",
-    "Scalable Backend Systems",
-    "Machine Learning Models",
-    "Data Analytics Pipelines"
-  ];
+  const featuredProjects = projectsData.filter(p => p.featured).slice(0, 2);
+  const recentArticles = articles.slice(0, 3);
 
   return (
-    <div className="space-y-24 py-6 md:py-10">
-      
-      {/* HERO SECTION */}
-      <section className="relative flex flex-col lg:flex-row items-center justify-between gap-12 pt-4 pb-12">
-        
-        {/* Animated Floating Orbs */}
-        <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-indigo-600/15 blur-[130px] pointer-events-none animate-float-orb"></div>
-        <div className="absolute top-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-purple-600/15 blur-[100px] pointer-events-none animate-float-orb" style={{ animationDelay: '2s' }}></div>
-
-        {/* Hero Left Column: Intro */}
-        <div className="flex-1 space-y-6 text-center lg:text-left max-w-2xl">
-          
-          {/* Status Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800/80 text-xs font-bold text-indigo-600 dark:text-indigo-300 shadow-sm animate-badge-pulse">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-            <span>{t.hero.badge}</span>
-          </div>
-
-          {/* Main Headline with Typewriter Typing Animation */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15] min-h-[120px]">
-            {lang === 'uz' ? "Muhandislik va" : "Architecting"} <br />
-            <Typewriter words={typewriterWords} speed={100} delay={2000} />
+    <div className="space-y-28 sm:space-y-32">
+      {/* Hero */}
+      <section className="grid lg:grid-cols-[1.15fr_1fr] gap-14 lg:gap-16 items-center pt-16 sm:pt-24">
+        <div className="space-y-7">
+          <p className="eyebrow">{t.hero.eyebrow}</p>
+          <h1 className="text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-7xl font-semibold tracking-tight text-ink">
+            {t.hero.titleTop}
+            <br />
+            <span className="underline-accent">{t.hero.titleMark}</span>
+            {t.hero.titleEnd}
           </h1>
-
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-            {lang === 'en' ? "Hi, I'm " : "Salom, men "} <strong className="text-slate-900 dark:text-white font-bold">{profile.name}</strong> — {lang === 'en' ? profile.subtitleEN : profile.subtitleUZ}
+          <p className="max-w-xl text-base sm:text-lg leading-relaxed text-body">
+            {pick(profile.subtitle, lang)}
           </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-            <button
-              onClick={() => setActiveTab('projects')}
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-105 transition-all flex items-center gap-2 cursor-pointer"
-            >
-              <span>{t.hero.viewProjects}</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
-
-            <button
-              onClick={() => setActiveTab('blog')}
-              className="px-6 py-3.5 rounded-xl bg-slate-200/80 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 hover:bg-slate-300/60 dark:hover:bg-indigo-900/60 text-slate-800 dark:text-slate-200 font-bold text-sm hover:scale-105 transition-all cursor-pointer"
-            >
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <Link to="/projects" className="btn btn-primary">
+              {t.hero.viewProjects} <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link to="/blog" className="btn btn-ghost">
               {t.hero.readBlog}
-            </button>
+            </Link>
           </div>
-
-          {/* Social Links */}
-          <div className="flex items-center justify-center lg:justify-start gap-3 pt-4">
-            <a 
-              href={profile.github} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-indigo-950 hover:scale-110 transition-all"
-            >
-              <GithubIcon className="h-5 w-5" />
-            </a>
-            <a 
-              href={profile.linkedin} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-200 dark:hover:bg-indigo-950 hover:scale-110 transition-all"
-            >
-              <LinkedinIcon className="h-5 w-5" />
-            </a>
-            <a 
-              href={profile.telegramUrl || `https://t.me/${profile.telegram.replace('@', '')}`} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-600 dark:text-slate-400 hover:text-sky-500 hover:bg-slate-200 dark:hover:bg-indigo-950 hover:scale-110 transition-all"
-            >
-              <Send className="h-5 w-5" />
-            </a>
-          </div>
+          <SocialLinks className="-ml-2" />
         </div>
 
-        {/* Hero Right Column: Animated Studio Visual */}
-        <div className="w-full lg:w-[480px] shrink-0 animate-levitate">
-          <TerminalVisual lang={lang} />
-        </div>
+        <TerminalVisual lang={lang} />
       </section>
 
-      {/* FEATURED PROJECTS SECTION */}
-      <section className="space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-indigo-900/40 pb-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-              <Zap className="h-6 w-6 text-indigo-500 animate-bounce" />
-              <span>{t.sections.featuredProjects}</span>
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              {t.sections.featuredProjectsSub}
-            </p>
-          </div>
-
-          <button
-            onClick={() => setActiveTab('projects')}
-            className="text-xs font-extrabold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 hover:underline cursor-pointer uppercase tracking-wider"
-          >
-            <span>{t.sections.viewAllProjects}</span>
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          {featuredProjects.map((project) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project} 
-              onSelect={() => setActiveTab('projects')}
+      {/* Selected work */}
+      <section>
+        <SectionHeader
+          eyebrow={t.sections.workEyebrow}
+          title={t.sections.featuredProjects}
+          linkTo="/projects"
+          linkLabel={t.sections.viewAllProjects}
+        />
+        <div className="grid gap-5 md:grid-cols-2">
+          {featuredProjects.map(project => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onSelect={p => navigate(`/projects?open=${p.id}`)}
               t={t.projects}
               lang={lang}
             />
@@ -144,122 +83,57 @@ export default function Home({ lang }) {
         </div>
       </section>
 
-      {/* TECHNICAL TOOLBOX / SKILLS */}
-      <section className="p-8 sm:p-12 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-slate-100/60 dark:bg-[#090e1f]/70 backdrop-blur-xl space-y-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] pointer-events-none rounded-full animate-pulse"></div>
-
-        <div className="space-y-2 text-center max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-            {t.sections.skillsTitle}
-          </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {t.sections.skillsSub}
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {skillsData.map((item, idx) => (
-            <SkillCard 
-              key={idx}
-              category={typeof item.category === 'object' ? item.category[lang] || item.category.en : item.category}
-              iconName={item.icon}
-              skills={item.skills}
-            />
+      {/* Toolbox */}
+      <section>
+        <SectionHeader eyebrow={t.sections.toolboxEyebrow} title={t.sections.skillsTitle} />
+        <div className="grid gap-px sm:grid-cols-3 rounded-2xl overflow-hidden border border-line bg-line">
+          {skillsData.map(group => (
+            <div key={group.category.en} className="bg-surface p-6 space-y-4">
+              <h3 className="text-sm font-medium text-ink">{pick(group.category, lang)}</h3>
+              <ul className="flex flex-wrap gap-1.5">
+                {group.skills.map(skill => (
+                  <li key={skill} className="chip">{skill}</li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* RECENT ARTICLES SECTION */}
-      <section className="space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-indigo-900/40 pb-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-              <Code2 className="h-6 w-6 text-purple-500" />
-              <span>{t.sections.recentPosts}</span>
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              {t.sections.recentPostsSub}
-            </p>
-          </div>
-
-          <button
-            onClick={() => setActiveTab('blog')}
-            className="text-xs font-extrabold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 hover:underline cursor-pointer uppercase tracking-wider"
-          >
-            <span>{t.sections.readAllPosts}</span>
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          {recentArticles.map((article) => (
-            <ArticleCard 
-              key={article.id} 
-              article={article} 
-              t={t.blog}
-              lang={lang}
-            />
+      {/* Writing */}
+      <section>
+        <SectionHeader
+          eyebrow={t.sections.writingEyebrow}
+          title={t.sections.recentPosts}
+          linkTo="/blog"
+          linkLabel={t.sections.readAllPosts}
+        />
+        <div className="border-t border-line">
+          {recentArticles.map(article => (
+            <ArticleCard key={article.slug} article={article} lang={lang} />
           ))}
         </div>
       </section>
 
-      {/* ABOUT SNIPPET & CONTACT CTA */}
-      <section className="grid gap-8 md:grid-cols-2 items-center py-6 border-t border-slate-200 dark:border-indigo-900/40 pt-12">
-        <div className="space-y-4">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            {t.sections.aboutSnippetTitle}
-          </h2>
-          <p className="text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            {lang === 'en' ? profile.bioEN1 : profile.bioUZ1}
-          </p>
-          <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            {lang === 'en' ? profile.bioEN2 : profile.bioUZ2}
-          </p>
-          <div className="pt-2">
-            <button
-              onClick={() => setActiveTab('about')}
-              className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/60 text-sm font-bold text-slate-800 dark:text-slate-200 hover:border-indigo-500 hover:text-indigo-600 hover:scale-105 transition-all flex items-center gap-2 cursor-pointer"
-            >
-              <Compass className="h-4 w-4 text-indigo-500" />
-              <span>{t.sections.readMoreAbout}</span>
-            </button>
-          </div>
+      {/* About + contact */}
+      <section className="grid gap-10 md:grid-cols-2 items-start">
+        <div className="space-y-5">
+          <p className="eyebrow">{t.sections.aboutEyebrow}</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-ink">{t.sections.aboutSnippetTitle}</h2>
+          <p className="leading-relaxed text-body">{pick(profile.bio[0], lang)}</p>
+          <Link to="/about" className="inline-flex items-center gap-1.5 text-sm text-ink hover:text-accent transition-colors">
+            {t.sections.readMoreAbout} <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
 
-        {/* Contact Banner Card */}
-        <div className="relative rounded-3xl overflow-hidden p-8 bg-gradient-to-br from-indigo-950 via-[#0d122b] to-purple-950 border border-indigo-800/40 text-white space-y-6 shadow-xl animate-levitate">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-indigo-200">
-            <Flame className="h-4 w-4 text-amber-400 animate-pulse" />
-            <span>{t.sections.openBadge}</span>
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="text-2xl font-black tracking-tight leading-snug">
-              {t.sections.bannerTitle}
-            </h3>
-            <p className="text-xs text-indigo-200/80 leading-relaxed">
-              {t.sections.bannerSub}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-6 pt-2 border-t border-indigo-800/50">
-            <div>
-              <div className="text-xl font-black text-white">{profile.yearsExp}</div>
-            </div>
-            <div>
-              <div className="text-xl font-black text-white">{profile.projectsCount}</div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setActiveTab('contact')}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 text-white font-black text-sm transition-all shadow-lg shadow-indigo-500/30 hover:scale-105 cursor-pointer"
-          >
-            {t.hero.getInTouch}
-          </button>
+        <div className="card p-8 space-y-5">
+          <h3 className="text-xl font-semibold tracking-tight text-ink">{t.sections.bannerTitle}</h3>
+          <p className="text-sm leading-relaxed text-body">{t.sections.bannerSub}</p>
+          <Link to="/contact" className="btn btn-primary">
+            {t.hero.getInTouch} <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
-
     </div>
   );
 }

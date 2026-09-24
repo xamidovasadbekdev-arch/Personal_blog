@@ -1,141 +1,74 @@
-import React, { useState } from 'react';
-import { User, Briefcase, GraduationCap, Download, CheckCircle2, Code2, Sparkles } from 'lucide-react';
-import { translations, profile, experienceTimeline } from '../data/portfolioData';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Download, ArrowRight } from 'lucide-react';
+import { translations, profile, experienceTimeline, skillsData, pick } from '../data/portfolioData';
+import usePageMeta from '../hooks/usePageMeta';
 
 export default function About({ lang }) {
-  const t = translations[lang] || translations.en;
-  const timeline = experienceTimeline;
-  const [downloaded, setDownloaded] = useState(false);
-
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = '/Asadbek_Xamidov_Resume.txt';
-    link.download = 'Asadbek_Xamidov_Resume.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    setDownloaded(true);
-    setTimeout(() => setDownloaded(false), 3000);
-  };
+  const t = translations[lang];
+  usePageMeta({ title: t.about.title, description: pick(profile.bio[0], lang) });
 
   return (
-    <div className="space-y-16 py-6 max-w-4xl mx-auto">
-      
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800/80 text-xs font-bold text-indigo-600 dark:text-indigo-400">
-          <User className="h-3.5 w-3.5" />
-          <span>{t.about.profileBadge}</span>
+    <div className="max-w-4xl pt-16 sm:pt-20 space-y-24">
+      <header className="space-y-6">
+        <p className="eyebrow">{t.about.eyebrow}</p>
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink leading-[1.1]">{t.about.title}</h1>
+        {profile.bio.map((paragraph, i) => (
+          <p key={i} className="text-base sm:text-lg leading-relaxed text-body max-w-3xl">{pick(paragraph, lang)}</p>
+        ))}
+        <div className="flex flex-wrap gap-3 pt-2">
+          <a href={profile.resume} download className="btn btn-primary">
+            <Download className="h-4 w-4" /> {t.about.downloadResume}
+          </a>
+          <Link to="/contact" className="btn btn-ghost">
+            {t.hero.getInTouch} <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
+      </header>
 
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white">
-          {t.about.title}
-        </h1>
-        
-        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-          {t.about.subtitle}
-        </p>
-      </div>
-
-      {/* Bio Card */}
-      <div className="p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 shadow-xs space-y-6">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-indigo-900/40 pb-3">
-          {t.about.bioHeading}
-        </h2>
-        <p className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300">
-          {lang === 'en' ? profile.bioEN1 : profile.bioUZ1}
-        </p>
-        <p className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300">
-          {lang === 'en' ? profile.bioEN2 : profile.bioUZ2}
-        </p>
-
-        <div className="pt-2">
-          <button
-            onClick={handleDownload}
-            className="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-500/20 flex items-center gap-2 cursor-pointer hover:scale-105"
-          >
-            {downloaded ? <CheckCircle2 className="h-4 w-4 text-emerald-300" /> : <Download className="h-4 w-4" />}
-            <span>{downloaded ? t.about.downloadingResume : t.about.downloadResume}</span>
-          </button>
+      <section className="space-y-8">
+        <div className="space-y-2">
+          <p className="eyebrow">{t.about.timelineEyebrow}</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-ink">{t.about.experienceTitle}</h2>
         </div>
-      </div>
-
-      {/* Timeline Section */}
-      <div className="space-y-8">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/40">
-            <Briefcase className="h-6 w-6" />
-          </div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-            {t.about.experienceTitle}
-          </h2>
-        </div>
-
-        <div className="relative border-l-2 border-slate-200 dark:border-indigo-900/50 ml-4 pl-6 space-y-10">
-          {timeline.map((item, idx) => {
-            const yearStr = typeof item.year === 'object' ? (item.year[lang] || item.year.en) : item.year;
-            const roleStr = typeof item.role === 'object' ? (item.role[lang] || item.role.en) : item.role;
-            const companyStr = typeof item.company === 'object' ? (item.company[lang] || item.company.en) : item.company;
-            const desc = typeof item.description === 'object' ? (item.description[lang] || item.description.en) : item.description;
-
-            return (
-              <div key={idx} className="relative group">
-                {/* Dot */}
-                <div className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-white dark:bg-[#070b18] border-2 border-indigo-600 group-hover:scale-125 transition-transform"></div>
-
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 font-mono tracking-wider">
-                    {yearStr}
-                  </span>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {lang === 'uz' ? (
-                      <>
-                        {companyStr} <span className="text-slate-400 font-normal">— {roleStr}</span>
-                      </>
-                    ) : (
-                      <>
-                        {roleStr} <span className="text-slate-400 font-normal">at {companyStr}</span>
-                      </>
-                    )}
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
-                    {desc}
-                  </p>
-                </div>
+        <ol className="border-t border-line">
+          {experienceTimeline.map(item => (
+            <li key={`${item.company.en}-${item.role.en}`} className="grid gap-2 sm:grid-cols-[11rem_1fr] sm:gap-8 py-6 border-b border-line">
+              <span className="font-mono text-xs text-muted pt-1">{pick(item.year, lang)}</span>
+              <div className="space-y-1.5">
+                <h3 className="text-lg font-medium text-ink">
+                  {pick(item.role, lang)} <span className="text-muted font-normal">· {pick(item.company, lang)}</span>
+                </h3>
+                <p className="text-sm leading-relaxed text-body">{pick(item.description, lang)}</p>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-      {/* Engineering Philosophy Cards */}
-      <div className="grid gap-6 sm:grid-cols-3 pt-6">
-        <div className="p-6 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-slate-100/50 dark:bg-indigo-950/20 space-y-3">
-          <Code2 className="h-6 w-6 text-indigo-500" />
-          <h4 className="font-bold text-slate-900 dark:text-white">{t.philosophy.cleanArchTitle}</h4>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            {t.philosophy.cleanArchSub}
-          </p>
+      <section className="space-y-8">
+        <div className="space-y-2">
+          <p className="eyebrow">{t.sections.toolboxEyebrow}</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-ink">{t.sections.skillsTitle}</h2>
         </div>
+        <dl className="border-t border-line">
+          {skillsData.map(group => (
+            <div key={group.category.en} className="grid gap-2 sm:grid-cols-[11rem_1fr] sm:gap-8 py-5 border-b border-line">
+              <dt className="text-sm text-ink">{pick(group.category, lang)}</dt>
+              <dd className="text-sm text-body">{group.skills.join(' · ')}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
-        <div className="p-6 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-slate-100/50 dark:bg-indigo-950/20 space-y-3">
-          <Sparkles className="h-6 w-6 text-purple-500" />
-          <h4 className="font-bold text-slate-900 dark:text-white">{t.philosophy.aiDataTitle}</h4>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            {t.philosophy.aiDataSub}
-          </p>
-        </div>
-
-        <div className="p-6 rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-slate-100/50 dark:bg-indigo-950/20 space-y-3">
-          <GraduationCap className="h-6 w-6 text-emerald-500" />
-          <h4 className="font-bold text-slate-900 dark:text-white">{t.philosophy.wiutTitle}</h4>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            {t.philosophy.wiutSub}
-          </p>
-        </div>
-      </div>
-
+      <section className="grid gap-px sm:grid-cols-3 rounded-2xl overflow-hidden border border-line bg-line">
+        {t.principles.map(item => (
+          <div key={item.title} className="bg-surface p-6 space-y-2">
+            <h3 className="font-medium text-ink">{item.title}</h3>
+            <p className="text-sm leading-relaxed text-body">{item.text}</p>
+          </div>
+        ))}
+      </section>
     </div>
   );
 }

@@ -1,253 +1,138 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Clock, Calendar, Share2, Copy, Check, ThumbsUp, BookOpen } from 'lucide-react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { translations, blogTaxonomy, articlesData } from '../data/portfolioData';
-import CommentsSection from '../components/CommentsSection';
+import { Link, useParams } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { ArrowLeft, Copy, Check, Link2 } from 'lucide-react';
+import { translations, blogTaxonomy, profile, pick } from '../data/portfolioData';
+import { getArticle } from '../content/articles';
+import { formatDate } from '../lib/formatDate';
+import GiscusComments from '../components/GiscusComments';
+import NotFound from './NotFound';
+import usePageMeta from '../hooks/usePageMeta';
 
-export default function BlogPost({ lang = 'en' }) {
-  const { slug } = useParams();
-  const navigate = useNavigate();
-  const onBack = () => navigate('/blog');
-  const t = translations[lang]?.blog || translations.en.blog;
-  const articles = articlesData;
-  const article = articles.find(a => (a.slug || a.id) === slug);
-
+function CodeBlock({ language, code, lang }) {
   const [copied, setCopied] = useState(false);
-  const [likes, setLikes] = useState(12);
-  const [liked, setLiked] = useState(false);
-  const [copiedCodeIdx, setCopiedCodeIdx] = useState(null);
-
-  // Bulletproof fallback if no article exists
-  if (!article) {
-    return (
-      <div className="py-16 text-center space-y-4 max-w-md mx-auto">
-        <BookOpen className="h-12 w-12 mx-auto text-indigo-400" />
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-          {lang === 'uz' ? "Maqola topilmadi" : "Article Not Found"}
-        </h2>
-        <p className="text-sm text-slate-500">
-          {lang === 'uz' ? "Siz qidirgan maqola o'chirilgan yoki mavjud emas." : "The article you are looking for has been moved or deleted."}
-        </p>
-        <button
-          onClick={onBack}
-          className="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs"
-        >
-          {t.backToBlog}
-        </button>
-      </div>
-    );
-  }
-
-  const title = typeof article.title === 'object' ? (article.title[lang] || article.title.en) : article.title;
-  const rawContent = typeof article.content === 'object' ? (article.content[lang] || article.content.en) : article.content;
-
-  const taxItem = blogTaxonomy[article.category];
-  let categoryLabel = article.category;
-  if (taxItem) {
-    categoryLabel = typeof taxItem.label === 'object' 
-      ? (taxItem.label[lang] || taxItem.label.en) 
-      : taxItem.label;
-  }
-
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleLike = () => {
-    if (!liked) {
-      setLikes(prev => prev + 1);
-      setLiked(true);
-    } else {
-      setLikes(prev => prev - 1);
-      setLiked(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard can be unavailable (insecure context); nothing else to do.
     }
-  };
-
-  const renderFormattedContent = (contentStr) => {
-    const content = contentStr || `# ${title}\n\n${typeof article.excerpt === 'object' ? (article.excerpt[lang] || article.excerpt.en) : (article.excerpt || '')}`;
-    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-    const parts = [];
-    let lastIndex = 0;
-    let match;
-    let blockIdx = 0;
-
-    while ((match = codeBlockRegex.exec(content)) !== null) {
-      if (match.index > lastIndex) {
-        parts.push({
-          type: 'text',
-          value: content.substring(lastIndex, match.index)
-        });
-      }
-
-      parts.push({
-        type: 'code',
-        language: match[1] || 'bash',
-        code: match[2].trim(),
-        idx: blockIdx++
-      });
-
-      lastIndex = match.index + match[0].length;
-    }
-
-    if (lastIndex < content.length) {
-      parts.push({
-        type: 'text',
-        value: content.substring(lastIndex)
-      });
-    }
-
-    return parts.map((part, index) => {
-      if (part.type === 'code') {
-        const isCopied = copiedCodeIdx === part.idx;
-        return (
-          <div key={index} className="my-6 rounded-2xl overflow-hidden border border-indigo-950 bg-[#070a16] shadow-xl">
-            <div className="flex items-center justify-between px-4 py-2 bg-indigo-950/80 border-b border-indigo-900/50 text-xs font-mono">
-              <span className="font-bold text-indigo-300 uppercase tracking-wider">{part.language}</span>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(part.code);
-                  setCopiedCodeIdx(part.idx);
-                  setTimeout(() => setCopiedCodeIdx(null), 2000);
-                }}
-                className="px-2.5 py-1 rounded-md bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 font-bold transition-all flex items-center gap-1.5 cursor-pointer"
-              >
-                {isCopied ? (
-                  <>
-                    <Check className="h-3.5 w-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">{lang === 'uz' ? "Nusxalandi!" : "Copied!"}</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3.5 w-3.5" />
-                    <span>{lang === 'uz' ? "Kodni Nusxalash" : "Copy Code"}</span>
-                  </>
-                )}
-              </button>
-            </div>
-            <pre className="p-4 overflow-x-auto text-xs sm:text-sm font-mono text-indigo-100 leading-relaxed">
-              <code>{part.code}</code>
-            </pre>
-          </div>
-        );
-      } else {
-        return (
-          <div key={index} className="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base space-y-4">
-            {part.value.split('\n\n').map((paragraph, pIdx) => {
-              if (paragraph.startsWith('# ')) {
-                return <h1 key={pIdx} className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white pt-4 pb-2 border-b border-slate-200 dark:border-indigo-900/40">{paragraph.replace('# ', '')}</h1>;
-              }
-              if (paragraph.startsWith('## ')) {
-                return <h2 key={pIdx} className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white pt-3">{paragraph.replace('## ', '')}</h2>;
-              }
-              if (paragraph.startsWith('### ')) {
-                return <h3 key={pIdx} className="text-lg font-bold text-slate-900 dark:text-white pt-2">{paragraph.replace('### ', '')}</h3>;
-              }
-              return <p key={pIdx}>{paragraph}</p>;
-            })}
-          </div>
-        );
-      }
-    });
   };
 
   return (
-    <article className="max-w-3xl mx-auto space-y-8 py-6">
-      
-      {/* Top Back Navigation */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-indigo-950/60 border border-slate-200 dark:border-indigo-900/60 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>{t.backToBlog}</span>
-        </button>
-
-        <button
-          onClick={handleShare}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 text-xs font-bold transition-all cursor-pointer"
-        >
-          <Share2 className="h-3.5 w-3.5" />
-          <span>{copied ? t.copied : t.share}</span>
+    <div className="not-prose rounded-xl overflow-hidden border border-[rgba(240,228,206,0.12)] bg-[#1b1814]">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-[rgba(240,228,206,0.08)] font-mono text-xs text-[#8b8272]">
+        <span>{language || 'code'}</span>
+        <button onClick={copy} className="flex items-center gap-1.5 hover:text-[#f2ebdf] transition-colors cursor-pointer">
+          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+          {copied ? (lang === 'uz' ? 'Nusxalandi' : 'Copied') : (lang === 'uz' ? 'Nusxalash' : 'Copy')}
         </button>
       </div>
+      <pre className="p-4 overflow-x-auto text-[13px] leading-relaxed font-mono text-[#e9e1d3]">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
 
-      {/* Header */}
-      <header className="space-y-4">
-        
-        {/* Category & Subcategory Badges */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider border border-indigo-200 dark:border-indigo-800">
-            {categoryLabel}
-          </span>
-          {article.subcategory && (
-            <span className="px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 font-bold text-xs uppercase tracking-wider border border-purple-200 dark:border-purple-800">
-              {article.subcategory}
-            </span>
-          )}
-        </div>
+export default function BlogPost({ lang = 'en' }) {
+  const { slug } = useParams();
+  const t = translations[lang].blog;
+  const article = getArticle(slug);
+  const [linkCopied, setLinkCopied] = useState(false);
 
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-          {title}
+  usePageMeta(article ? { title: pick(article.title, lang), description: pick(article.excerpt, lang) } : {});
+
+  if (!article) return <NotFound lang={lang} />;
+
+  const category = blogTaxonomy[article.category];
+
+  const share = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: pick(article.title, lang), url });
+      } catch {
+        // User closed the share sheet.
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2500);
+    } catch {
+      // Clipboard unavailable.
+    }
+  };
+
+  const markdownComponents = {
+    pre: ({ children }) => {
+      const codeEl = React.Children.only(children);
+      const language = /language-(\w+)/.exec(codeEl.props.className || '')?.[1];
+      return <CodeBlock language={language} code={String(codeEl.props.children).replace(/\n$/, '')} lang={lang} />;
+    },
+    a: ({ href, children }) =>
+      href?.startsWith('/') ? (
+        <Link to={href}>{children}</Link>
+      ) : (
+        <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>
+      ),
+  };
+
+  return (
+    <article className="max-w-3xl mx-auto pt-12 sm:pt-16">
+      <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-body hover:text-ink transition-colors">
+        <ArrowLeft className="h-3.5 w-3.5" /> {t.backToBlog}
+      </Link>
+
+      <header className="mt-10 space-y-5 pb-8 border-b border-line">
+        <p className="eyebrow">
+          <Link to={`/blog?category=${article.category}`} className="hover:text-ink transition-colors">
+            {category ? pick(category.label, lang) : article.category}
+          </Link>
+          {article.subcategory && <> · {article.subcategory}</>}
+        </p>
+        <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight leading-[1.1] text-ink">
+          {pick(article.title, lang)}
         </h1>
-
-        {/* Meta details */}
-        <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 border-y border-slate-200 dark:border-indigo-900/40 py-3">
-          <div className="flex items-center gap-2">
-            <img 
-              src={article.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"} 
-              alt={article.author?.name || "Asadbek"} 
-              className="w-7 h-7 rounded-full object-cover border border-indigo-500/40"
-            />
-            <span className="font-bold text-slate-900 dark:text-white">{article.author?.name || "Xamidov Asadbek"}</span>
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+          <div className="flex items-center gap-3 text-sm">
+            <span className="w-8 h-8 rounded-full bg-surface-2 border border-line flex items-center justify-center font-mono text-[11px] text-ink">
+              AX
+            </span>
+            <div className="leading-tight">
+              <div className="text-ink">{profile.name}</div>
+              <div className="font-mono text-xs text-muted">
+                <time dateTime={article.date}>{formatDate(article.date, lang)}</time> · {pick(article.readTime, lang)} {t.readTime}
+              </div>
+            </div>
           </div>
-          
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3.5 w-3.5 text-slate-400" />
-            <span>{article.date}</span>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5 text-slate-400" />
-            <span>{article.readTime} {t.readTime}</span>
-          </div>
+          <button onClick={share} className="inline-flex items-center gap-1.5 text-sm text-body hover:text-ink transition-colors cursor-pointer">
+            {linkCopied ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" />}
+            {linkCopied ? t.copied : t.share}
+          </button>
         </div>
-
       </header>
 
-      {/* Article Content */}
-      <div className="pt-2">
-        {renderFormattedContent(rawContent)}
+      <div className="prose-warm pt-10">
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+          {pick(article.content, lang)}
+        </ReactMarkdown>
       </div>
 
-      {/* Like Button & Tags */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-200 dark:border-indigo-900/40">
-        <div className="flex flex-wrap gap-2">
-          {article.tags && article.tags.map((tag, idx) => (
-            <span key={idx} className="text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-indigo-950/60 px-3 py-1 rounded-lg">
-              #{tag}
-            </span>
+      {article.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 pt-12">
+          {article.tags.map(tag => (
+            <span key={tag} className="chip">#{tag}</span>
           ))}
         </div>
+      )}
 
-        <button
-          onClick={handleLike}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-            liked 
-              ? 'bg-indigo-600 text-white shadow-md' 
-              : 'bg-slate-100 dark:bg-indigo-950 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
-          }`}
-        >
-          <ThumbsUp className="h-4 w-4" />
-          <span>{likes} {lang === 'uz' ? "Layklar" : "Likes"}</span>
-        </button>
-      </div>
-
-      {/* Working Interactive Comments Engine */}
-      <CommentsSection articleId={article.id} lang={lang} />
-
+      <GiscusComments lang={lang} title={t.comments} />
     </article>
   );
 }
