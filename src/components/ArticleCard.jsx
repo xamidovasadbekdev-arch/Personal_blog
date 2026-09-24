@@ -1,95 +1,32 @@
 import React from 'react';
-import { Clock, Calendar, ArrowRight, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { blogTaxonomy } from '../data/portfolioData';
+import { ArrowRight } from 'lucide-react';
+import { formatDate } from '../lib/formatDate';
+import { blogTaxonomy, translations, pick } from '../data/portfolioData';
 
-export default function ArticleCard({ article, t, lang = 'en' }) {
-  const taxItem = blogTaxonomy[article.category];
-  
-  let categoryLabel = article.category;
-  if (taxItem) {
-    categoryLabel = typeof taxItem.label === 'object' 
-      ? (taxItem.label[lang] || taxItem.label.en) 
-      : taxItem.label;
-  }
-
-  const title = typeof article.title === 'object' ? (article.title[lang] || article.title.en) : article.title;
-  const excerpt = typeof article.excerpt === 'object' ? (article.excerpt[lang] || article.excerpt.en) : article.excerpt;
+// One article as a list row: date, title + excerpt, category and read time.
+export default function ArticleCard({ article, lang = 'en' }) {
+  const t = translations[lang].blog;
+  const category = blogTaxonomy[article.category];
 
   return (
     <Link
-      to={`/blog/${article.slug || article.id}`}
-      className="group relative rounded-2xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 p-6 transition-all duration-300 hover:border-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/10 cursor-pointer flex flex-col justify-between"
+      to={`/blog/${article.slug}`}
+      className="group grid gap-2 sm:grid-cols-[8rem_1fr_auto] sm:gap-6 py-6 border-b border-line items-baseline"
     >
-      <div className="space-y-3">
-        
-        {/* Category & Subcategory Badges */}
-        <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200 dark:border-indigo-800/50 text-[11px] capitalize flex items-center gap-1">
-              <Tag className="h-3 w-3" />
-              {categoryLabel}
-            </span>
-
-            {article.subcategory && (
-              <span className="px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/80 text-purple-600 dark:text-purple-400 font-bold border border-purple-200 dark:border-purple-800/50 text-[11px]">
-                {article.subcategory}
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2.5 text-[11px]">
-            <span className="flex items-center gap-1">
-              <Calendar className="h-3 w-3 text-slate-400" />
-              {article.date}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3 text-slate-400" />
-              {article.readTime} {t?.readTime || "min read"}
-            </span>
-          </div>
-        </div>
-
-        {/* Title */}
-        <h3 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
-          {title}
+      <time dateTime={article.date} className="font-mono text-xs text-muted">
+        {formatDate(article.date, lang)}
+      </time>
+      <div className="space-y-1.5 min-w-0">
+        <h3 className="text-lg font-medium leading-snug text-ink group-hover:text-accent transition-colors">
+          {pick(article.title, lang)}
         </h3>
-
-        {/* Excerpt */}
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
-          {excerpt}
+        <p className="text-sm text-body leading-relaxed line-clamp-2">{pick(article.excerpt, lang)}</p>
+        <p className="font-mono text-xs text-muted">
+          {category ? pick(category.label, lang) : article.category} · {pick(article.readTime, lang)} {t.readTime}
         </p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 pt-1">
-          {article.tags && article.tags.map((tag, idx) => (
-            <span 
-              key={idx}
-              className="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-indigo-950/60 px-2 py-0.5 rounded-md"
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
       </div>
-
-      {/* Footer Read Link */}
-      <div className="flex items-center justify-between pt-5 mt-4 border-t border-slate-100 dark:border-indigo-900/40">
-        <div className="flex items-center gap-2">
-          <img 
-            src={article.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"} 
-            alt={article.author?.name || "Asadbek"} 
-            className="w-6 h-6 rounded-full object-cover border border-indigo-500/40"
-          />
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            {article.author?.name || "Xamidov Asadbek"}
-          </span>
-        </div>
-
-        <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-          {lang === 'uz' ? "Maqolani O'qish" : "Read Article"} <ArrowRight className="h-3.5 w-3.5" />
-        </span>
-      </div>
+      <ArrowRight className="hidden sm:block h-4 w-4 text-muted group-hover:text-ink group-hover:translate-x-0.5 transition-all" />
     </Link>
   );
 }

@@ -1,37 +1,67 @@
 import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
-export default function GiscusComments({ repo = "xamidovasadbekdev-arch/Personal_blog" }) {
+// Comments are stored as GitHub Discussions via giscus (https://giscus.app).
+// To turn them on: enable Discussions on the repo, install the giscus app,
+// then copy the two IDs giscus.app shows you into GISCUS below.
+const GISCUS = {
+  repo: 'xamidovasadbekdev-arch/Personal_blog',
+  repoId: '',
+  category: 'Announcements',
+  categoryId: '',
+};
+
+const giscusTheme = () => (document.documentElement.classList.contains('dark') ? 'noborder_dark' : 'noborder_light');
+
+export default function GiscusComments({ lang = 'en', title }) {
   const containerRef = useRef(null);
+  const { pathname } = useLocation();
+  const enabled = Boolean(GISCUS.repoId && GISCUS.categoryId);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    containerRef.current.innerHTML = '';
+    const container = containerRef.current;
+    if (!enabled || !container) return;
+    container.innerHTML = '';
 
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
-    script.setAttribute('data-repo', repo);
-    script.setAttribute('data-repo-id', 'R_kgDOG1234'); // Placeholder GitHub repo id
-    script.setAttribute('data-category', 'Announcements');
-    script.setAttribute('data-category-id', 'DIC_kwDOG1234');
-    script.setAttribute('data-mapping', 'pathname');
-    script.setAttribute('data-strict', '0');
-    script.setAttribute('data-reactions-enabled', '1');
-    script.setAttribute('data-emit-metadata', '0');
-    script.setAttribute('data-input-position', 'top');
-    script.setAttribute('data-theme', 'transparent_dark');
-    script.setAttribute('data-lang', 'en');
-    script.setAttribute('crossorigin', 'anonymous');
+    const attrs = {
+      'data-repo': GISCUS.repo,
+      'data-repo-id': GISCUS.repoId,
+      'data-category': GISCUS.category,
+      'data-category-id': GISCUS.categoryId,
+      'data-mapping': 'pathname',
+      'data-strict': '1',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'top',
+      'data-theme': giscusTheme(),
+      'data-lang': lang,
+      'data-loading': 'lazy',
+    };
+    Object.entries(attrs).forEach(([key, value]) => script.setAttribute(key, value));
+    script.crossOrigin = 'anonymous';
     script.async = true;
+    container.appendChild(script);
+  }, [enabled, lang, pathname]);
 
-    containerRef.current.appendChild(script);
-  }, [repo]);
+  // Follow the site's light/dark switch without reloading the widget.
+  useEffect(() => {
+    if (!enabled) return;
+    const observer = new MutationObserver(() => {
+      const iframe = document.querySelector('iframe.giscus-frame');
+      iframe?.contentWindow?.postMessage({ giscus: { setConfig: { theme: giscusTheme() } } }, 'https://giscus.app');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
-    <div className="pt-8 border-t border-slate-200 dark:border-indigo-900/40 space-y-4">
-      <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-        <span>Discussion & Comments</span>
-      </h3>
-      <div ref={containerRef} className="min-h-[160px] bg-slate-100/50 dark:bg-indigo-950/20 p-4 rounded-2xl border border-slate-200 dark:border-indigo-900/30"></div>
-    </div>
+    <section className="mt-16 pt-10 border-t border-line space-y-6">
+      <h2 className="text-xl font-semibold text-ink">{title}</h2>
+      <div ref={containerRef} />
+    </section>
   );
 }

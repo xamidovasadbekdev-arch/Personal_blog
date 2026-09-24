@@ -1,173 +1,114 @@
-import React, { useState } from 'react';
-import { Menu, X, Sun, Moon, Sparkles } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { translations, profile } from '../data/portfolioData';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
+import { translations } from '../data/portfolioData';
+
+export function LogoMark({ className = 'h-5 w-5' }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" strokeWidth="3" />
+      <path d="M16 4a12 12 0 0 1 0 24z" fill="var(--accent)" />
+    </svg>
+  );
+}
 
 export default function Navbar({ lang, setLang, theme, toggleTheme }) {
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
-  const activeTab = pathname === '/' ? 'home' : pathname.split('/')[1];
-  const setActiveTab = (id) => navigate(id === 'home' ? '/' : `/${id}`);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[lang].nav;
 
+  useEffect(() => setOpen(false), [pathname]);
+
   const navItems = [
-    { id: 'home', label: t.home },
-    { id: 'projects', label: t.projects },
-    { id: 'blog', label: t.blog },
-    { id: 'about', label: t.about },
-    { id: 'contact', label: t.contact },
+    { to: '/projects', label: t.projects },
+    { to: '/blog', label: t.blog },
+    { to: '/about', label: t.about },
   ];
 
-  return (
-    <nav className="sticky top-0 z-50 w-full transition-all duration-300 bg-slate-50/80 dark:bg-[#070913]/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-indigo-900/30">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          
-          {/* AX Monogram Logo & Name */}
-          <button 
-            onClick={() => setActiveTab('home')}
-            className="flex items-center gap-3 group cursor-pointer text-left focus:outline-none"
+  const linkClass = ({ isActive }) =>
+    `text-sm transition-colors ${isActive ? 'text-ink' : 'text-body hover:text-ink'}`;
+
+  const langToggle = (
+    <div className="flex items-center font-mono text-xs" role="group" aria-label="Language">
+      {['en', 'uz'].map((code, i) => (
+        <React.Fragment key={code}>
+          {i > 0 && <span className="text-muted px-1">/</span>}
+          <button
+            onClick={() => setLang(code)}
+            aria-pressed={lang === code}
+            className={`uppercase cursor-pointer transition-colors ${lang === code ? 'text-ink' : 'text-muted hover:text-body'}`}
           >
-            <div className="relative flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 rounded-xl blur-sm opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"></div>
-              
-              <div className="relative z-10 w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center border border-indigo-400/40 shadow-md font-mono font-black text-sm tracking-tighter group-hover:rotate-3 transition-transform">
-                <span className="bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent">
-                  AX
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">
-                {profile.name}
-              </span>
-              <span className="text-[10px] text-indigo-500 dark:text-indigo-400 font-mono tracking-widest uppercase -mt-1 hidden sm:block font-bold">
-                Backend & AI/ML Engineer
-              </span>
-            </div>
+            {code}
           </button>
+        </React.Fragment>
+      ))}
+    </div>
+  );
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-1.5">
-            <div className="flex items-center p-1 rounded-xl bg-slate-200/60 dark:bg-indigo-950/40 border border-slate-300/50 dark:border-indigo-900/40 backdrop-blur-md">
-              {navItems.map((item) => {
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveTab(item.id)}
-                    className={`relative px-4 py-1.5 text-xs font-bold rounded-lg transition-all duration-200 cursor-pointer ${
-                      isActive 
-                        ? 'bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white shadow-sm' 
-                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300/40 dark:hover:bg-indigo-900/30'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
+  const themeToggle = (
+    <button
+      onClick={toggleTheme}
+      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="p-1.5 rounded-full text-body hover:text-ink transition-colors cursor-pointer"
+    >
+      {theme === 'dark' ? <Sun className="h-4 w-4" strokeWidth={1.75} /> : <Moon className="h-4 w-4" strokeWidth={1.75} />}
+    </button>
+  );
 
+  return (
+    <header className="sticky top-0 z-50 border-b border-line bg-bg/80 backdrop-blur-md">
+      <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <Link to="/" className="flex items-center gap-2.5 text-ink shrink-0">
+          <LogoMark />
+          <span className="font-semibold tracking-tight">xamidov.dev</span>
+          <span className="hidden sm:inline font-mono text-xs text-muted">/ backend · ai</span>
+        </Link>
 
-            <div className="h-4 w-[1px] bg-slate-300 dark:bg-indigo-900/50 mx-1"></div>
-
-            {/* Language Switcher */}
-            <div className="flex items-center gap-1 border border-slate-300 dark:border-indigo-900/50 rounded-xl p-0.5 bg-slate-200/60 dark:bg-indigo-950/40">
-              <button
-                onClick={() => setLang('en')}
-                className={`px-2.5 py-1 text-xs font-black rounded-lg transition-all cursor-pointer ${
-                  lang === 'en'
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLang('uz')}
-                className={`px-2.5 py-1 text-xs font-black rounded-lg transition-all cursor-pointer ${
-                  lang === 'uz'
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                UZ
-              </button>
-            </div>
-
-            {/* Dark / Light Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle Theme"
-              className="p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-indigo-900/40 transition-colors cursor-pointer"
-            >
-              {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-indigo-700" />}
-            </button>
-
-            {/* Hire Me CTA Button */}
-            <button
-              onClick={() => setActiveTab('contact')}
-              className="ml-1 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-600 rounded-xl transition-all shadow-md shadow-indigo-500/25 hover:shadow-indigo-500/40 cursor-pointer flex items-center gap-1.5"
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>{t.letsTalk}</span>
-            </button>
-          </div>
-
-          {/* Mobile Controls */}
-          <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={() => setLang(lang === 'en' ? 'uz' : 'en')}
-              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-300 dark:border-indigo-800"
-            >
-              {lang.toUpperCase()}
-            </button>
-
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-slate-200 dark:bg-indigo-950 text-slate-700 dark:text-slate-300"
-            >
-              {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4" />}
-            </button>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg bg-slate-200 dark:bg-indigo-950 text-slate-700 dark:text-slate-300"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-
+        <div className="hidden md:flex items-center gap-7">
+          {navItems.map(item => (
+            <NavLink key={item.to} to={item.to} className={linkClass}>
+              {item.label}
+            </NavLink>
+          ))}
+          {langToggle}
+          {themeToggle}
+          <Link to="/contact" className="btn btn-ghost !py-2 !px-4 text-sm">
+            {t.letsTalk} <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
-      </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 dark:border-indigo-900/50 bg-slate-50/95 dark:bg-[#070913]/95 backdrop-blur-2xl px-4 pt-2 pb-6 space-y-2">
-          {navItems.map((item) => {
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  isActive 
-                    ? 'bg-indigo-600 text-white' 
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-indigo-900/40'
-                }`}
+        <div className="flex md:hidden items-center gap-3">
+          {themeToggle}
+          <button
+            onClick={() => setOpen(o => !o)}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            className="p-1.5 text-ink cursor-pointer"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </nav>
+
+      {open && (
+        <div className="md:hidden border-t border-line bg-bg px-4 pb-6 pt-2">
+          <div className="flex flex-col">
+            {[{ to: '/', label: t.home }, ...navItems, { to: '/contact', label: t.contact }].map(item => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
+                className={({ isActive }) =>
+                  `py-3 border-b border-line text-base ${isActive ? 'text-ink' : 'text-body'}`
+                }
               >
                 {item.label}
-              </button>
-            );
-          })}
+              </NavLink>
+            ))}
+          </div>
+          <div className="pt-4">{langToggle}</div>
         </div>
       )}
-    </nav>
+    </header>
   );
 }

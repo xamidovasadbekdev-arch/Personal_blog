@@ -1,238 +1,141 @@
 import React, { useState } from 'react';
-import { Mail, Send, MapPin, CheckCircle2 } from 'lucide-react';
+import { Mail, Send, MapPin, ArrowRight, Check, AlertCircle } from 'lucide-react';
 import { translations, profile } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
+import usePageMeta from '../hooks/usePageMeta';
+
+// Web3Forms access keys are designed to be public; the key only allows
+// sending to the inbox it was created for.
+const WEB3FORMS_KEY = '4a88f7be-7696-4a4b-a7e8-e501d5dd578e';
+
+const EMPTY = { name: '', email: '', subject: '', message: '' };
 
 export default function Contact({ lang }) {
   const t = translations[lang].contact;
+  usePageMeta({ title: t.title, description: t.subtitle });
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
+  const [form, setForm] = useState(EMPTY);
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const update = field => e => setForm(prev => ({ ...prev, [field]: e.target.value }));
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setErrorMessage('');
+    // Hidden field that only bots fill in.
+    if (e.currentTarget.elements.botcheck?.checked) return;
 
-    const emailSubject = encodeURIComponent(formData.subject || `Portfolio Message from ${formData.name}`);
-    const emailBody = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    );
-
-    // 1. Direct Mailto dispatch (Opens email app pre-filled to xamidovasadbek.dev@gmail.com)
-    window.location.href = `mailto:xamidovasadbek.dev@gmail.com?subject=${emailSubject}&body=${emailBody}`;
-
-    // 2. Background HTTP POST dispatch via Web3Forms API to deliver email straight to inbox
+    setStatus('sending');
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          access_key: "4a88f7be-7696-4a4b-a7e8-e501d5dd578e", // Web3Forms direct key
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject || `New Portfolio Message from ${formData.name}`,
-          message: formData.message,
-          to_email: "xamidovasadbek.dev@gmail.com"
-        })
+          access_key: WEB3FORMS_KEY,
+          from_name: 'xamidovasadbek.dev',
+          subject: form.subject || `New message from ${form.name}`,
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        }),
       });
-
-      const res = await response.json();
-      if (res.success) {
-        setSubmitted(true);
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        setSubmitted(true);
-      }
-    } catch (err) {
-      setSubmitted(true);
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || 'Send failed');
+      setStatus('sent');
+      setForm(EMPTY);
+    } catch {
+      setStatus('error');
     }
-
-    setIsSubmitting(false);
   };
 
+  const contacts = [
+    { icon: Mail, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
+    { icon: Send, label: 'Telegram', value: profile.telegram, href: profile.telegramUrl },
+    { icon: LinkedinIcon, label: 'LinkedIn', value: 'asadbekxamidov', href: profile.linkedin },
+    { icon: GithubIcon, label: 'GitHub', value: 'xamidovasadbekdev-arch', href: profile.github },
+  ];
+
   return (
-    <div className="space-y-12 py-6 max-w-5xl mx-auto">
-      
-      {/* Header */}
-      <div className="space-y-3 max-w-2xl">
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-          {t.title}
-        </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-          {t.subtitle}
-        </p>
-      </div>
+    <div className="pt-16 sm:pt-20 space-y-12">
+      <header className="space-y-4 max-w-2xl">
+        <p className="eyebrow">{t.eyebrow}</p>
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink">{t.title}</h1>
+        <p className="text-base sm:text-lg leading-relaxed text-body">{t.subtitle}</p>
+      </header>
 
-      <div className="grid gap-8 md:grid-cols-5 items-start">
-        
-        {/* Contact Form (3 cols) */}
-        <div className="md:col-span-3 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-white dark:bg-indigo-950/30 shadow-xl space-y-6">
-          
-          {submitted && (
-            <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-xs sm:text-sm font-bold flex items-center gap-3 animate-in fade-in duration-200">
-              <CheckCircle2 className="h-5 w-5 shrink-0" />
-              <span>{t.success}</span>
-            </div>
-          )}
+      <div className="grid gap-10 md:grid-cols-[1.4fr_1fr] items-start">
+        <form onSubmit={handleSubmit} className="card p-6 sm:p-8 space-y-5">
+          <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  {t.name} *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder={t.namePlaceholder}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  {t.email} *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder={t.emailPlaceholder}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                {t.subject}
-              </label>
-              <input
-                type="text"
-                value={formData.subject}
-                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                placeholder={t.subjectPlaceholder}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm font-semibold outline-none focus:border-indigo-500 text-slate-900 dark:text-white"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                {t.message} *
-              </label>
-              <textarea
-                rows="5"
-                required
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                placeholder={t.messagePlaceholder}
-                className="w-full p-4 rounded-xl bg-slate-50 dark:bg-indigo-950/60 border border-slate-300 dark:border-indigo-900/60 text-xs sm:text-sm outline-none focus:border-indigo-500 text-slate-900 dark:text-white resize-none"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-purple-600 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              <Send className="h-4 w-4" />
-              <span>{isSubmitting ? t.sending : t.send}</span>
-            </button>
-
-          </form>
-
-        </div>
-
-        {/* Direct Contact Info Sidebar (2 cols) */}
-        <div className="md:col-span-2 space-y-6">
-          
-          <div className="p-6 rounded-3xl border border-slate-200 dark:border-indigo-900/40 bg-slate-100/60 dark:bg-indigo-950/20 space-y-5">
-            <h3 className="font-bold text-slate-900 dark:text-white text-base">
-              {t.directContact}
-            </h3>
-
-            <div className="space-y-4">
-              <a 
-                href={`mailto:${profile.email}`}
-                className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-indigo-950/60 border border-slate-200 dark:border-indigo-900/40 hover:border-indigo-500 transition-colors"
-              >
-                <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-900/60 text-indigo-600 dark:text-indigo-400">
-                  <Mail className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase">Direct Email</div>
-                  <div className="text-xs font-extrabold text-slate-900 dark:text-white">{profile.email}</div>
-                </div>
-              </a>
-
-              <a 
-                href={profile.telegramUrl || `https://t.me/${profile.telegram.replace('@', '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-indigo-950/60 border border-slate-200 dark:border-indigo-900/40 hover:border-indigo-500 transition-colors"
-              >
-                <div className="p-2.5 rounded-xl bg-sky-50 dark:bg-sky-950 text-sky-500">
-                  <Send className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase">Telegram</div>
-                  <div className="text-xs font-extrabold text-slate-900 dark:text-white">{profile.telegram}</div>
-                </div>
-              </a>
-
-              <div className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-indigo-950/60 border border-slate-200 dark:border-indigo-900/40">
-                <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-500">
-                  <MapPin className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase">Location</div>
-                  <div className="text-xs font-extrabold text-slate-900 dark:text-white">Tashkent, Uzbekistan</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 flex items-center gap-3">
-              <a 
-                href={profile.github} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-white dark:bg-indigo-950/60 border border-slate-200 dark:border-indigo-900/40 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-              >
-                <GithubIcon className="h-5 w-5" />
-              </a>
-
-              <a 
-                href={profile.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-white dark:bg-indigo-950/60 border border-slate-200 dark:border-indigo-900/40 text-slate-700 dark:text-slate-300 hover:text-indigo-600"
-              >
-                <LinkedinIcon className="h-5 w-5" />
-              </a>
-            </div>
-
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="space-y-1.5 block">
+              <span className="text-sm text-ink">{t.name}</span>
+              <input required autoComplete="name" value={form.name} onChange={update('name')} placeholder={t.namePlaceholder} className="field" />
+            </label>
+            <label className="space-y-1.5 block">
+              <span className="text-sm text-ink">{t.email}</span>
+              <input required type="email" autoComplete="email" value={form.email} onChange={update('email')} placeholder={t.emailPlaceholder} className="field" />
+            </label>
           </div>
 
-        </div>
+          <label className="space-y-1.5 block">
+            <span className="text-sm text-ink">
+              {t.subject} <span className="text-muted">({t.optional})</span>
+            </span>
+            <input value={form.subject} onChange={update('subject')} placeholder={t.subjectPlaceholder} className="field" />
+          </label>
 
+          <label className="space-y-1.5 block">
+            <span className="text-sm text-ink">{t.message}</span>
+            <textarea required rows={6} value={form.message} onChange={update('message')} placeholder={t.messagePlaceholder} className="field resize-y" />
+          </label>
+
+          <div aria-live="polite">
+            {status === 'sent' && (
+              <p className="flex items-start gap-2 text-sm text-ink">
+                <Check className="h-4 w-4 mt-0.5 text-accent shrink-0" /> {t.success}
+              </p>
+            )}
+            {status === 'error' && (
+              <p className="flex items-start gap-2 text-sm text-ink">
+                <AlertCircle className="h-4 w-4 mt-0.5 text-accent shrink-0" />
+                <span>
+                  {t.error}{' '}
+                  <a href={`mailto:${profile.email}`} className="underline underline-offset-2">{profile.email}</a>
+                </span>
+              </p>
+            )}
+          </div>
+
+          <button type="submit" disabled={status === 'sending'} className="btn btn-primary w-full sm:w-auto">
+            {status === 'sending' ? t.sending : t.send} <ArrowRight className="h-4 w-4" />
+          </button>
+        </form>
+
+        <aside className="space-y-6">
+          <p className="eyebrow">{t.directContact}</p>
+          <ul className="border-t border-line">
+            {contacts.map(({ icon: Icon, label, value, href }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target={href.startsWith('mailto:') ? undefined : '_blank'}
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-4 py-4 border-b border-line min-w-0"
+                >
+                  <Icon className="h-4 w-4 text-muted group-hover:text-accent transition-colors" />
+                  <span className="font-mono text-xs text-muted w-20">{label}</span>
+                  <span className="text-sm text-ink truncate min-w-0">{value}</span>
+                </a>
+              </li>
+            ))}
+            <li className="flex items-center gap-4 py-4 border-b border-line">
+              <MapPin className="h-4 w-4 text-muted" />
+              <span className="font-mono text-xs text-muted w-20">{t.locationLabel}</span>
+              <span className="text-sm text-ink">{t.location}</span>
+            </li>
+          </ul>
+        </aside>
       </div>
-
     </div>
   );
 }
