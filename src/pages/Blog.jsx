@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Search, BookOpen, ChevronRight, ArrowLeft, FolderOpen } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import { translations, blogTaxonomy, articlesData } from '../data/portfolioData';
 import ArticleCard from '../components/ArticleCard';
-import BlogPost from './BlogPost';
 
 const getStr = (val, lang = 'en') => {
   if (!val) return '';
@@ -12,11 +12,13 @@ const getStr = (val, lang = 'en') => {
   return String(val);
 };
 
-export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
+export default function Blog({ lang }) {
   const t = translations[lang]?.blog || translations.en.blog;
   
   // Drill-down view states
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedCategory = searchParams.get('category');
+  const setSelectedCategory = (id) => setSearchParams(id ? { category: id } : {});
   const [activeSubcategory, setActiveSubcategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -28,18 +30,6 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
     description: getStr(tax.description, lang),
     subcategories: tax.subcategories[lang] || tax.subcategories.en,
   }));
-
-  // LEVEL 3: Full Article Reader View
-  if (selectedArticleId) {
-    return (
-      <BlogPost 
-        articleId={selectedArticleId}
-        onBack={() => setSelectArticleId(null)}
-        onSelectArticle={(id) => setSelectArticleId(id)}
-        lang={lang}
-      />
-    );
-  }
 
   // Filtered articles for Level 2 or Search
   const filteredArticles = allArticles.filter(article => {
@@ -138,7 +128,6 @@ export default function Blog({ selectedArticleId, setSelectArticleId, lang }) {
               <ArticleCard 
                 key={article.id} 
                 article={article} 
-                onSelectArticle={(id) => setSelectArticleId(id)}
                 t={t}
                 lang={lang}
               />

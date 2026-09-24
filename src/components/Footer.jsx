@@ -1,9 +1,11 @@
 import React from 'react';
 import { Send } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './BrandIcons';
+import { useNavigate } from 'react-router-dom';
 import { profile } from '../data/portfolioData';
 
-export default function Footer({ setActiveTab, lang = 'en' }) {
+export default function Footer({ lang = 'en' }) {
+  const navigate = useNavigate();
   const isUzbek = lang === 'uz';
 
   return (
@@ -14,7 +16,7 @@ export default function Footer({ setActiveTab, lang = 'en' }) {
           
           <div className="flex flex-col items-center md:items-start gap-1 text-center md:text-left">
             <button 
-              onClick={() => setActiveTab('home')}
+              onClick={() => navigate('/')}
               className="text-base font-black tracking-tight text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
             >
               {profile.name}

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Clock, Calendar, Share2, Copy, Check, ThumbsUp, BookOpen } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { translations, blogTaxonomy, articlesData } from '../data/portfolioData';
 import CommentsSection from '../components/CommentsSection';
 
-export default function BlogPost({ articleId, onBack, onSelectArticle, lang = 'en' }) {
+export default function BlogPost({ lang = 'en' }) {
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const onBack = () => navigate('/blog');
   const t = translations[lang]?.blog || translations.en.blog;
   const articles = articlesData;
-  const article = articles.find(a => a.id === articleId) || articles[0];
+  const article = articles.find(a => (a.slug || a.id) === slug);
 
   const [copied, setCopied] = useState(false);
   const [likes, setLikes] = useState(12);

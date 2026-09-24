@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Send, Compass, Code2, Zap, Flame } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { translations, skillsData, profile, projectsData, articlesData } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
 import TerminalVisual from '../components/TerminalVisual';
@@ -8,7 +9,9 @@ import ArticleCard from '../components/ArticleCard';
 import SkillCard from '../components/SkillCard';
 import Typewriter from '../components/Typewriter';
 
-export default function Home({ setActiveTab, setSelectArticleId, lang }) {
+export default function Home({ lang }) {
+  const navigate = useNavigate();
+  const setActiveTab = (id) => navigate(`/${id}`);
   const t = translations[lang] || translations.en;
   const projects = projectsData;
   const articles = articlesData;
@@ -193,10 +196,6 @@ export default function Home({ setActiveTab, setSelectArticleId, lang }) {
             <ArticleCard 
               key={article.id} 
               article={article} 
-              onSelectArticle={(id) => {
-                setSelectArticleId(id);
-                setActiveTab('blog');
-              }}
               t={t.blog}
               lang={lang}
             />
