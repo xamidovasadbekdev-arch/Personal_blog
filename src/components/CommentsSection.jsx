@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageSquare, Send, User, Clock, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, Send, Clock, CheckCircle2 } from 'lucide-react';
 import { translations } from '../data/portfolioData';
 
 export default function CommentsSection({ articleId, lang = 'en' }) {

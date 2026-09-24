@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { User, Briefcase, GraduationCap, Download, CheckCircle2, Code2, Sparkles } from 'lucide-react';
-import { translations } from '../data/portfolioData';
-import { getStoredProfile, getStoredTimeline } from '../data/dataStore';
+import { translations, profile, experienceTimeline } from '../data/portfolioData';
 
 export default function About({ lang }) {
   const t = translations[lang] || translations.en;
-  const profile = getStoredProfile();
-  const timeline = getStoredTimeline();
+  const timeline = experienceTimeline;
   const [downloaded, setDownloaded] = useState(false);
 
   const handleDownload = () => {

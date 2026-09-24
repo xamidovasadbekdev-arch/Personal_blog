@@ -1,10 +1,9 @@
 import React from 'react';
 import { Send } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './BrandIcons';
-import { getStoredProfile } from '../data/dataStore';
+import { profile } from '../data/portfolioData';
 
 export default function Footer({ setActiveTab, lang = 'en' }) {
-  const profile = getStoredProfile();
   const isUzbek = lang === 'uz';
 
   return (

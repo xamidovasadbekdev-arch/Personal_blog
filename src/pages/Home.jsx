@@ -1,7 +1,6 @@
 import React from 'react';
-import { ArrowRight, Send, Compass, Sparkles, Code2, Zap, Terminal, Flame } from 'lucide-react';
-import { translations, skillsData } from '../data/portfolioData';
-import { getStoredProfile, getStoredProjects, getStoredArticles } from '../data/dataStore';
+import { ArrowRight, Send, Compass, Code2, Zap, Flame } from 'lucide-react';
+import { translations, skillsData, profile, projectsData, articlesData } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
 import TerminalVisual from '../components/TerminalVisual';
 import ProjectCard from '../components/ProjectCard';
@@ -11,9 +10,8 @@ import Typewriter from '../components/Typewriter';
 
 export default function Home({ setActiveTab, setSelectArticleId, lang }) {
   const t = translations[lang] || translations.en;
-  const profile = getStoredProfile();
-  const projects = getStoredProjects();
-  const articles = getStoredArticles();
+  const projects = projectsData;
+  const articles = articlesData;
 
   const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
   const recentArticles = articles.slice(0, 2);

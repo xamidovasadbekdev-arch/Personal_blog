@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Menu, X, Sun, Moon, Sparkles, Lock } from 'lucide-react';
-import { translations } from '../data/portfolioData';
-import { getStoredProfile } from '../data/dataStore';
+import { Menu, X, Sun, Moon, Sparkles } from 'lucide-react';
+import { translations, profile } from '../data/portfolioData';
 
 export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, toggleTheme }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[lang].nav;
-  const profile = getStoredProfile();
 
   const navItems = [
     { id: 'home', label: t.home },
@@ -67,18 +65,6 @@ export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, 
               })}
             </div>
 
-            {/* Admin Gateway Lock Icon */}
-            <button
-              onClick={() => setActiveTab('admin')}
-              title="Admin Panel Gateway"
-              className={`p-2.5 rounded-xl border border-slate-300 dark:border-indigo-900/50 transition-colors cursor-pointer ${
-                activeTab === 'admin' 
-                  ? 'bg-indigo-600 text-white border-indigo-600' 
-                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-indigo-900/40'
-              }`}
-            >
-              <Lock className="h-4 w-4" />
-            </button>
 
             <div className="h-4 w-[1px] bg-slate-300 dark:bg-indigo-900/50 mx-1"></div>
 
@@ -127,13 +113,6 @@ export default function Navbar({ activeTab, setActiveTab, lang, setLang, theme, 
 
           {/* Mobile Controls */}
           <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={() => setActiveTab('admin')}
-              className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-300 dark:border-indigo-800"
-            >
-              <Lock className="h-4 w-4" />
-            </button>
-
             <button
               onClick={() => setLang(lang === 'en' ? 'uz' : 'en')}
               className="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-300 dark:border-indigo-800"

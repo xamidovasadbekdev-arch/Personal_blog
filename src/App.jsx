@@ -7,16 +7,12 @@ import Projects from './pages/Projects';
 import Blog from './pages/Blog';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import AdminLogin from './components/AdminLogin';
-import AdminPanel from './pages/AdminPanel';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [selectedArticleId, setSelectedArticleId] = useState(null);
   const [lang, setLang] = useState('en');
   const [theme, setTheme] = useState('dark');
-  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-  const [dataRefreshKey, setDataRefreshKey] = useState(0);
 
   // Toggle dark/light theme
   useEffect(() => {
@@ -34,16 +30,12 @@ export default function App() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
-  const handleDataUpdated = () => {
-    setDataRefreshKey(prev => prev + 1);
-  };
 
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
         return (
           <Home 
-            key={dataRefreshKey}
             setActiveTab={setActiveTab} 
             setSelectArticleId={(id) => {
               setSelectedArticleId(id);
@@ -53,32 +45,21 @@ export default function App() {
           />
         );
       case 'projects':
-        return <Projects key={dataRefreshKey} lang={lang} />;
+        return <Projects lang={lang} />;
       case 'blog':
         return (
           <Blog 
-            key={dataRefreshKey}
             selectedArticleId={selectedArticleId} 
             setSelectArticleId={setSelectedArticleId} 
             lang={lang} 
           />
         );
       case 'about':
-        return <About key={dataRefreshKey} lang={lang} />;
+        return <About lang={lang} />;
       case 'contact':
-        return <Contact key={dataRefreshKey} lang={lang} />;
-      case 'admin':
-        return isAdminAuthenticated ? (
-          <AdminPanel 
-            key={dataRefreshKey}
-            onLogout={() => setIsAdminAuthenticated(false)}
-            onDataUpdated={handleDataUpdated}
-          />
-        ) : (
-          <AdminLogin onLoginSuccess={() => setIsAdminAuthenticated(true)} />
-        );
+        return <Contact lang={lang} />;
       default:
-        return <Home key={dataRefreshKey} setActiveTab={setActiveTab} setSelectArticleId={setSelectedArticleId} lang={lang} />;
+        return <Home setActiveTab={setActiveTab} setSelectArticleId={setSelectedArticleId} lang={lang} />;
     }
   };
 

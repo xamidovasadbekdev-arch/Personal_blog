@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Layers, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight } from 'lucide-react';
 import { GithubIcon } from './BrandIcons';
 
 export default function ProjectCard({ project, onSelect, t, lang = 'en' }) {
