@@ -1,10 +1,15 @@
 ---
 title: "Unsupervised Learning: K-Means & Hierarchical Clustering Patterns"
-excerpt: "Explore how unsupervised algorithms discover hidden structures in unlabelled dataset clusters using K-Means and PCA dimensionality reduction."
+excerpt: Explore how unsupervised algorithms discover hidden structures in
+  unlabelled dataset clusters using K-Means and PCA dimensionality reduction.
 date: 2026-07-20
 category: ml
-subcategory: "Unsupervised Learning"
-tags: ["Unsupervised Learning", "Clustering", "K-Means", "PCA"]
+subcategory: Unsupervised Learning
+tags:
+  - Unsupervised Learning
+  - Clustering
+  - K-Means
+  - PCA
 ---
 
 Unsupervised learning algorithms process data without explicit target labels to discover natural groupings and clusters.

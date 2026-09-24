@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "category": {
+        "en": "Backend & Languages",
+        "uz": "Backend va Dasturlash Tillar"
+      },
+      "skills": [
+        "Python",
+        "FastAPI",
+        "SQL",
+        "JavaScript",
+        "Go (Basics)",
+        "RESTful APIs",
+        "Django",
+        "Django REST Framework"
+      ]
+    },
+    {
+      "category": {
+        "en": "Data Science & AI/ML",
+        "uz": "Data Science va AI/ML"
+      },
+      "skills": [
+        "Supervised Learning",
+        "Unsupervised Learning",
+        "Pandas & NumPy",
+        "Scikit-Learn",
+        "Machine Learning",
+        "Data Pipelines",
+        "XGBoost",
+        "RAG (FAISS, embeddings)"
+      ]
+    },
+    {
+      "category": {
+        "en": "Databases & Tools",
+        "uz": "Ma'lumotlar Bazasi va Asboblar"
+      },
+      "skills": [
+        "PostgreSQL",
+        "Docker",
+        "Git / GitHub",
+        "Linux",
+        "VS Code",
+        "Vercel",
+        "Streamlit",
+        "Render"
+      ]
+    }
+  ]
+}

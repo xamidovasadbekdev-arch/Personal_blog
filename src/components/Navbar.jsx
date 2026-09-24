@@ -60,8 +60,8 @@ export default function Navbar({ lang, setLang, theme, toggleTheme }) {
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2.5 text-ink shrink-0">
           <LogoMark />
-          <span className="font-semibold tracking-tight">xamidov.dev</span>
-          <span className="hidden sm:inline font-mono text-xs text-muted">/ backend · ai</span>
+          <span className="font-semibold tracking-tight">{t.brand}</span>
+          <span className="hidden sm:inline font-mono text-xs text-muted">{t.tagline}</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-7">

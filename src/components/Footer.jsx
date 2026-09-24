@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Send, Mail } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './BrandIcons';
 import { LogoMark } from './Navbar';
-import { profile, translations } from '../data/portfolioData';
+import { profile, pick } from '../data/portfolioData';
 
 export function SocialLinks({ className = '' }) {
   const links = [
@@ -31,8 +31,6 @@ export function SocialLinks({ className = '' }) {
 }
 
 export default function Footer({ lang = 'en' }) {
-  const t = translations[lang].footer;
-
   return (
     <footer className="relative z-10 mt-24 border-t border-line">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -41,7 +39,7 @@ export default function Footer({ lang = 'en' }) {
             <LogoMark className="h-4 w-4" />
             <span className="font-medium">{profile.name}</span>
           </Link>
-          <span className="font-mono text-xs text-muted">© {new Date().getFullYear()} · {t.location}</span>
+          <span className="font-mono text-xs text-muted">© {new Date().getFullYear()} · {pick(profile.location, lang)}</span>
         </div>
         <SocialLinks />
       </div>

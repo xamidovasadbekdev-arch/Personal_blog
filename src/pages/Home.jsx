@@ -30,7 +30,7 @@ export default function Home({ lang }) {
   const navigate = useNavigate();
   usePageMeta({ description: pick(profile.subtitle, lang) });
 
-  const featuredProjects = projectsData.filter(p => p.featured).slice(0, 2);
+  const featuredProjects = projectsData.filter(p => p.featured).slice(0, 4);
   const recentArticles = articles.slice(0, 3);
 
   return (

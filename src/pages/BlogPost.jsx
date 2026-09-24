@@ -10,7 +10,7 @@ import GiscusComments from '../components/GiscusComments';
 import NotFound from './NotFound';
 import usePageMeta from '../hooks/usePageMeta';
 
-function CodeBlock({ language, code, lang }) {
+function CodeBlock({ language, code, labels }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -28,7 +28,7 @@ function CodeBlock({ language, code, lang }) {
         <span>{language || 'code'}</span>
         <button onClick={copy} className="flex items-center gap-1.5 hover:text-[#f2ebdf] transition-colors cursor-pointer">
           {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-          {copied ? (lang === 'uz' ? 'Nusxalandi' : 'Copied') : (lang === 'uz' ? 'Nusxalash' : 'Copy')}
+          {copied ? labels.codeCopied : labels.copyCode}
         </button>
       </div>
       <pre className="p-4 overflow-x-auto text-[13px] leading-relaxed font-mono text-[#e9e1d3]">
@@ -73,7 +73,7 @@ export default function BlogPost({ lang = 'en' }) {
     pre: ({ children }) => {
       const codeEl = React.Children.only(children);
       const language = /language-(\w+)/.exec(codeEl.props.className || '')?.[1];
-      return <CodeBlock language={language} code={String(codeEl.props.children).replace(/\n$/, '')} lang={lang} />;
+      return <CodeBlock language={language} code={String(codeEl.props.children).replace(/\n$/, '')} labels={t} />;
     },
     a: ({ href, children }) =>
       href?.startsWith('/') ? (

@@ -1,6 +1,15 @@
 ---
 title: "Nazorat Qilinadigan O'rganish: Scikit-Learn Bilan Klassifikator Modellari"
-excerpt: "Nazorat qilinadigan machine learning algoritmlari, kross-validatsiya, belgilarni masshtablash va modelni baholash bo'yicha amaliy qo'llanma."
+excerpt: Nazorat qilinadigan machine learning algoritmlari, kross-validatsiya,
+  belgilarni masshtablash va modelni baholash bo'yicha amaliy qo'llanma.
+date: 2026-08-02
+category: ml
+subcategory: Supervised Learning
+tags:
+  - Machine Learning
+  - Supervised Learning
+  - Python
+  - Scikit-Learn
 ---
 
 Nazorat qilinadigan Machine Learning (Supervised Learning) algoritmlari kirish belgilaridan maqsadli belgilarga akslantirishni o'rganadi. Ushbu maqolada **Scikit-Learn** yordamida klassifikatsiya modellarini ko'rib chiqamiz.

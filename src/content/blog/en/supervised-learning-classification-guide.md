@@ -1,10 +1,15 @@
 ---
 title: "Supervised Learning: Building Classifier Models with Scikit-Learn"
-excerpt: "A practical guide to supervised machine learning algorithms, cross-validation, feature scaling, and model evaluation metrics."
+excerpt: A practical guide to supervised machine learning algorithms,
+  cross-validation, feature scaling, and model evaluation metrics.
 date: 2026-08-02
 category: ml
-subcategory: "Supervised Learning"
-tags: ["Machine Learning", "Supervised Learning", "Python", "Scikit-Learn"]
+subcategory: Supervised Learning
+tags:
+  - Machine Learning
+  - Supervised Learning
+  - Python
+  - Scikit-Learn
 ---
 
 Supervised Machine Learning algorithms learn mappings from input features to target labels. In this article, we explore classification models using **Scikit-Learn**.

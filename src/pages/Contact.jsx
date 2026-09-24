@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Send, MapPin, ArrowRight, Check, AlertCircle } from 'lucide-react';
-import { translations, profile } from '../data/portfolioData';
+import { translations, profile, pick } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
 import usePageMeta from '../hooks/usePageMeta';
 
@@ -32,7 +32,7 @@ export default function Contact({ lang }) {
         body: JSON.stringify({
           access_key: WEB3FORMS_KEY,
           from_name: 'xamidovasadbek.dev',
-          subject: form.subject || `New message from ${form.name}`,
+          subject: form.subject || `${t.formSubjectPrefix} ${form.name}`,
           name: form.name,
           email: form.email,
           message: form.message,
@@ -131,7 +131,7 @@ export default function Contact({ lang }) {
             <li className="flex items-center gap-4 py-4 border-b border-line">
               <MapPin className="h-4 w-4 text-muted" />
               <span className="font-mono text-xs text-muted w-20">{t.locationLabel}</span>
-              <span className="text-sm text-ink">{t.location}</span>
+              <span className="text-sm text-ink">{pick(profile.location, lang)}</span>
             </li>
           </ul>
         </aside>

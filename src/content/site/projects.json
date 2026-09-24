@@ -1,0 +1,157 @@
+{
+  "items": [
+    {
+      "id": "anchor-rag",
+      "title": { "en": "AnchorRAG — chat with your documents", "uz": "AnchorRAG — hujjatlaringiz bilan suhbat" },
+      "category": "ai",
+      "description": {
+        "en": "A retrieval-augmented generation app built from scratch, without RAG frameworks. It chunks a document, embeds it with sentence-transformers, searches it with FAISS, and answers with an LLM via Groq, showing which section each answer came from.",
+        "uz": "RAG frameworklarisiz, noldan yozilgan retrieval-augmented generation ilovasi. Hujjatni bo'laklarga ajratadi, sentence-transformers bilan embedding qiladi, FAISS orqali qidiradi va Groq'dagi LLM yordamida javob beradi — har bir javob qaysi bo'limdan olingani ko'rsatiladi."
+      },
+      "longDescription": {
+        "en": "I built every piece of the RAG pipeline by hand to understand how it really works: an HTML loader that keeps section headings, an overlapping chunker, local embeddings with sentence-transformers, a FAISS index for similarity search, and a generator that sends the retrieved context to an LLM on Groq. The Streamlit chat shows the source section next to each answer. Next steps: a similarity threshold so it declines off-topic questions, multi-document support, and a multilingual embedding model for Uzbek text.",
+        "uz": "RAG qanday ishlashini chuqur tushunish uchun uning har bir qismini qo'lda yozdim: bo'lim sarlavhalarini saqlaydigan HTML loader, bir-biriga qisman ustma-ust tushuvchi chunker, sentence-transformers bilan lokal embeddinglar, o'xshashlik qidiruvi uchun FAISS indeksi va topilgan kontekstni Groq'dagi LLMga yuboruvchi generator. Streamlit chatida har bir javob yonida manba bo'limi ko'rsatiladi. Keyingi qadamlar: mavzudan tashqari savollarni rad etish uchun o'xshashlik chegarasi, bir nechta hujjatni qo'llab-quvvatlash va o'zbekcha matn uchun ko'p tilli embedding modeli."
+      },
+      "tech": ["Python", "Streamlit", "sentence-transformers", "FAISS", "Groq API", "BeautifulSoup"],
+      "github": "https://github.com/xamidovasadbekdev-arch/AnchorRAG",
+      "demo": "https://anchor-rag.streamlit.app/",
+      "featured": true
+    },
+    {
+      "id": "student-stress-api",
+      "title": { "en": "Student Stress Prediction API", "uz": "Talabalar stressini bashorat qiluvchi API" },
+      "category": "backend",
+      "description": {
+        "en": "A live FastAPI service that predicts whether a student is stressed from sleep, study habits, social media use, exam pressure, and family support. It rebuilds the training features at request time, runs in Docker, and is deployed on Render with Swagger docs.",
+        "uz": "Uyqu, o'qish odatlari, ijtimoiy tarmoqlardan foydalanish, imtihon bosimi va oila qo'llab-quvvatlashiga qarab talaba stressda yoki yo'qligini bashorat qiluvchi jonli FastAPI xizmati. O'qitishdagi belgilarni so'rov vaqtida qayta tiklaydi, Docker'da ishlaydi va Swagger hujjatlari bilan Render'ga joylangan."
+      },
+      "longDescription": {
+        "en": "This is the serving layer of a two-repo project. The trained scikit-learn classifier loads when FastAPI starts; POST /predict takes raw student data, recreates the engineered features used in training (study/sleep ratio, pressure–support gap, low-sleep and high-pressure flags) plus one-hot encodings, and returns a readable label. Data cleaning and model training live in the StudentLifestyleAndStressDataset repo. The free Render instance can take up to a minute to wake up.",
+        "uz": "Bu ikki repozitoriyadan iborat loyihaning xizmat qatlami. O'qitilgan scikit-learn klassifikatori FastAPI ishga tushganda yuklanadi; POST /predict xom ma'lumotlarni qabul qilib, o'qitishda ishlatilgan belgilarni (o'qish/uyqu nisbati, bosim va qo'llab-quvvatlash farqi, kam uyqu va yuqori bosim belgilari) hamda one-hot kodlashni qayta tiklaydi va tushunarli natija qaytaradi. Ma'lumotlarni tozalash va modelni o'qitish StudentLifestyleAndStressDataset repozitoriyasida. Bepul Render serveri uyg'onishi uchun bir daqiqagacha vaqt ketishi mumkin."
+      },
+      "tech": ["FastAPI", "scikit-learn", "pandas", "Docker", "Render"],
+      "github": "https://github.com/xamidovasadbekdev-arch/StudentStressPredictorAPI",
+      "demo": "https://student-stress-api-k8du.onrender.com/docs",
+      "featured": true
+    },
+    {
+      "id": "car-price-prediction",
+      "title": { "en": "Used Car Price Prediction", "uz": "Ishlatilgan avtomobil narxini bashorat qilish" },
+      "category": "ai",
+      "description": {
+        "en": "End-to-end regression on 6,926 CarDekho listings: a leak-free scikit-learn pipeline, three models compared, and a Random Forest that reaches R² 0.92 on the test set. Served as a FastAPI endpoint in Docker on Render.",
+        "uz": "CarDekho'dagi 6 926 ta e'lon asosida to'liq regressiya loyihasi: ma'lumot sizib chiqishidan himoyalangan scikit-learn pipeline, uchta model taqqoslangan, test to'plamida R² 0.92 ga erishgan Random Forest. Render'da Docker ichida FastAPI endpoint sifatida ishlaydi."
+      },
+      "longDescription": {
+        "en": "The project moves from EDA to feature engineering to modelling in three notebooks. All preprocessing (imputation, scaling, encoding) sits inside a ColumnTransformer fit only on training data, and the whole pipeline is saved with joblib so the API accepts raw input with no manual preprocessing. The final model was chosen on test-set performance, not training accuracy.",
+        "uz": "Loyiha uchta notebook'da EDA'dan belgilar muhandisligiga va modellashtirishga o'tadi. Barcha oldindan ishlov berish (bo'shliqlarni to'ldirish, masshtablash, kodlash) faqat o'qitish ma'lumotlarida o'rgatilgan ColumnTransformer ichida, butun pipeline esa joblib bilan saqlangan — shuning uchun API xom ma'lumotni qo'lda ishlov bermasdan qabul qiladi. Yakuniy model o'qitishdagi aniqlikka emas, test natijalariga qarab tanlangan."
+      },
+      "tech": ["Python", "scikit-learn", "pandas", "FastAPI", "Pydantic", "Docker"],
+      "github": "https://github.com/xamidovasadbekdev-arch/CarPricePredict",
+      "demo": "https://carpricepredictapi.onrender.com/docs",
+      "featured": true
+    },
+    {
+      "id": "interviewiq-api",
+      "title": { "en": "InterviewIQ — AI interview assessment API", "uz": "InterviewIQ — AI intervyu baholash API'si" },
+      "category": "backend",
+      "description": {
+        "en": "Upload a CV, choose a role and level, and get 10 tailored technical interview questions. Each answer is scored by LLaMA 3.3 70B via Groq, with feedback, a total score out of 100, and a learning roadmap for the gaps.",
+        "uz": "Rezyume yuklang, lavozim va darajani tanlang — sizga moslashtirilgan 10 ta texnik intervyu savoli beriladi. Har bir javobni Groq orqali LLaMA 3.3 70B baholaydi: fikr-mulohaza, 100 ballik umumiy natija va bo'shliqlarni to'ldirish uchun o'quv rejasi."
+      },
+      "longDescription": {
+        "en": "A Django REST Framework API that parses the uploaded PDF with pdfplumber, extracts skills, generates role- and level-specific questions, and scores each answer with an LLM. The result includes per-answer feedback, a total out of 100, and a roadmap with estimated time to close each skill gap. Endpoints are documented with drf-spectacular (Swagger).",
+        "uz": "Django REST Framework API: yuklangan PDF'ni pdfplumber bilan o'qiydi, ko'nikmalarni ajratib oladi, lavozim va darajaga mos savollar tuzadi va har bir javobni LLM bilan baholaydi. Natijada har bir javob bo'yicha fikr, 100 ballik umumiy natija va har bir bo'shliqni yopish uchun taxminiy muddatli yo'l xaritasi bo'ladi. Endpointlar drf-spectacular (Swagger) bilan hujjatlashtirilgan."
+      },
+      "tech": ["Django", "Django REST Framework", "Groq API", "pdfplumber", "Swagger", "SQLite"],
+      "github": "https://github.com/xamidovasadbekdev-arch/InterviewIQ_API",
+      "demo": "",
+      "featured": true
+    },
+    {
+      "id": "airline-passenger-satisfaction",
+      "title": { "en": "Airline Passenger Satisfaction", "uz": "Aviayo'lovchilar mamnuniyati" },
+      "category": "ai",
+      "description": {
+        "en": "Classifies 104k airline passengers as satisfied or not. XGBoost reached 96.3% accuracy and 0.957 F1, held up under 5-fold cross-validation, and showed that online boarding alone drives 44% of the model's decisions.",
+        "uz": "104 mingta aviayo'lovchini mamnun yoki mamnun emas deb tasniflaydi. XGBoost 96,3% aniqlik va 0,957 F1 ko'rsatdi, 5-fold kross-validatsiyada ham barqaror bo'ldi va model qarorlarining 44% onlayn ro'yxatdan o'tishga bog'liqligini ko'rsatdi."
+      },
+      "longDescription": {
+        "en": "A full classification workflow on a Kaggle dataset of 103,904 flights: column cleanup, missing-value handling, EDA across demographics, travel type and service ratings, then several models compared. Random Forest, XGBoost and CatBoost scored almost the same; XGBoost was kept, validated with 5-fold CV and RandomizedSearchCV. Feature importance matched the EDA: online boarding, in-flight Wi-Fi and business travel matter most.",
+        "uz": "Kaggle'dagi 103 904 ta parvoz ma'lumoti bo'yicha to'liq tasniflash jarayoni: ustunlarni tozalash, bo'sh qiymatlarni to'ldirish, demografiya, sayohat turi va xizmat baholari bo'yicha EDA, so'ngra bir nechta modelni taqqoslash. Random Forest, XGBoost va CatBoost deyarli bir xil natija berdi; XGBoost tanlanib, 5-fold CV va RandomizedSearchCV bilan tekshirildi. Belgilar ahamiyati EDA natijalariga mos keldi: eng muhimlari onlayn ro'yxatdan o'tish, bortdagi Wi-Fi va xizmat safari."
+      },
+      "tech": ["Python", "pandas", "scikit-learn", "XGBoost", "CatBoost", "seaborn"],
+      "github": "https://github.com/xamidovasadbekdev-arch/AirlinePassengerSatisfaction",
+      "demo": "",
+      "featured": false
+    },
+    {
+      "id": "bank-customer-churn",
+      "title": { "en": "Bank Customer Churn", "uz": "Bank mijozlarining ketishi (churn)" },
+      "category": "ai",
+      "description": {
+        "en": "An EDA-first churn study on 10,000 bank customers. I tested every variable against churn, found a U-shaped effect of product count, and caught a leaking \"Complain\" column before modelling. XGBoost reached about 87% accuracy.",
+        "uz": "10 000 bank mijozi bo'yicha EDA'ga asoslangan churn tadqiqoti. Har bir o'zgaruvchini churn bilan solishtirdim, mahsulotlar sonining U shaklidagi ta'sirini topdim va modellashtirishdan oldin ma'lumot sizdiradigan \"Complain\" ustunini aniqladim. XGBoost taxminan 87% aniqlikka erishdi."
+      },
+      "longDescription": {
+        "en": "Findings that shaped the model: German customers churn at 32%, double France and Spain; inactive members churn twice as often; churn drops from 28% with one product to 8% with two, then jumps to 83% with three and 100% with four. The Complain column showed 99.5% churn among complainers, which is leakage rather than a signal, so it was dropped. Random Forest, Logistic Regression, KNN and XGBoost were compared.",
+        "uz": "Modelni shakllantirgan topilmalar: Germaniyadagi mijozlar 32% holatda ketadi — Fransiya va Ispaniyadan ikki baravar ko'p; faol bo'lmagan mijozlar ikki baravar ko'p ketadi; churn bitta mahsulotda 28% dan ikkita mahsulotda 8% ga tushadi, keyin uchtada 83% va to'rttada 100% ga ko'tariladi. Complain ustunida shikoyat qilganlarning 99,5% ketgan — bu signal emas, ma'lumot sizishi, shuning uchun ustun olib tashlandi. Random Forest, Logistic Regression, KNN va XGBoost taqqoslandi."
+      },
+      "tech": ["Python", "pandas", "seaborn", "scikit-learn", "XGBoost"],
+      "github": "https://github.com/xamidovasadbekdev-arch/BankCustomerChurn",
+      "demo": "",
+      "featured": false
+    },
+    {
+      "id": "ishtop",
+      "title": { "en": "IshTop — daily job marketplace", "uz": "IshTop — kunlik ish bozori" },
+      "category": "fullstack",
+      "description": {
+        "en": "A Django marketplace for daily and short-term jobs in Uzbekistan, inspired by Karrot's jobs section. Employers post gigs, workers apply by region, an accepted application opens a chat, and employers rate workers afterwards.",
+        "uz": "O'zbekistonda kunlik va qisqa muddatli ishlar uchun Django platformasi, Karrot ilovasining ish bo'limidan ilhomlangan. Ish beruvchilar e'lon joylaydi, ishchilar viloyati bo'yicha ariza yuboradi, qabul qilingan ariza chatni ochadi, ish tugagach ish beruvchi ishchini baholaydi."
+      },
+      "longDescription": {
+        "en": "Two roles, worker and employer, each with their own dashboard and history. Job posts have a category, price, photo, date and a location shown on an OpenStreetMap map (Leaflet + Nominatim geocoding). Workers filter by region and category; chat updates every few seconds with AJAX polling; ratings from 1 to 5 stars appear on worker profiles.",
+        "uz": "Ikki rol — ishchi va ish beruvchi, har birining o'z paneli va tarixi bor. Ish e'lonlarida kategoriya, narx, rasm, sana va OpenStreetMap xaritasida ko'rsatiladigan manzil bor (Leaflet + Nominatim). Ishchilar viloyat va kategoriya bo'yicha saralaydi; chat AJAX polling orqali har bir necha soniyada yangilanadi; 1–5 yulduzli baholar ishchi profilida ko'rinadi."
+      },
+      "tech": ["Django", "Python", "SQLite", "JavaScript", "Leaflet.js", "OpenStreetMap"],
+      "github": "https://github.com/xamidovasadbekdev-arch/WORKOOO",
+      "demo": "",
+      "featured": false
+    },
+    {
+      "id": "top-transfers",
+      "title": { "en": "Top Transfers", "uz": "Top Transfers" },
+      "category": "fullstack",
+      "description": {
+        "en": "A Django web app for following football transfers: clubs by country, the latest deals, player profiles, a U-20 section, and stats such as transfer records and the top 50 clubs by spending and income.",
+        "uz": "Futbol transferlarini kuzatish uchun Django veb-ilovasi: davlatlar bo'yicha klublar, so'nggi transferlar, o'yinchi profillari, U-20 bo'limi hamda transfer rekordlari va xarajat va daromad bo'yicha top-50 klub kabi statistikalar."
+      },
+      "longDescription": {
+        "en": "Built with Django, split into a main app for clubs, players and transfers and a separate stats app. Templates are plain HTML, CSS and JavaScript, and it was deployed on PythonAnywhere.",
+        "uz": "Django'da yozilgan: klublar, o'yinchilar va transferlar uchun asosiy ilova hamda alohida statistika ilovasi. Shablonlar oddiy HTML, CSS va JavaScript'da, loyiha PythonAnywhere'ga joylangan."
+      },
+      "tech": ["Django", "Python", "SQLite", "JavaScript"],
+      "github": "https://github.com/xamidovasadbekdev-arch/toptransfers",
+      "demo": "",
+      "featured": false
+    },
+    {
+      "id": "personal-blog",
+      "title": { "en": "xamidov.dev — this website", "uz": "xamidov.dev — ushbu sayt" },
+      "category": "frontend",
+      "description": {
+        "en": "My portfolio and bilingual blog: a static React site with Markdown articles, a Git-based admin panel, giscus comments, and automatic deploys on Vercel.",
+        "uz": "Portfoliom va ikki tilli blogim: Markdown maqolalar, Git'ga asoslangan admin panel, giscus izohlari va Vercel'da avtomatik joylashtiriladigan statik React sayt."
+      },
+      "longDescription": {
+        "en": "Every piece of text on the site lives in JSON and Markdown files in the repo and is edited through Sveltia CMS at /admin, which commits changes to GitHub; Vercel rebuilds within a minute. Built with React 19, Vite, Tailwind CSS v4 and React Router, with English and Uzbek throughout, dark and light themes, and a sitemap generated at build time.",
+        "uz": "Saytdagi barcha matnlar repozitoriyadagi JSON va Markdown fayllarda saqlanadi va /admin'dagi Sveltia CMS orqali tahrirlanadi — o'zgarishlar GitHub'ga commit qilinadi, Vercel bir daqiqada qayta quradi. React 19, Vite, Tailwind CSS v4 va React Router'da qurilgan; to'liq ingliz va o'zbek tillarida, qorong'i va yorug' mavzular, sitemap esa build vaqtida yaratiladi."
+      },
+      "tech": ["React", "Vite", "Tailwind CSS", "Sveltia CMS", "Vercel"],
+      "github": "https://github.com/xamidovasadbekdev-arch/Personal_blog",
+      "demo": "https://xamidovasadbek.dev",
+      "featured": false
+    }
+  ]
+}

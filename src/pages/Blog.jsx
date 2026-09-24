@@ -38,10 +38,10 @@ export default function Blog({ lang }) {
 
   // Only show categories that actually have posts.
   const usedCategories = Object.keys(blogTaxonomy).filter(id => articles.some(a => a.category === id));
-  // Subcategories are stored in English on the article; the index maps them to the Uzbek label.
+  // Articles store the English topic name; the category maps it to the current language.
   const topics = category
-    ? blogTaxonomy[category].subcategories.en
-        .map((en, i) => ({ en, label: blogTaxonomy[category].subcategories[lang]?.[i] || en }))
+    ? blogTaxonomy[category].subcategories
+        .map(topic => ({ en: topic.en, label: pick(topic, lang) }))
         .filter(topic => articles.some(a => a.category === category && a.subcategory === topic.en))
     : [];
 
