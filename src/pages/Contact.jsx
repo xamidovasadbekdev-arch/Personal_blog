@@ -3,10 +3,7 @@ import { Mail, Send, MapPin, ArrowRight, Check, AlertCircle } from 'lucide-react
 import { translations, profile, pick } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons';
 import usePageMeta from '../hooks/usePageMeta';
-
-// Web3Forms access keys are designed to be public; the key only allows
-// sending to the inbox it was created for.
-const WEB3FORMS_KEY = '4a88f7be-7696-4a4b-a7e8-e501d5dd578e';
+import { API_URL } from '../lib/api';
 
 const EMPTY = { name: '', email: '', subject: '', message: '' };
 
@@ -21,25 +18,22 @@ export default function Contact({ lang }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    // Hidden field that only bots fill in.
-    if (e.currentTarget.elements.botcheck?.checked) return;
+    // Hidden field: people leave it empty, bots fill it in. The backend drops those.
+    const website = e.currentTarget.elements.website?.value || '';
 
     setStatus('sending');
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      // Our own backend checks the message and emails it via Resend.
+      const response = await fetch(`${API_URL}/contact`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          from_name: 'xamidovasadbek.dev',
+          ...form,
           subject: form.subject || `${t.formSubjectPrefix} ${form.name}`,
-          name: form.name,
-          email: form.email,
-          message: form.message,
+          website,
         }),
       });
-      const result = await response.json();
-      if (!response.ok || !result.success) throw new Error(result.message || 'Send failed');
+      if (!response.ok) throw new Error(`Contact API responded ${response.status}`);
       setStatus('sent');
       setForm(EMPTY);
     } catch {
@@ -64,7 +58,7 @@ export default function Contact({ lang }) {
 
       <div className="grid gap-10 md:grid-cols-[1.4fr_1fr] items-start">
         <form onSubmit={handleSubmit} className="card p-6 sm:p-8 space-y-5">
-          <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+          <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="space-y-1.5 block">

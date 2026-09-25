@@ -6,8 +6,30 @@
     <meta name="robots" content="noindex" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Admin · xamidov.dev</title>
+    <script>
+      // Start the CMS by hand so sign-in and saving go through our backend.
+      // Everything else comes from config.yml, which this is merged into.
+      window.CMS_MANUAL_INIT = true;
+      window.API_URL = ['localhost', '127.0.0.1'].includes(location.hostname)
+        ? 'http://localhost:8000'
+        : 'https://api.xamidovasadbek.dev';
+    </script>
   </head>
   <body>
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+    <script>
+      CMS.init({
+        config: {
+          backend: {
+            // "Sign In with GitHub" opens our email + password window (backend /auth).
+            base_url: API_URL,
+            auth_endpoint: 'auth',
+            // All GitHub calls go through the backend, which holds the real token.
+            api_root: `${API_URL}/gh/api/v3`,
+            graphql_api_root: `${API_URL}/gh/graphql`,
+          },
+        },
+      });
+    </script>
   </body>
 </html>

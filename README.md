@@ -3,14 +3,14 @@
 Personal site of **Asadbek Xamidov**, backend developer and ML engineer in Tashkent.
 Live at **[xamidovasadbek.dev](https://xamidovasadbek.dev)**.
 
-A static React site: no server, no database. Content lives in the repo, and every push to `main` redeploys on Vercel.
+The frontend: a static React site on Vercel. Content lives in this repo, and every push to `main` redeploys. The backend (admin sign-in, saving, contact form) is a separate FastAPI service: [portfolio-api](https://github.com/xamidovasadbekdev-arch/portfolio-api) at `api.xamidovasadbek.dev`.
 
 ## Stack
 
 - React 19, Vite, Tailwind CSS v4, React Router
 - Articles in Markdown, rendered with `react-markdown` + GFM
 - Comments via [giscus](https://giscus.app) (GitHub Discussions)
-- Contact form via [Web3Forms](https://web3forms.com)
+- Contact form and admin sign-in through the FastAPI backend (`src/lib/api.js`)
 - English and Uzbek, dark and light themes
 
 ## Run locally
@@ -20,13 +20,13 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173.
+Open http://localhost:5173. In development the site talks to the backend at `http://localhost:8000` (`.env.development`); run portfolio-api locally for the contact form and admin.
 
 ## Editing content — xamidovasadbek.dev/admin
 
 Every piece of text on the site is editable at **https://xamidovasadbek.dev/admin** (Sveltia CMS). Saving commits to `main` on GitHub, and Vercel redeploys in about a minute.
 
-**First sign-in:** create a [fine-grained GitHub token](https://github.com/settings/personal-access-tokens/new) limited to this repository with **Contents: Read and write**, then choose **Sign In Using Access Token** on the admin page and paste it. The token stays in that browser only.
+**Sign-in:** click **Sign In with GitHub** on /admin. Despite the label, it opens our own email + password window served by the backend. Set, change or reset the password at **/admin/account**.
 
 | In the admin | File in the repo |
 |---|---|
