@@ -65,7 +65,6 @@
       "copied": "Link copied",
       "backToBlog": "All articles",
       "noArticles": "No articles match your search.",
-      "comments": "Comments",
       "copyCode": "Copy",
       "codeCopied": "Copied"
     },
@@ -118,6 +117,19 @@
       "title": "Page not found",
       "text": "There is nothing at this address.",
       "back": "Back home"
+    },
+    "comments": {
+      "title": "Comments",
+      "empty": "No comments yet. Be the first to share your thoughts.",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "text": "Comment",
+      "textPlaceholder": "Share your thoughts on this article",
+      "send": "Post comment",
+      "sending": "Sending…",
+      "pending": "Thanks! Your comment will appear after approval.",
+      "error": "The comment could not be sent. Please try again later.",
+      "loadError": "Comments could not be loaded."
     }
   },
   "uz": {
@@ -186,7 +198,6 @@
       "copied": "Havola nusxalandi",
       "backToBlog": "Barcha maqolalar",
       "noArticles": "Qidiruvga mos maqola topilmadi.",
-      "comments": "Izohlar",
       "copyCode": "Nusxalash",
       "codeCopied": "Nusxalandi"
     },
@@ -239,6 +250,19 @@
       "title": "Sahifa topilmadi",
       "text": "Bu manzilda hech narsa yo'q.",
       "back": "Bosh sahifa"
+    },
+    "comments": {
+      "title": "Izohlar",
+      "empty": "Hozircha izoh yo'q. Birinchi bo'lib fikringizni yozing.",
+      "name": "Ism",
+      "namePlaceholder": "Ismingiz",
+      "text": "Izoh",
+      "textPlaceholder": "Ushbu maqola haqidagi fikringizni yozing",
+      "send": "Izoh qoldirish",
+      "sending": "Yuborilmoqda…",
+      "pending": "Rahmat! Izohingiz tasdiqlangandan so'ng ko'rinadi.",
+      "error": "Izoh yuborilmadi. Keyinroq qayta urinib ko'ring.",
+      "loadError": "Izohlarni yuklab bo'lmadi."
     }
   }
 }

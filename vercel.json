@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/account", "destination": "/admin/account/index.html" },
+    { "source": "/admin/comments", "destination": "/admin/comments/index.html" },
     { "source": "/((?!admin/).*)", "destination": "/index.html" }
   ],
   "headers": [

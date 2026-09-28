@@ -9,8 +9,7 @@ The frontend: a static React site on Vercel. Content lives in this repo, and eve
 
 - React 19, Vite, Tailwind CSS v4, React Router
 - Articles in Markdown, rendered with `react-markdown` + GFM
-- Comments via [giscus](https://giscus.app) (GitHub Discussions)
-- Contact form and admin sign-in through the FastAPI backend (`src/lib/api.js`)
+- Contact form, article comments and admin sign-in through the FastAPI backend (`src/lib/api.js`)
 - English and Uzbek, dark and light themes
 
 ## Run locally
@@ -44,14 +43,9 @@ The admin config (`public/admin/config.yml`) is generated from `scripts/cms-conf
 
 You can still edit the files by hand and `git push`; an article is a Markdown file with YAML frontmatter (`title`, `excerpt`, `date`, `category`, `subcategory`, `tags`, optional `draft: true`). A missing Uzbek file falls back to English.
 
-## Turning on comments
+## Comments
 
-1. In the GitHub repo settings, enable **Discussions**.
-2. Install the [giscus app](https://github.com/apps/giscus) on this repo.
-3. On [giscus.app](https://giscus.app), enter the repo, choose the **Announcements** category, and copy `data-repo-id` and `data-category-id`.
-4. Paste them into `GISCUS` in `src/components/GiscusComments.jsx`.
-
-Until both IDs are set, the comments section stays hidden.
+Readers can comment under every article with just a name (`src/components/Comments.jsx`). Comments go to the backend and stay hidden until approved: the owner gets an email with **Approve / Delete** buttons for each new comment, or can moderate at **/admin/comments** (same email + password as the admin).
 
 ## Deploy
 

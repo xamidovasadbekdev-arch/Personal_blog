@@ -6,7 +6,7 @@ import { ArrowLeft, Copy, Check, Link2 } from 'lucide-react';
 import { translations, blogTaxonomy, profile, pick } from '../data/portfolioData';
 import { getArticle } from '../content/articles';
 import { formatDate } from '../lib/formatDate';
-import GiscusComments from '../components/GiscusComments';
+import Comments from '../components/Comments';
 import NotFound from './NotFound';
 import usePageMeta from '../hooks/usePageMeta';
 
@@ -132,7 +132,7 @@ export default function BlogPost({ lang = 'en' }) {
         </div>
       )}
 
-      <GiscusComments lang={lang} title={t.comments} />
+      <Comments slug={article.slug} lang={lang} />
     </article>
   );
 }

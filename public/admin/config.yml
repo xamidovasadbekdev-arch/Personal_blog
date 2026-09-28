@@ -590,9 +590,6 @@ collections:
                   - name: noArticles
                     label: No Articles
                     widget: string
-                  - name: comments
-                    label: Comments
-                    widget: string
                   - name: copyCode
                     label: Copy Code
                     widget: string
@@ -712,6 +709,44 @@ collections:
                     widget: string
                   - name: back
                     label: Back
+                    widget: string
+              - name: comments
+                label: Comments
+                widget: object
+                collapsed: true
+                fields:
+                  - name: title
+                    label: Title
+                    widget: string
+                  - name: empty
+                    label: Empty
+                    widget: string
+                  - name: name
+                    label: Name
+                    widget: string
+                  - name: namePlaceholder
+                    label: Name Placeholder
+                    widget: string
+                  - name: text
+                    label: Text
+                    widget: string
+                  - name: textPlaceholder
+                    label: Text Placeholder
+                    widget: string
+                  - name: send
+                    label: Send
+                    widget: string
+                  - name: sending
+                    label: Sending
+                    widget: string
+                  - name: pending
+                    label: Pending
+                    widget: string
+                  - name: error
+                    label: Error
+                    widget: string
+                  - name: loadError
+                    label: Load Error
                     widget: string
           - name: uz
             label: O'zbekcha
@@ -910,9 +945,6 @@ collections:
                   - name: noArticles
                     label: No Articles
                     widget: string
-                  - name: comments
-                    label: Comments
-                    widget: string
                   - name: copyCode
                     label: Copy Code
                     widget: string
@@ -1032,4 +1064,42 @@ collections:
                     widget: string
                   - name: back
                     label: Back
+                    widget: string
+              - name: comments
+                label: Comments
+                widget: object
+                collapsed: true
+                fields:
+                  - name: title
+                    label: Title
+                    widget: string
+                  - name: empty
+                    label: Empty
+                    widget: string
+                  - name: name
+                    label: Name
+                    widget: string
+                  - name: namePlaceholder
+                    label: Name Placeholder
+                    widget: string
+                  - name: text
+                    label: Text
+                    widget: string
+                  - name: textPlaceholder
+                    label: Text Placeholder
+                    widget: string
+                  - name: send
+                    label: Send
+                    widget: string
+                  - name: sending
+                    label: Sending
+                    widget: string
+                  - name: pending
+                    label: Pending
+                    widget: string
+                  - name: error
+                    label: Error
+                    widget: string
+                  - name: loadError
+                    label: Load Error
                     widget: string

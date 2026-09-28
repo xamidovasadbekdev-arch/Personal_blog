@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Comments · xamidov.dev admin</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #14120f; color: #c4baa9; font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 20px; display: grid; gap: 28px; }
+  h1 { margin: 0; color: #f2ebdf; font-size: 26px; font-weight: 600; }
+  p { margin: 0; }
+  a { color: #e4ac48; }
+  .muted { color: #8b8272; font-size: 13px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .spread { justify-content: space-between; }
+  form#login { display: grid; gap: 12px; max-width: 360px; }
+  label { display: grid; gap: 6px; font-size: 13px; color: #f2ebdf; }
+  input { width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid rgba(240,228,206,.2);
+          background: #1b1814; color: #f2ebdf; font: inherit; outline: none; }
+  input:focus { border-color: #e4ac48; }
+  button { padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(240,228,206,.2); background: transparent;
+           color: #f2ebdf; font: inherit; font-size: 14px; cursor: pointer; }
+  button.primary { background: #f2ebdf; color: #14120f; border-color: #f2ebdf; font-weight: 600; }
+  button.approve { background: #2f6f3e; border-color: #2f6f3e; color: #fff; }
+  button:disabled { opacity: .5; cursor: default; }
+  .tabs button[aria-pressed="true"] { background: #f2ebdf; color: #14120f; border-color: #f2ebdf; }
+  .comment { border: 1px solid rgba(240,228,206,.09); background: #1b1814; border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
+  .comment .text { color: #f2ebdf; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .error { color: #f0a58a; font-size: 13px; min-height: 20px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div class="row spread">
+    <h1>Comments</h1>
+    <div class="row">
+      <a href="/admin">Content admin</a>
+      <button id="signout" hidden>Sign out</button>
+    </div>
+  </div>
+
+  <form id="login" hidden>
+    <p class="muted">Sign in with your admin email and password.</p>
+    <label>Email <input name="email" type="email" autocomplete="username" required></label>
+    <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+    <div class="error" id="login-error" role="alert"></div>
+    <button class="primary">Sign in</button>
+  </form>
+
+  <section id="panel" hidden>
+    <div class="row tabs" role="group" aria-label="Filter">
+      <button data-status="pending" aria-pressed="true">Waiting</button>
+      <button data-status="approved" aria-pressed="false">Approved</button>
+      <button data-status="deleted" aria-pressed="false">Deleted</button>
+    </div>
+    <div class="error" id="panel-error" role="alert"></div>
+    <div id="list" style="display:grid;gap:14px;margin-top:6px"></div>
+  </section>
+</main>
+
+<template id="comment-template">
+  <article class="comment">
+    <div class="row spread">
+      <div><strong class="name"></strong> <span class="muted">on <a class="article" target="_blank" rel="noopener"></a></span></div>
+      <span class="muted date"></span>
+    </div>
+    <p class="text"></p>
+    <div class="row actions"></div>
+  </article>
+</template>
+
+<script>
+  const API_URL = ['localhost', '127.0.0.1'].includes(location.hostname)
+    ? 'http://localhost:8000'
+    : 'https://api.xamidovasadbek.dev';
+  const SESSION_KEY = 'comments-admin-session';
+  const ACTIONS = {
+    pending: [['approve', 'Approve', 'approve'], ['delete', 'Delete', '']],
+    approved: [['delete', 'Delete', '']],
+    deleted: [['restore', 'Move back to waiting', ''], ['approve', 'Approve', 'approve']],
+  };
+
+  const $ = (selector) => document.querySelector(selector);
+  let currentStatus = 'pending';
+
+  function session() {
+    try { return sessionStorage.getItem(SESSION_KEY); } catch { return null; }
+  }
+
+  function setSession(token) {
+    try { token ? sessionStorage.setItem(SESSION_KEY, token) : sessionStorage.removeItem(SESSION_KEY); } catch {}
+  }
+
+  function show(signedIn) {
+    $('#login').hidden = signedIn;
+    $('#panel').hidden = !signedIn;
+    $('#signout').hidden = !signedIn;
+  }
+
+  function describe(detail) {
+    if (typeof detail === 'string') return detail;
+    if (Array.isArray(detail) && detail[0] && detail[0].msg) return detail[0].msg;
+    return 'Something went wrong.';
+  }
+
+  async function api(path, options = {}) {
+    const response = await fetch(API_URL + path, {
+      ...options,
+      headers: { 'Content-Type': 'application/json', Authorization: 'token ' + session(), ...(options.headers || {}) },
+    });
+    const body = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      setSession(null);
+      show(false);
+      throw new Error('Your session ended. Please sign in again.');
+    }
+    if (!response.ok) throw new Error(describe(body.detail));
+    return body;
+  }
+
+  function render(comments) {
+    const list = $('#list');
+    list.replaceChildren();
+    if (!comments.length) {
+      const empty = document.createElement('p');
+      empty.className = 'muted';
+      empty.textContent = currentStatus === 'pending' ? 'Nothing waiting for approval.' : 'Nothing here.';
+      list.append(empty);
+      return;
+    }
+    for (const comment of comments) {
+      const node = $('#comment-template').content.cloneNode(true);
+      // textContent only: comment text never becomes HTML.
+      node.querySelector('.name').textContent = comment.name;
+      const link = node.querySelector('.article');
+      link.textContent = comment.slug;
+      link.href = 'https://xamidovasadbek.dev/blog/' + encodeURIComponent(comment.slug);
+      node.querySelector('.date').textContent = new Date(comment.created).toLocaleString();
+      node.querySelector('.text').textContent = comment.text;
+      const actions = node.querySelector('.actions');
+      for (const [action, label, style] of ACTIONS[comment.status] || []) {
+        const button = document.createElement('button');
+        button.textContent = label;
+        if (style) button.className = style;
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          try {
+            await api(`/admin/comments/${encodeURIComponent(comment.id)}/${action}`, { method: 'POST' });
+            await load();
+          } catch (error) {
+            $('#panel-error').textContent = error.message;
+            button.disabled = false;
+          }
+        });
+        actions.append(button);
+      }
+      list.append(node);
+    }
+  }
+
+  async function load() {
+    $('#panel-error').textContent = '';
+    try {
+      const data = await api('/admin/comments?status=' + currentStatus);
+      render(data.comments);
+    } catch (error) {
+      $('#panel-error').textContent = error.message;
+    }
+  }
+
+  document.querySelectorAll('.tabs button').forEach((button) => {
+    button.addEventListener('click', () => {
+      currentStatus = button.dataset.status;
+      document.querySelectorAll('.tabs button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      load();
+    });
+  });
+
+  $('#login').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const errorBox = $('#login-error');
+    errorBox.textContent = '';
+    try {
+      const response = await fetch(API_URL + '/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email.value, password: form.password.value }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.token) throw new Error(describe(result.detail) || 'Sign-in failed.');
+      setSession(result.token);
+      form.reset();
+      show(true);
+      load();
+    } catch (error) {
+      errorBox.textContent = error.message === 'Failed to fetch' ? 'Could not reach the server.' : error.message;
+    }
+  });
+
+  $('#signout').addEventListener('click', () => {
+    setSession(null);
+    show(false);
+  });
+
+  if (session()) {
+    show(true);
+    load();
+  } else {
+    show(false);
+  }
+</script>
+</body>
+</html>
